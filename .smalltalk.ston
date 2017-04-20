@@ -1,0 +1,21 @@
+SmalltalkCISpec {
+	#loading : [
+		SCIMetacelloLoadSpec {
+			#platforms : [
+				#pharo
+			],
+			#baseline : 'UMLBootstrapGenerator',
+			#directory : 'repository'
+		}
+	],
+	#testing : {
+		#coverage : {
+			#packages : [
+				'OP-UML-BootstrapGenerator'
+			]
+		},
+		#packages : [
+			'OP-UML-BootstrapGenerator'
+		]
+	}
+}
