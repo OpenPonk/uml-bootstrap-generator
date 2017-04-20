@@ -5,7 +5,7 @@ Utility to bootstrap UML implementation.
 
 ## Usage
 
-1. Get XMI representation of Specs.
+### 1. Get XMI representation of Specs.
 
 ```smalltalk
 primitives := 'http://www.omg.org/spec/UML/20131001/PrimitiveTypes.xmi'.
@@ -18,7 +18,7 @@ xmi := result at: uml.
 "or xmi := OPUMLBootstrapGeneratorTest umlSpecs"
 ```
 
-2. Generate code
+### 2. Generate code
 
 ```smalltalk
 generator := OPUMLBootstrapGenerator new.
@@ -28,7 +28,7 @@ generator packageName: 'OP-UML-Bootstrap'.
 (CBChangesBrowser changes: generator generateAll) open
 ```
 
-3. Read XMI into the bootstrap UML
+### 3. Read XMI into the bootstrap UML
 
 @todo requires separate package
 
@@ -38,11 +38,11 @@ reader classPrefix: 'BootUML'.
 model := reader readXmi: xmi.
 ```
 
-4. Generate the actual UML
+### 4. Generate the actual UML
 
 WIP
 
-# Installation
+## Installation
  
 ```smalltalk
 Metacello new
