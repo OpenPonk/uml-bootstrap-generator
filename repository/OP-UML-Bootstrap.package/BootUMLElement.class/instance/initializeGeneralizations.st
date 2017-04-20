@@ -1,0 +1,4 @@
+initialization
+initializeGeneralizations
+	generalizations := {
+	}

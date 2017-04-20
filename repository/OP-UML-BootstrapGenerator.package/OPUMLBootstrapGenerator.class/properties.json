@@ -1,0 +1,19 @@
+{
+	"category" : "OP-UML-BootstrapGenerator-Generator",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "PeterUhnak 4/14/2017 10:35",
+	"instvars" : [
+		"classPrefix",
+		"packageName",
+		"rootClassName",
+		"sourceXmi",
+		"classes",
+		"cachedRequiredClasses" ],
+	"name" : "OPUMLBootstrapGenerator",
+	"pools" : [
+		 ],
+	"super" : "Object",
+	"type" : "normal" }

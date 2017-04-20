@@ -1,0 +1,14 @@
+{
+	"category" : "OP-UML-Bootstrap-SimpleClassifiers",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "",
+	"instvars" : [
+		 ],
+	"name" : "BootUMLPrimitiveType",
+	"pools" : [
+		 ],
+	"super" : "OPUMLBootstrapObject",
+	"type" : "normal" }

@@ -1,0 +1,14 @@
+{
+	"category" : "OP-UML-Bootstrap-Classification",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "",
+	"instvars" : [
+		"isReadOnly" ],
+	"name" : "BootUMLStructuralFeature",
+	"pools" : [
+		 ],
+	"super" : "OPUMLBootstrapObject",
+	"type" : "normal" }

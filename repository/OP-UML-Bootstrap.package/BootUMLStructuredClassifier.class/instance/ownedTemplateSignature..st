@@ -1,0 +1,3 @@
+accessing - Classifier
+ownedTemplateSignature: aRedefinableTemplateSignature
+	(sharedGeneralizations at: #Classifier) ownedTemplateSignature: aRedefinableTemplateSignature

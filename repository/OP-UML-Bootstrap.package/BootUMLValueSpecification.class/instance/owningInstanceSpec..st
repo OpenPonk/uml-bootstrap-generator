@@ -1,0 +1,3 @@
+accessing
+owningInstanceSpec: anInstanceSpecification
+	owningInstanceSpec := anInstanceSpecification

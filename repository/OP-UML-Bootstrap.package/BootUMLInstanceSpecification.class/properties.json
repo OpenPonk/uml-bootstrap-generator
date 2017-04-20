@@ -1,0 +1,17 @@
+{
+	"category" : "OP-UML-Bootstrap-Classification",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "",
+	"instvars" : [
+		"classifier",
+		"slot",
+		"instanceValue",
+		"specification" ],
+	"name" : "BootUMLInstanceSpecification",
+	"pools" : [
+		 ],
+	"super" : "OPUMLBootstrapObject",
+	"type" : "normal" }

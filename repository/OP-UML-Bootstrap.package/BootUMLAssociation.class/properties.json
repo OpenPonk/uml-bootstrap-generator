@@ -1,0 +1,18 @@
+{
+	"category" : "OP-UML-Bootstrap-StructuredClassifiers",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "",
+	"instvars" : [
+		"ownedEnd",
+		"endType",
+		"isDerived",
+		"memberEnd",
+		"navigableOwnedEnd" ],
+	"name" : "BootUMLAssociation",
+	"pools" : [
+		 ],
+	"super" : "OPUMLBootstrapObject",
+	"type" : "normal" }

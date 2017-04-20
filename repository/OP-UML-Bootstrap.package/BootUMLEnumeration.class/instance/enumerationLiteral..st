@@ -1,0 +1,3 @@
+accessing
+enumerationLiteral: anEnumerationLiteral
+	enumerationLiteral := anEnumerationLiteral

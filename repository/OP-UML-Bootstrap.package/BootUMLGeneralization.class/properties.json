@@ -1,0 +1,17 @@
+{
+	"category" : "OP-UML-Bootstrap-Classification",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "",
+	"instvars" : [
+		"general",
+		"isSubstitutable",
+		"generalizationSet",
+		"specific" ],
+	"name" : "BootUMLGeneralization",
+	"pools" : [
+		 ],
+	"super" : "OPUMLBootstrapObject",
+	"type" : "normal" }

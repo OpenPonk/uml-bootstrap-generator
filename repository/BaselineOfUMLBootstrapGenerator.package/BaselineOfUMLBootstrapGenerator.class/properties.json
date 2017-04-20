@@ -1,0 +1,14 @@
+{
+	"category" : "BaselineOfUMLBootstrapGenerator",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "PeterUhnak 4/20/2017 11:00",
+	"instvars" : [
+		 ],
+	"name" : "BaselineOfUMLBootstrapGenerator",
+	"pools" : [
+		 ],
+	"super" : "BaselineOf",
+	"type" : "normal" }

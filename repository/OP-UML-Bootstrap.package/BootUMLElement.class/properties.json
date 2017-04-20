@@ -1,0 +1,20 @@
+{
+	"category" : "OP-UML-Bootstrap-CommonStructure",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "",
+	"instvars" : [
+		"relationship",
+		"comment",
+		"constraint",
+		"owner",
+		"ownedComment",
+		"ownedElement",
+		"directedRelationship" ],
+	"name" : "BootUMLElement",
+	"pools" : [
+		 ],
+	"super" : "OPUMLBootstrapObject",
+	"type" : "normal" }

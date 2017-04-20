@@ -1,0 +1,30 @@
+{
+	"category" : "OP-UML-Bootstrap-Classification",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "",
+	"instvars" : [
+		"redefinedOperation",
+		"datatype",
+		"lower",
+		"bodyCondition",
+		"precondition",
+		"operation",
+		"ownedParameter",
+		"templateParameter",
+		"isQuery",
+		"isUnique",
+		"upper",
+		"owningClass",
+		"interface",
+		"type",
+		"isOrdered",
+		"raisedException",
+		"postcondition" ],
+	"name" : "BootUMLOperation",
+	"pools" : [
+		 ],
+	"super" : "OPUMLBootstrapObject",
+	"type" : "normal" }

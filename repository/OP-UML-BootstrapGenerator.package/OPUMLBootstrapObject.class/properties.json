@@ -1,0 +1,15 @@
+{
+	"category" : "OP-UML-BootstrapGenerator-Generator",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "",
+	"instvars" : [
+		"sharedGeneralizations",
+		"generalizations" ],
+	"name" : "OPUMLBootstrapObject",
+	"pools" : [
+		 ],
+	"super" : "Object",
+	"type" : "normal" }

@@ -1,0 +1,22 @@
+{
+	"category" : "OP-UML-Bootstrap-Packages",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "",
+	"instvars" : [
+		"ownedType",
+		"nestedPackage",
+		"packageImport",
+		"packageMerge",
+		"ownedStereotype",
+		"packagedElement",
+		"profileApplication",
+		"nestingPackage",
+		"URI" ],
+	"name" : "BootUMLPackage",
+	"pools" : [
+		 ],
+	"super" : "OPUMLBootstrapObject",
+	"type" : "normal" }

@@ -1,0 +1,14 @@
+{
+	"category" : "OP-UML-Bootstrap-CommonStructure",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "",
+	"instvars" : [
+		"relatedElement" ],
+	"name" : "BootUMLRelationship",
+	"pools" : [
+		 ],
+	"super" : "OPUMLBootstrapObject",
+	"type" : "normal" }

@@ -1,0 +1,3 @@
+accessing
+templateParameter
+	^ templateParameter

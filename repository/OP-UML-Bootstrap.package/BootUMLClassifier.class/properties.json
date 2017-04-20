@@ -1,0 +1,33 @@
+{
+	"category" : "OP-UML-Bootstrap-Classification",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "",
+	"instvars" : [
+		"general",
+		"generalization",
+		"feature",
+		"substitution",
+		"useCase",
+		"classifier",
+		"redefinableElement",
+		"powertypeExtent",
+		"ownedTemplateSignature",
+		"isAbstract",
+		"inheritedMember",
+		"ownedUseCase",
+		"collaborationUse",
+		"attribute",
+		"templateParameter",
+		"nestingClass",
+		"redefinedClassifier",
+		"representation",
+		"isFinalSpecialization",
+		"instanceSpecification" ],
+	"name" : "BootUMLClassifier",
+	"pools" : [
+		 ],
+	"super" : "OPUMLBootstrapObject",
+	"type" : "normal" }
