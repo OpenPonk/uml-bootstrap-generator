@@ -6,5 +6,5 @@ layeredSuperclassesFor: aKey in: aCollection
 	[ keys isNotEmpty ]
 		whileTrue: [ layer := keys flatCollect: [ :each | aCollection select: [ :pair | pair key = each ] ].
 			keys := layer collect: #value.
-			pairs add: keys removeDuplicates ].
+			pairs add: (self withoutDuplicates: keys) ].
 	^ (pairs reject: #isEmpty) reverse

@@ -1,8 +1,7 @@
 generating
 generateGeneralizations: aCollectionOfPairs
 	| keys |
-	keys := ((aCollectionOfPairs collect: #key) , (aCollectionOfPairs collect: #value))
-		removeDuplicates.
+	keys := self withoutDuplicates: ((aCollectionOfPairs collect: #key) , (aCollectionOfPairs collect: #value)).
 	keys
 		do: [ :each | 
 			self

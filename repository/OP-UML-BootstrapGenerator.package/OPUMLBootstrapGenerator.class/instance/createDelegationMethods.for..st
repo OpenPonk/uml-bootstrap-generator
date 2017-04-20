@@ -2,7 +2,7 @@ generating
 createDelegationMethods: aCollectionOfLayers for: aClassName
 	| cls supers |
 	cls := classes at: (self classNameFor: aClassName) ifAbsent: [ ^ self ].
-	supers := (aCollectionOfLayers gather: #yourself) removeDuplicates
+	supers := (self withoutDuplicates: (aCollectionOfLayers gather: #yourself))
 		collect: [ :each | classes at: (self classNameFor: each) ifAbsent: [ nil ] ]
 		thenReject: #isNil.
 	supers
