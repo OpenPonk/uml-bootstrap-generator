@@ -1,14 +1,13 @@
 {
-	"category" : "OP-UML-BootstrapGenerator-Bootrap-Generator",
+	"category" : "OP-UML-BootstrapGenerator-Metamodel-Generator",
 	"classinstvars" : [
 		 ],
 	"classvars" : [
 		 ],
 	"commentStamp" : "",
 	"instvars" : [
-		"sharedGeneralizations",
-		"generalizations" ],
-	"name" : "OPUMLBootstrapObject",
+		 ],
+	"name" : "OPUMLMetamodelGenerator",
 	"pools" : [
 		 ],
 	"super" : "Object",
