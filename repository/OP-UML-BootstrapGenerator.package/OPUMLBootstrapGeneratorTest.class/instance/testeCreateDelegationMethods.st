@@ -1,8 +1,8 @@
 tests - generating
 testeCreateDelegationMethods
 	| parent child |
-	parent := generator ensureCreateClass: 'BUTGeneratedParentClass' in: 'Generated-Package'.
-	child := generator ensureCreateClass: 'BUTGeneratedChildClass' in: 'Generated-Package'.
+	parent := generator ensureCreateClass: 'GeneratedParentClass' in: 'Package'.
+	child := generator ensureCreateClass: 'GeneratedChildClass' in: 'Package'.
 	parent addMethod: (CBMethod new getter: 'property').
 	parent addMethod: (CBMethod new setter: 'property' argument: 'Property').
 	generator createDelegationMethods: #(#(GeneratedParentClass)) for: #GeneratedChildClass.

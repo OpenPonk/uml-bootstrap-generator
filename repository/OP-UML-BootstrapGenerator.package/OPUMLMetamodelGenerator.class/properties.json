@@ -6,7 +6,11 @@
 		 ],
 	"commentStamp" : "",
 	"instvars" : [
-		 ],
+		"classPrefix",
+		"packageName",
+		"rootClassName",
+		"sourceModel",
+		"classes" ],
 	"name" : "OPUMLMetamodelGenerator",
 	"pools" : [
 		 ],

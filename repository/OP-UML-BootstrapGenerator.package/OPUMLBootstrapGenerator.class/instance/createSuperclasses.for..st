@@ -1,7 +1,7 @@
 generating
 createSuperclasses: aCollectionOfLayers for: aClassName
 	| cls added sharedMethod directMethod |
-	cls := classes at: (self classNameFor: aClassName) ifAbsent: [ ^ self ].
+	cls := classes at: aClassName ifAbsent: [ ^ self ].
 	sharedMethod := CBMethodBuilder new.
 	sharedMethod selector: 'initialize'.
 	sharedMethod addLine: 'super initialize.'.

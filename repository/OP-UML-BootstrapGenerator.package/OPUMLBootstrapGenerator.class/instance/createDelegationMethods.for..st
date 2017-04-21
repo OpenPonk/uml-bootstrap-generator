@@ -1,9 +1,9 @@
 generating
 createDelegationMethods: aCollectionOfLayers for: aClassName
 	| cls supers |
-	cls := classes at: (self classNameFor: aClassName) ifAbsent: [ ^ self ].
+	cls := classes at: aClassName ifAbsent: [ ^ self ].
 	supers := (self withoutDuplicates: (aCollectionOfLayers gather: #yourself))
-		collect: [ :each | classes at: (self classNameFor: each) ifAbsent: [ nil ] ]
+		collect: [ :each | classes at: each ifAbsent: [ nil ] ]
 		thenReject: #isNil.
 	supers
 		do: [ :superClass | 
