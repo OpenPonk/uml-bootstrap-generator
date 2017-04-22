@@ -10,12 +10,12 @@ testAddDelegationMethods
 	self assert: (methods includes: 'nameExpression' -> 'accessing - NamedElement').
 	self assert: (methods includes: 'ownedComment:' -> 'accessing - Element').
 	self
-		assert: (class methods detect: [ :each | each selector = 'nameExpression' ]) source
+		assertMethod: (class methods detect: [ :each | each selector = 'nameExpression' ]) source
 		equals:
 			'nameExpression
 	^ (sharedGeneralizations at: #NamedElement) nameExpression'.
 	self
-		assert: (class methods detect: [ :each | each selector = 'ownedComment:' ]) source
+		assertMethod: (class methods detect: [ :each | each selector = 'ownedComment:' ]) source
 		equals:
 			'ownedComment: aComment
 	(sharedGeneralizations at: #Element) ownedComment: aComment'

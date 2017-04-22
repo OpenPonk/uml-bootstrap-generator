@@ -6,6 +6,6 @@ testAddAttribute
 	generator addAttribute: attribute to: class.
 	self assert: class instanceVariables equals: #(ownedComment).
 	self assert: class selectors equals: #(ownedComment ownedComment:).
-	self assert: class methods first source equals: 'ownedComment
+	self assertMethod: class methods first source equals: 'ownedComment
 	"The Comments owned by this Element."
 	^ ownedComment'

@@ -8,20 +8,20 @@ testAddGeneralizations
 		assert: class selectors
 		equals: #(initialize initializeSharedGeneralizations initializeDirectGeneralizations).
 	self
-		assert: class methods first source
+		assertMethod: class methods first source
 		equals:
 			'initialize
 	super initialize.
 	self initializeSharedGeneralizations.
 	self initializeDirectGeneralizations'.
 	self
-		assert: class methods second source
+		assertMethod: class methods second source
 		equals:
 			'initializeSharedGeneralizations
 	sharedGeneralizations at: #Element put: (MBUTElement newOnShared: sharedGeneralizations).
 	sharedGeneralizations at: #NamedElement put: (MBUTNamedElement newOnShared: sharedGeneralizations)'.
 	self
-		assert: class methods third source
+		assertMethod: class methods third source
 		equals:
 			'initializeDirectGeneralizations
 	generalizations := {
