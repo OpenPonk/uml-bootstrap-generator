@@ -1,0 +1,15 @@
+{
+	"category" : "OP-UML-BootstrapGenerator-Reader",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "PeterUhnak 4/15/2017 10:27",
+	"instvars" : [
+		"classPrefix",
+		"instanceCache" ],
+	"name" : "OPUMLXMIBootstrapReader",
+	"pools" : [
+		 ],
+	"super" : "Object",
+	"type" : "normal" }
