@@ -7,7 +7,8 @@ baseline: spec
 			spec
 				baseline: 'ChangesBuilder'
 				with: [ spec repository: 'github://peteruhnak/pharo-changes-builder/repository' ].
+			spec package: 'OP-UML-Bootstrap'.
 			spec
 				package: 'OP-UML-BootstrapGenerator'
-				with: [ spec requires: #('OPXMI' 'ChangesBuilder') ].
+				with: [ spec requires: #('OPXMI' 'ChangesBuilder' 'OP-UML-Bootstrap') ].
 			spec group: 'default' with: #('OP-UML-BootstrapGenerator') ]
