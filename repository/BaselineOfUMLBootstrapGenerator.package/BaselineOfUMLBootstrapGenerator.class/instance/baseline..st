@@ -10,5 +10,5 @@ baseline: spec
 			spec package: 'OP-UML-Bootstrap'.
 			spec
 				package: 'OP-UML-BootstrapGenerator'
-				with: [ spec requires: #('OPXMI' 'ChangesBuilder') ].
-			spec group: 'default' with: #('OP-UML-Bootstrap' 'OP-UML-BootstrapGenerator') ]
+				with: [ spec requires: #('OPXMI' 'ChangesBuilder' 'OP-UML-Bootstrap') ].
+			spec group: 'default' with: #('OP-UML-BootstrapGenerator') ]
