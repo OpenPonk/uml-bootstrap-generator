@@ -1,13 +1,12 @@
 GTInspector - extensions
-gtInspectorPropertiesIn: aComposite
-	<gtInspectorPresentationOrder: 5>
+gtInspectorAllPropertiesIn: aComposite
+	<gtInspectorPresentationOrder: 6>
 	aComposite fastTable
-		title: 'Properties';
-		display: [ (((self class methods sorted: [ :a :b | a selector < b selector ])
+		title: 'Properties (All)';
+		display: [ ((self class methods sorted: [ :a :b | a selector < b selector ])
 				select: [ :each | each protocol beginsWith: 'accessing' ])
 				select: [ :each | each numArgs = 0 ]
-				thenCollect: [ :each | each selector -> (self perform: each selector) ])
-				select: [ :pair | pair value isNotNil ] ];
+				thenCollect: [ :each | each selector -> (self perform: each selector) ] ];
 		column: 'name' evaluated: [ :each | each key ];
 		column: 'value' evaluated: [ :each | each value ];
 		send: [ :selection | 

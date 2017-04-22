@@ -1,8 +1,8 @@
-generating
-ensureCreateClass: aName in: aCategoryName
+generating - classes
+ensureCreateClass: aName in: aTagName
 	^ classes
 		at: aName
 		ifAbsentPut: [ CBClass
 				name: (self classNameFor: aName)
 				parent: self rootClassName
-				package: self packageName , '-' , aCategoryName ]
+				package: self packageName , '-' , aTagName ]
