@@ -7,14 +7,16 @@ isCollectionAttribute: aSymbol inClass: aClass
 	(#(name lowerValue upperValue) includes: aSymbol)
 		ifTrue: [ ^ false ].
 	(aSymbol = #value
-		and:
-			[ #(LiteralString LiteralInteger LiteralBoolean LiteralUnlimitedNatural LiteralReal) includes: className ])
+		and: [ #(LiteralString LiteralInteger LiteralBoolean LiteralUnlimitedNatural LiteralReal)
+				includes: className ])
 		ifTrue: [ ^ false ].
 	(aSymbol = #body and: [ className = #Comment ])
 		ifTrue: [ ^ false ].
 	(aSymbol = #importedPackage and: [ className = #PackageImport ])
 		ifTrue: [ ^ false ].
 	aSymbol = #type
+		ifTrue: [ ^ false ].
+	aSymbol = #defaultValue
 		ifTrue: [ ^ false ].
 	((#(general specific) includes: aSymbol) and: [ className = #Generalization ])
 		ifTrue: [ ^ false ].

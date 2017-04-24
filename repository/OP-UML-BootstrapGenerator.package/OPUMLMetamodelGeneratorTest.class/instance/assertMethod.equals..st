@@ -1,4 +1,4 @@
-tests - retrieving
+asserting
 assertMethod: actualCode equals: expectedCode
 	self
 		assert: (RBParser parseMethod: actualCode) formattedCode
