@@ -12,7 +12,10 @@ readItem: anItem
 		keysAndValuesDo: [ :key :values | 
 			| selector arguments |
 			selector := (key , ':') asSymbol.
-			self assert: [ instance class selectors includes: selector ].
+			self
+				assert: [ (instance class selectors includes: selector)
+						or: [ instance class superclass name = (self classPrefix , 'Element')
+								and: [ instance class superclass selectors includes: selector ] ] ].
 			arguments := values collect: [ :each | self readItem: each ].
 			(arguments anyOne isArray or: [ arguments anyOne isKindOf: OrderedCollection ])
 				ifTrue: [ arguments := arguments gather: #yourself ].

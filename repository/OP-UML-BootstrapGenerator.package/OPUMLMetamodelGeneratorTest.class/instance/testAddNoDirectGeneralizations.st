@@ -1,4 +1,4 @@
-tests - generating - generalizations
+tests
 testAddNoDirectGeneralizations
 	| class classModel |
 	class := CBClass new.
@@ -6,21 +6,14 @@ testAddNoDirectGeneralizations
 	generator addGeneralizationsFrom: classModel to: class.
 	self
 		assert: class selectors
-		equals: #(initialize initializeSharedGeneralizations initializeDirectGeneralizations).
+		equals: #(initializeSharedGeneralizations initializeDirectGeneralizations).
 	self
-		assertMethod: class methods first source
-		equals:
-			'initialize
-	super initialize.
-	self initializeSharedGeneralizations.
-	self initializeDirectGeneralizations'.
-	self
-		assertMethod: class methods second source
+		assertMethod: (class methodNamed: #initializeSharedGeneralizations) source
 		equals:
 			'initializeSharedGeneralizations
 '.
 	self
-		assertMethod: class methods third source
+		assertMethod: (class methodNamed: #initializeDirectGeneralizations) source
 		equals:
 			'initializeDirectGeneralizations
 	directGeneralizations := {
