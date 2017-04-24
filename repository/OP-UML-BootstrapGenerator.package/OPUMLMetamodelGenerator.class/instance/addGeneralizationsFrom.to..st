@@ -25,6 +25,6 @@ addGeneralizationsFrom: aClassModel to: cls
 				do: [ :each | directMethod addLine: 'sharedGeneralizations at: #' , each general name , '.' ] ].
 	directMethod removeIndent.
 	directMethod addLine: '}'.
-	cls compile: initMethod source classified: 'initialization'.
-	cls compile: sharedMethod source classified: 'initialization'.
-	cls compile: directMethod source classified: 'initialization'
+	cls compile: initMethod source trimmed classified: 'initialization'.
+	cls compile: sharedMethod source trimmed classified: 'initialization'.
+	cls compile: directMethod source trimmed classified: 'initialization'

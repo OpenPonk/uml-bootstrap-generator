@@ -10,4 +10,4 @@ umlBootstrapModel
 			xmi := OPUMLBootstrapGeneratorTest umlSpecs.
 			reader := OPUMLXMIBootstrapReader new.
 			reader classPrefix: 'BootUML'.
-			umlBootstrapModel := reader readXmi: xmi ]
+			umlBootstrapModel := (reader readXmi: xmi) first ]

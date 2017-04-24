@@ -1,3 +1,3 @@
 accessing
 model
-	^ self class umlBootstrapModel first
+	^ self class umlBootstrapModel

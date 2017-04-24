@@ -10,7 +10,8 @@
 		"packageName",
 		"rootClassName",
 		"sourceModel",
-		"classes" ],
+		"classes",
+		"defaultValues" ],
 	"name" : "OPUMLMetamodelGenerator",
 	"pools" : [
 		 ],

@@ -13,7 +13,7 @@ addAttribute: anAttributeModel to: aClass
 					(CBMethod new
 						getter: name
 						comment: comment
-						defaultValue: anAttributeModel defaultValue value) ]
+						defaultValue: (self defaultValueFrom: anAttributeModel defaultValue)) ]
 		ifFalse: [ aClass addMethod: (CBMethod new getter: name comment: comment) ].
 	aClass
 		addMethod: (CBMethod new setter: name argument: anAttributeModel type name comment: comment)
