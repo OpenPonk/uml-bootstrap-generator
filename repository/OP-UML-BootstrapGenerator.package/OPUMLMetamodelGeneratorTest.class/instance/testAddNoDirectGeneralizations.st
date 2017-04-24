@@ -1,8 +1,8 @@
 tests - generating - generalizations
-testAddGeneralizations
+testAddNoDirectGeneralizations
 	| class classModel |
 	class := CBClass new.
-	classModel := self findClass: 'RedefinableElement'.
+	classModel := self findClass: 'NamedElement'.
 	generator addGeneralizationsFrom: classModel to: class.
 	self
 		assert: class selectors
@@ -18,11 +18,10 @@ testAddGeneralizations
 		assertMethod: class methods second source
 		equals:
 			'initializeSharedGeneralizations
-	sharedGeneralizations at: #NamedElement put: (MBUTNamedElement newOnShared: sharedGeneralizations)'.
+'.
 	self
 		assertMethod: class methods third source
 		equals:
 			'initializeDirectGeneralizations
 	directGeneralizations := {
-		sharedGeneralizations at: #NamedElement.
 	}'

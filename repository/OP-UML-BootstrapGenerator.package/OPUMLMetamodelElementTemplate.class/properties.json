@@ -1,0 +1,15 @@
+{
+	"category" : "OP-UML-BootstrapGenerator-Metamodel-Generator",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "PeterUhnak 4/25/2017 00:01",
+	"instvars" : [
+		"sharedGeneralizations",
+		"directGeneralizations" ],
+	"name" : "OPUMLMetamodelElementTemplate",
+	"pools" : [
+		 ],
+	"super" : "Object",
+	"type" : "normal" }

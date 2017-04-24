@@ -1,4 +1,4 @@
-tests
+tests - generating - attributes
 testAddAttributeNamedClass
 	| class attribute |
 	class := CBClass new.

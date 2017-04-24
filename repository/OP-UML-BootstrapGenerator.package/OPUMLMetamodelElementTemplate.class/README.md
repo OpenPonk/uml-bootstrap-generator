@@ -1,0 +1,1 @@
+I am a template implementation for UML Element handling things like multiple inheritance and whatnot.

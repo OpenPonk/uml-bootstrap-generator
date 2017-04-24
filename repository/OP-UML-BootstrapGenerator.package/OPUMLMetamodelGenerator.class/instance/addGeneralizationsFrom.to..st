@@ -17,12 +17,13 @@ addGeneralizationsFrom: aClassModel to: cls
 						with: (self classNameFor: each name)) ].
 	directMethod := CBMethodBuilder new.
 	directMethod selector: 'initializeDirectGeneralizations'.
-	directMethod addLine: 'generalizations := {'.
+	directMethod addLine: 'directGeneralizations := {'.
 	directMethod addIndent.
 	aClassModel generalization
 		ifNotNil: [ :gen | 
 			gen
-				do: [ :each | directMethod addLine: 'sharedGeneralizations at: #' , each general name , '.' ] ].
+				reject: [ :each | each general name = 'Element' ]
+				thenDo: [ :each | directMethod addLine: 'sharedGeneralizations at: #' , each general name , '.' ] ].
 	directMethod removeIndent.
 	directMethod addLine: '}'.
 	cls compile: initMethod source trimmed classified: 'initialization'.

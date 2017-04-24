@@ -1,4 +1,4 @@
-tests
+tests - generating - classes
 testCreateClass
 	| classModel class |
 	classModel := BootUMLClass new name: 'Simple'.

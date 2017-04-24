@@ -1,4 +1,4 @@
-tests - generating - methods
+tests - generating - generalizations
 testAddDelegationMethods
 	| class classModel methods |
 	class := CBClass new.
@@ -8,14 +8,8 @@ testAddDelegationMethods
 	generator addDelegationMethodsFrom: classModel to: class.
 	methods := class methods collect: [ :each | each selector -> each protocol ].
 	self assert: (methods includes: 'nameExpression' -> 'accessing - NamedElement').
-	self assert: (methods includes: 'ownedComment:' -> 'accessing - Element').
 	self
 		assertMethod: (class methods detect: [ :each | each selector = 'nameExpression' ]) source
 		equals:
 			'nameExpression
-	^ (sharedGeneralizations at: #NamedElement) nameExpression'.
-	self
-		assertMethod: (class methods detect: [ :each | each selector = 'ownedComment:' ]) source
-		equals:
-			'ownedComment: aComment
-	(sharedGeneralizations at: #Element) ownedComment: aComment'
+	^ (sharedGeneralizations at: #NamedElement) nameExpression'

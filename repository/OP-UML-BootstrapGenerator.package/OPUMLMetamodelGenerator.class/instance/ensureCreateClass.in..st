@@ -4,5 +4,5 @@ ensureCreateClass: aName in: aTagName
 		at: aName
 		ifAbsentPut: [ CBClass
 				name: (self classNameFor: aName)
-				parent: self rootClassName
+				parent: (self parentFor: aName)
 				package: self packageName , '-' , aTagName ]

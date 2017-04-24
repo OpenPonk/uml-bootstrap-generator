@@ -4,6 +4,6 @@ testEnsureCreateClass
 	result1 := generator ensureCreateClass: 'GeneratedClassXXX' in: 'Generated-Package'.
 	self assert: result1 name equals: 'MBUTGeneratedClassXXX'.
 	self assert: result1 package equals: 'Generated-UMLMetamodelTest-Generated-Package'.
-	self assert: result1 parent equals: generator rootClassName.
+	self assert: result1 parent equals: 'MBUTElement'.
 	result2 := generator ensureCreateClass: 'GeneratedClassXXX' in: 'Generated-Package'.
 	self assert: result1 == result2 description: 'should be the same identity'
