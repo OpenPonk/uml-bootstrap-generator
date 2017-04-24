@@ -2,6 +2,7 @@
 [![Build Status](https://travis-ci.org/OpenPonk/uml-bootstrap-generator.svg?branch=master)](https://travis-ci.org/OpenPonk/uml-bootstrap-generator) [![Coverage Status](https://coveralls.io/repos/github/OpenPonk/uml-bootstrap-generator/badge.svg?branch=master)](https://coveralls.io/github/OpenPonk/uml-bootstrap-generator?branch=master)
 
 Utility to bootstrap UML implementation.
+The generated code is available here https://github.com/OpenPonk/uml-metamodel
 
 ## Usage
 
@@ -30,17 +31,22 @@ generator packageName: 'OP-UML-Bootstrap'.
 
 ### 3. Read XMI into the bootstrap UML
 
-@todo requires separate package
-
 ```smalltalk
-reader := OPUMLXMIReader new.
+reader := OPUMLXMIBootstrapReader new.
 reader classPrefix: 'BootUML'.
-model := reader readXmi: xmi.
+model := (reader readXmi: xmi) first
 ```
 
 ### 4. Generate the actual UML
 
-WIP
+```smalltalk
+generator := OPUMLMetamodelGenerator new.
+generator sourceModel: model.
+generator rootClassName: 'OPUMLBootstrapObject'.
+generator classPrefix: 'OPUML'.
+generator packageName: 'OP-UML-Metamodel'.
+(CBChangesBrowser changes: generator generateAll) open
+```
 
 ## Installation
  
