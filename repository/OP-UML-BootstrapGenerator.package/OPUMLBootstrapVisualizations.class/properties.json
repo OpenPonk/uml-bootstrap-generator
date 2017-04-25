@@ -1,0 +1,14 @@
+{
+	"category" : "OP-UML-BootstrapGenerator-Utilities",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "",
+	"instvars" : [
+		 ],
+	"name" : "OPUMLBootstrapVisualizations",
+	"pools" : [
+		 ],
+	"super" : "Object",
+	"type" : "normal" }

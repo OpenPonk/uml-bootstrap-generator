@@ -1,16 +1,9 @@
 SystemOrganization addCategory: #'OP-UML-Bootstrap'!
-SystemOrganization addCategory: 'OP-UML-Bootstrap-Actions'!
-SystemOrganization addCategory: 'OP-UML-Bootstrap-Activities'!
 SystemOrganization addCategory: 'OP-UML-Bootstrap-Classification'!
-SystemOrganization addCategory: 'OP-UML-Bootstrap-CommonBehavior'!
 SystemOrganization addCategory: 'OP-UML-Bootstrap-CommonStructure'!
 SystemOrganization addCategory: 'OP-UML-Bootstrap-Deployments'!
-SystemOrganization addCategory: 'OP-UML-Bootstrap-InformationFlows'!
-SystemOrganization addCategory: 'OP-UML-Bootstrap-Interactions'!
 SystemOrganization addCategory: 'OP-UML-Bootstrap-Packages'!
 SystemOrganization addCategory: 'OP-UML-Bootstrap-SimpleClassifiers'!
-SystemOrganization addCategory: 'OP-UML-Bootstrap-StateMachines'!
 SystemOrganization addCategory: 'OP-UML-Bootstrap-StructuredClassifiers'!
 SystemOrganization addCategory: 'OP-UML-Bootstrap-Super'!
-SystemOrganization addCategory: 'OP-UML-Bootstrap-UseCases'!
 SystemOrganization addCategory: 'OP-UML-Bootstrap-Values'!
