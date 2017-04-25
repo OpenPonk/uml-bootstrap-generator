@@ -4,8 +4,8 @@ testAddAttribute
 	class := CBClass new.
 	attribute := self attribute: 'ownedComment' inClass: 'Element'.
 	generator addAttribute: attribute to: class.
-	self assert: class instanceVariables equals: #(ownedComment).
-	self assert: class selectors equals: #(ownedComment ownedComment:).
-	self assertMethod: class methods first source equals: 'ownedComment
+	self assert: class instanceVariables equals: #(ownedComments).
+	self assert: class selectors equals: #(ownedComments ownedComments:).
+	self assertMethod: class methods first source equals: 'ownedComments
 	"The Comments owned by this Element."
-	^ ownedComment'
+	^ ownedComments'

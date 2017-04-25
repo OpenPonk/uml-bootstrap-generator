@@ -1,10 +1,7 @@
 generating - attributes
 addAttribute: anAttributeModel to: aClass
 	| name comment |
-	name := anAttributeModel name.
-	"class is a prohibited method name (it accesses the class-side)"
-	name = 'class'
-		ifTrue: [ name := 'owningClass' ].
+	name := self attributeNameFor: anAttributeModel.
 	comment := anAttributeModel ownedComment ifNil: [ '' ] ifNotNil: [ :c | c first body ].
 	aClass addInstVarNamed: name.
 	(self isLiteralSpecification: anAttributeModel defaultValue)
