@@ -11,6 +11,8 @@ addAttribute: anAttributeModel to: aClass
 		ifTrue: [ getterBuilder defaultValue: 'OrderedCollection new' ].
 	(self isLiteralSpecification: anAttributeModel defaultValue)
 		ifTrue: [ getterBuilder defaultValue: (self defaultValueFrom: anAttributeModel defaultValue) ].
+	(self isEnumValue: anAttributeModel defaultValue)
+		ifTrue: [ getterBuilder defaultValue: (self defaultValueFrom: anAttributeModel defaultValue) ].
 	aClass addMethod: getterBuilder build.
 	aClass
 		addMethod: (CBMethod new setter: name argument: anAttributeModel type name comment: comment)

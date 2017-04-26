@@ -1,4 +1,4 @@
-tests - generating - attributes
+tests - retrieving
 testDefaultValues
 	| result |
 	result := generator defaultValues.

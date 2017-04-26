@@ -18,6 +18,8 @@ isCollectionAttribute: aSymbol inClass: aClass
 		ifTrue: [ ^ false ].
 	aSymbol = #defaultValue
 		ifTrue: [ ^ false ].
+	(aSymbol = #instance and: [ className = #InstanceValue ])
+		ifTrue: [ ^ false ].
 	((#(general specific) includes: aSymbol) and: [ className = #Generalization ])
 		ifTrue: [ ^ false ].
 	^ true

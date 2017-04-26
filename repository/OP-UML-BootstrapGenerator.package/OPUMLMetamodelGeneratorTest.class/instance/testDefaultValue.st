@@ -1,4 +1,4 @@
-tests - generating - attributes
+tests - retrieving
 testDefaultValue
 	| attribute |
 	attribute := self attribute: 'value' inClass: 'LiteralInteger'.

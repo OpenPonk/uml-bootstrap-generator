@@ -1,4 +1,4 @@
-tests - generating - attributes
+tests - retrieving
 testDefaultDefaultValue
 	| attribute |
 	attribute := self attribute: 'isReadOnly' inClass: 'Activity'.
