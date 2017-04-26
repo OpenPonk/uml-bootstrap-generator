@@ -1,0 +1,16 @@
+{
+	"category" : "OP-UML-BootstrapGenerator-Utilities",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "",
+	"instvars" : [
+		"selector",
+		"comment",
+		"defaultValue" ],
+	"name" : "OPUMLBootstrapGetterMethodBuilder",
+	"pools" : [
+		 ],
+	"super" : "Object",
+	"type" : "normal" }
