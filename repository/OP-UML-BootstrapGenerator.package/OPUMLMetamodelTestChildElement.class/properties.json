@@ -1,0 +1,14 @@
+{
+	"category" : "OP-UML-BootstrapGenerator-Tests",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "",
+	"instvars" : [
+		 ],
+	"name" : "OPUMLMetamodelTestChildElement",
+	"pools" : [
+		 ],
+	"super" : "OPUMLMetamodelTestParentElement",
+	"type" : "normal" }

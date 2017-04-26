@@ -5,8 +5,6 @@ testCreateElementMetaInstanceMethods
 	self
 		assert: (cls methods collect: #selector) sorted
 		equals:
-			#(initialize initializeWithShared: gtInspectorAllPropertiesIn: gtInspectorPropertiesIn: printOn:)
+			#(initialize initializeWithShared: gtInspectorAllPropertiesIn: gtInspectorPropertiesIn: printOn: inspectorProperties inspectorPropertiesSelectors nonEmptyinspectorProperties)
 				sorted.
-	self
-		assert: (cls methodNamed: #initialize) protocol
-		equals: 'initialization'.
+	self assert: (cls methodNamed: #initialize) protocol equals: 'initialization'

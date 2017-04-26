@@ -1,0 +1,3 @@
+accessing
+fromParent
+	^ 12
