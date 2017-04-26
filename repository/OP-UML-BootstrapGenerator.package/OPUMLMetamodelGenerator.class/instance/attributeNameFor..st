@@ -6,5 +6,5 @@ attributeNameFor: anAttributeModel
 	name = 'class'
 		ifTrue: [ name := 'owningClass' ].
 	anAttributeModel isMultivalued
-		ifTrue: [ ^ name asEnglishPlural ].
+		ifTrue: [ ^ (self asPlural: name) ].
 	^ name

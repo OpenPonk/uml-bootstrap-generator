@@ -12,7 +12,7 @@ readItem: anItem
 		keysAndValuesDo: [ :key :values | 
 			| selector arguments pluralSelector sg pl isMultivalued |
 			selector := (key , ':') asSymbol.
-			pluralSelector := (key asEnglishPlural , ':') asSymbol.
+			pluralSelector := ((self asPlural: key) , ':') asSymbol.
 			sg := (instance class selectors includes: selector)
 				or: [ instance class superclass name = (self classPrefix , 'Element')
 						and: [ instance class superclass selectors includes: selector ] ].
