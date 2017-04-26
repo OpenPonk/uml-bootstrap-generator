@@ -8,4 +8,4 @@ testAddAttribute
 	self assert: class selectors equals: #(ownedComments ownedComments:).
 	self assertMethod: class methods first source equals: 'ownedComments
 	"The Comments owned by this Element."
-	^ ownedComments'
+	^ ownedComments ifNil: [ ownedComments := OrderedCollection new ]'

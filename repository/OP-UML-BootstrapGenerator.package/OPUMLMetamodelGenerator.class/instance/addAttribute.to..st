@@ -11,6 +11,9 @@ addAttribute: anAttributeModel to: aClass
 						getter: name
 						comment: comment
 						defaultValue: (self defaultValueFrom: anAttributeModel defaultValue)) ]
-		ifFalse: [ aClass addMethod: (CBMethod new getter: name comment: comment) ].
+		ifFalse: [ anAttributeModel isMultivalued
+				ifTrue: [ aClass
+						addMethod: (CBMethod new getter: name comment: comment defaultValue: 'OrderedCollection new') ]
+				ifFalse: [ aClass addMethod: (CBMethod new getter: name comment: comment) ] ].
 	aClass
 		addMethod: (CBMethod new setter: name argument: anAttributeModel type name comment: comment)
