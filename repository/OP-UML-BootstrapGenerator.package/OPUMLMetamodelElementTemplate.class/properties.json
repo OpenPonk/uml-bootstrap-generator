@@ -8,7 +8,8 @@
 	"instvars" : [
 		"sharedGeneralizations",
 		"directGeneralizations",
-		"announcer" ],
+		"announcer",
+		"uuid" ],
 	"name" : "OPUMLMetamodelElementTemplate",
 	"pools" : [
 		 ],
