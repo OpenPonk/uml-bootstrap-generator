@@ -42,7 +42,6 @@ model := (reader readXmi: xmi) first
 ```smalltalk
 generator := OPUMLMetamodelGenerator new.
 generator sourceModel: model.
-generator rootClassName: 'OPUMLBootstrapObject'.
 generator classPrefix: 'OPUML'.
 generator packageName: 'OP-UML-Metamodel'.
 (CBChangesBrowser changes: generator generateAll) open
