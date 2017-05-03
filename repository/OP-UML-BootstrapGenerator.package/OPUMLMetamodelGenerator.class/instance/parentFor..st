@@ -1,5 +1,7 @@
 retrieving
 parentFor: aClassName
-	^ aClassName = 'Element'
-		ifTrue: [ 'Object' ]
-		ifFalse: [ self classPrefix , 'Element' ]
+	aClassName = 'MetaElement'
+		ifTrue: [ ^ 'Object' ].
+	aClassName = 'Element'
+		ifTrue: [ ^ self classPrefix , 'MetaElement' ].
+	^ self classPrefix , 'Element'

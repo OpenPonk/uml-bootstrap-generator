@@ -3,7 +3,7 @@ inspectorPropertiesSelectors
 	| classes class |
 	classes := Set new.
 	class := self class.
-	[ class name = 'Object' ]
+	[ class superclass name = 'Object' ]
 		whileFalse: [ classes add: class.
 			class := class superclass ].
 	^ ((((classes flatCollect: #methods) select: [ :each | each numArgs = 0 ])

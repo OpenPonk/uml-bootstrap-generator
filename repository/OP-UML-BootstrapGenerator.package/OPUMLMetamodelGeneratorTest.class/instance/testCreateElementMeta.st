@@ -1,7 +1,9 @@
-tests - meta
+tests
 testCreateElementMeta
-	| cls |
+	| cls elCls |
 	cls := generator createElementMeta.
-	generator createClassFrom: (self findClass: 'Element') in: 'CommonStructure'.
-	self assert: cls name equals: 'MBUTElement'.
-	self assert: cls parent equals: 'Object'
+	elCls := generator createClassFrom: (self findClass: 'Element') in: 'CommonStructure'.
+	self assert: cls name equals: 'MBUTMetaElement'.
+	self assert: cls parent equals: 'Object'.
+	self assert: elCls name equals: 'MBUTElement'.
+	self assert: elCls parent equals: 'MBUTMetaElement'

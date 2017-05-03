@@ -2,7 +2,6 @@ tests - meta
 testCreateElementMetaInitialize
 	| cls |
 	cls := generator createElementMeta.
-	generator createClassFrom: (self findClass: 'Element') in: 'CommonStructure'.
 	self
 		assertMethod: (cls methodNamed: #initialize) source
 		equals:

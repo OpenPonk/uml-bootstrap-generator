@@ -1,0 +1,3 @@
+initialization
+initializeSharedGeneralizations
+	^ self subclassResponsibility
