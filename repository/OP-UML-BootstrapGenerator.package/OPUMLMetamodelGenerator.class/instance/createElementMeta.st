@@ -2,9 +2,12 @@ generating - meta
 createElementMeta
 	| cls sourceClass |
 	cls := self ensureCreateClass: 'MetaElement' in: 'Meta'.
-	cls comment: 'I am a metaclass for UML classes implementing some behavior for managing the classes and other stuff (like an announcer).'.
+	cls
+		comment:
+			'I am a metaclass for UML classes implementing some behavior for managing the classes and other stuff (like an announcer).'.
 	sourceClass := OPUMLMetamodelElementTemplate.
 	sourceClass instanceVariables do: [ :each | cls addInstVarNamed: each ].
+	sourceClass class instanceVariables do: [ :each | cls addMetaInstVarNamed: each ].
 	sourceClass methods
 		do: [ :each | 
 			cls

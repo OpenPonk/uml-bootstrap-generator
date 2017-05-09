@@ -12,4 +12,10 @@ testAddDelegationMethods
 		assertMethod: (class methods detect: [ :each | each selector = 'nameExpression' ]) source
 		equals:
 			'nameExpression
-	^ (sharedGeneralizations at: #NamedElement) nameExpression'
+	^ (sharedGeneralizations at: #NamedElement) nameExpression'.
+	self assert: (methods includes: 'nameExpression:' -> 'accessing - NamedElement').
+	self
+		assertMethod: (class methods detect: [ :each | each selector = 'nameExpression:' ]) source
+		equals:
+			'nameExpression: aStringExpression
+	(sharedGeneralizations at: #NamedElement) nameExpression: aStringExpression'.

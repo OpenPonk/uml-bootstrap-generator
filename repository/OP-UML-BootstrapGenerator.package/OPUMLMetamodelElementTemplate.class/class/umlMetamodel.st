@@ -1,8 +1,8 @@
 instance creation
-inspectUML
+umlMetamodel
 	"Open an inspector on the UML metamodel itself"
 
-	<script: 'self inspectUML inspect'>
+	<script: 'self umlMetamodel inspect'>
 	^ self metaModels
 		at: #UML
 		ifAbsentPut: [ | primitives uml mapping result xmi reader model |

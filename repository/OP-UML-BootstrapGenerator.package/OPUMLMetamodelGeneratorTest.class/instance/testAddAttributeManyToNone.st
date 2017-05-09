@@ -1,5 +1,5 @@
 tests - generating - attributes
-testAddAttribute
+testAddAttributeManyToNone
 	| class attribute |
 	class := CBClass new.
 	attribute := self attribute: 'ownedComment' inClass: 'Element'.
@@ -8,4 +8,7 @@ testAddAttribute
 	self assert: class selectors equals: #(ownedComments ownedComments:).
 	self assertMethod: class methods first source equals: 'ownedComments
 	"The Comments owned by this Element."
-	^ ownedComments ifNil: [ ownedComments := OrderedCollection new ]'
+	^ ownedComments ifNil: [ ownedComments := OrderedCollection new ]'.
+self assertMethod: class methods second source equals: 'ownedComments: aComment
+	"The Comments owned by this Element."
+	ownedComments := aComment'

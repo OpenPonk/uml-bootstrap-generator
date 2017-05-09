@@ -4,4 +4,5 @@ testCreateElementMetaAttributes
 	cls := generator createElementMeta.
 	self
 		assert: cls instanceVariables sorted
-		equals: #(announcer directGeneralizations sharedGeneralizations uuid)
+		equals: #(announcer directGeneralizations sharedGeneralizations uuid).
+	self assert: cls metaInstanceVariables sorted equals: #(metaModels)
