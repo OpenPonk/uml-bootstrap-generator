@@ -9,7 +9,7 @@ build
 						nextPutAll: String tab , '"' , (comment copyReplaceAll: '"' with: '""') , '"' , String cr ].
 			stream nextPutAll: String tab , '^ ' , selector.
 			defaultValue
-				ifNotNil: [ stream nextPutAll: ' ifNil: [ ' , selector , ' := ' , defaultValue , ' ]' ] ].
+				ifNotNil: [ stream nextPutAll: ' ifNil: [ ' , selector , ' := ' , defaultValue asString , ' ]' ] ].
 	^ CBMethod new
 		protocol: 'accessing';
 		source: source
