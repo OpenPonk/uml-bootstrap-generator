@@ -1,5 +1,5 @@
 tests - generating - generalizations
-testAddDelegationMethods
+testAddAccessingDelegationMethods
 	| class classModel methods |
 	class := CBClass new.
 	classModel := self findClass: 'RedefinableElement'.

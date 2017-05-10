@@ -6,4 +6,6 @@ testIsCollectionAttribute
 	self deny: (reader isCollectionAttribute: #type inClass: BootUMLProperty).
 	self deny: (reader isCollectionAttribute: #importedPackage inClass: BootUMLPackageImport).
 	self deny: (reader isCollectionAttribute: #defaultValue inClass: BootUMLProperty).
-	self deny: (reader isCollectionAttribute: #instance inClass: BootUMLInstanceValue)
+	self deny: (reader isCollectionAttribute: #instance inClass: BootUMLInstanceValue).
+	self deny: (reader isCollectionAttribute: #bodyCondition inClass: BootUMLOperation).
+	self deny: (reader isCollectionAttribute: #specification inClass: BootUMLConstraint)

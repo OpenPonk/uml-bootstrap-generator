@@ -1,0 +1,14 @@
+{
+	"category" : "OP-UML-BootstrapGenerator-Metamodel-Generator",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "",
+	"instvars" : [
+		 ],
+	"name" : "OPUMLBootMultiplicityBehaviorImplementation",
+	"pools" : [
+		 ],
+	"super" : "Object",
+	"type" : "normal" }

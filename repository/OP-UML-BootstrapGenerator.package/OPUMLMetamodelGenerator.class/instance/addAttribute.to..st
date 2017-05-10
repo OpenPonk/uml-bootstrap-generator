@@ -8,7 +8,7 @@ addAttribute: anAttributeModel to: aClass
 			assoc first memberEnd \ (assoc first ownedEnd ifNil: [ #() ])
 				detect: [ :each | (each = anAttributeModel) not ]
 				ifFound: [ :each | oppositeEnd := each ] ].
-	comment := anAttributeModel ownedComment ifNil: [ '' ] ifNotNil: [ :c | c first body ].
+	comment := self commentIn: anAttributeModel.
 	aClass addInstVarNamed: name.
 	(getterBuilder := OPUMLBootstrapGetterMethodBuilder new)
 		selector: name;

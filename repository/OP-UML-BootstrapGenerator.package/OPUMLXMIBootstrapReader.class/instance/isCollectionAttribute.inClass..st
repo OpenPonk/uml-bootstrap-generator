@@ -2,24 +2,20 @@ testing
 isCollectionAttribute: aSymbol inClass: aClass
 	"hacks for now, look at multiplicity later on"
 
-	| className |
+	| className pairs selectors |
 	className := aClass name withoutPrefix: self classPrefix.
-	(#(name lowerValue upperValue) includes: aSymbol)
+	pairs := {#Comment -> #body.
+	#Constraint -> #specification.
+	#Operation -> #bodyCondition.
+	#InstanceValue -> #instance.
+	#PackageImport -> #importedPackage.
+	#Generalization -> #general.
+	#Generalization -> #specific}.
+	selectors := #(name lowerValue upperValue type defaultValue).
+	(pairs includes: className -> aSymbol)
 		ifTrue: [ ^ false ].
-	(aSymbol = #value
-		and: [ #(LiteralString LiteralInteger LiteralBoolean LiteralUnlimitedNatural LiteralReal)
-				includes: className ])
+	(selectors includes: aSymbol)
 		ifTrue: [ ^ false ].
-	(aSymbol = #body and: [ className = #Comment ])
-		ifTrue: [ ^ false ].
-	(aSymbol = #importedPackage and: [ className = #PackageImport ])
-		ifTrue: [ ^ false ].
-	aSymbol = #type
-		ifTrue: [ ^ false ].
-	aSymbol = #defaultValue
-		ifTrue: [ ^ false ].
-	(aSymbol = #instance and: [ className = #InstanceValue ])
-		ifTrue: [ ^ false ].
-	((#(general specific) includes: aSymbol) and: [ className = #Generalization ])
+	(aSymbol = #value and: [ #(LiteralString LiteralInteger LiteralBoolean LiteralUnlimitedNatural LiteralReal) includes: className ])
 		ifTrue: [ ^ false ].
 	^ true

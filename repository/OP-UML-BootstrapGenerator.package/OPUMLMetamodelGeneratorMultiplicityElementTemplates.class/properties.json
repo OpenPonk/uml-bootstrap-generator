@@ -1,0 +1,14 @@
+{
+	"category" : "OP-UML-BootstrapGenerator-Templates",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "",
+	"instvars" : [
+		"value" ],
+	"name" : "OPUMLMetamodelGeneratorMultiplicityElementTemplates",
+	"pools" : [
+		 ],
+	"super" : "OPUMLMetamodelGeneratorTemplates",
+	"type" : "normal" }
