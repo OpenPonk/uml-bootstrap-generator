@@ -1,8 +1,9 @@
-tests - generating - generalizations
+tests
 testAddOperationsDelegationMethods
 	| class classModel methods |
 	class := CBClass new.
 	classModel := self findClass: 'LiteralSpecification'.
+	generator loadTemplateMethods.
 	generator createClassFrom: (self findClass: 'NamedElement') in: 'Anywhere'.
 	generator createClassFrom: (self findClass: 'ParameterableElement') in: 'Anywhere'.
 	generator createClassFrom: (self findClass: 'TypedElement') in: 'Anywhere'.
