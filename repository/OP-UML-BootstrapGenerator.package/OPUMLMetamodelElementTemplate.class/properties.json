@@ -1,17 +1,18 @@
 {
+	"commentStamp" : "PeterUhnak 4/25/2017 00:01",
+	"super" : "Object",
 	"category" : "OP-UML-BootstrapGenerator-Metamodel-Generator",
 	"classinstvars" : [
-		"metaModels" ],
-	"classvars" : [
-		 ],
-	"commentStamp" : "PeterUhnak 4/25/2017 00:01",
+		"metaModels"
+	],
+	"pools" : [ ],
+	"classvars" : [ ],
 	"instvars" : [
 		"sharedGeneralizations",
 		"directGeneralizations",
 		"announcer",
-		"uuid" ],
+		"uuid"
+	],
 	"name" : "OPUMLMetamodelElementTemplate",
-	"pools" : [
-		 ],
-	"super" : "Object",
-	"type" : "normal" }
+	"type" : "normal"
+}

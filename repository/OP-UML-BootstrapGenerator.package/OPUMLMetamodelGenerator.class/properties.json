@@ -1,19 +1,18 @@
 {
-	"category" : "OP-UML-BootstrapGenerator-Metamodel-Generator",
-	"classinstvars" : [
-		 ],
-	"classvars" : [
-		 ],
 	"commentStamp" : "PeterUhnak 4/26/2017 13:04",
+	"super" : "Object",
+	"category" : "OP-UML-BootstrapGenerator-Metamodel-Generator",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
 	"instvars" : [
 		"classPrefix",
 		"packageName",
 		"rootClassName",
 		"sourceModel",
 		"classes",
-		"defaultValues" ],
+		"defaultValues"
+	],
 	"name" : "OPUMLMetamodelGenerator",
-	"pools" : [
-		 ],
-	"super" : "Object",
-	"type" : "normal" }
+	"type" : "normal"
+}

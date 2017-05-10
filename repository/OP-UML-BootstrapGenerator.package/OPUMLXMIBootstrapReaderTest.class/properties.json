@@ -1,14 +1,13 @@
 {
-	"category" : "OP-UML-BootstrapGenerator-Reader",
-	"classinstvars" : [
-		 ],
-	"classvars" : [
-		 ],
 	"commentStamp" : "",
-	"instvars" : [
-		"reader" ],
-	"name" : "OPUMLXMIBootstrapReaderTest",
-	"pools" : [
-		 ],
 	"super" : "TestCase",
-	"type" : "normal" }
+	"category" : "OP-UML-BootstrapGenerator-Reader",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"reader"
+	],
+	"name" : "OPUMLXMIBootstrapReaderTest",
+	"type" : "normal"
+}

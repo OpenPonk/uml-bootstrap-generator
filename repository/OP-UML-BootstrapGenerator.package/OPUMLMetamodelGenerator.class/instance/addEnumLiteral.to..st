@@ -1,6 +1,6 @@
 generating - enums
 addEnumLiteral: anEnumLiteral to: aClass
-	| builder |
+	| builder prohibitedClassSideSelectors |
 	builder := CBMethodBuilder new.
 	builder selector: anEnumLiteral name.
 	anEnumLiteral ownedComment
@@ -12,4 +12,11 @@ addEnumLiteral: anEnumLiteral to: aClass
 		addMethod:
 			(CBMethod new
 				protocol: 'accessing';
-				source: builder source)
+				source: builder source).
+	prohibitedClassSideSelectors := #(package).
+	(prohibitedClassSideSelectors includes: anEnumLiteral name)
+		ifFalse: [ aClass
+				addMetaMethod:
+					(CBMethod new
+						protocol: 'accessing - enum';
+						source: builder source) ]

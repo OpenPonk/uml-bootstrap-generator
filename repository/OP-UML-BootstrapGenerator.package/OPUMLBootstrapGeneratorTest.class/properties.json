@@ -1,14 +1,15 @@
 {
+	"commentStamp" : "",
+	"super" : "TestCase",
 	"category" : "OP-UML-BootstrapGenerator-Tests",
 	"classinstvars" : [
-		"umlSpecs" ],
-	"classvars" : [
-		 ],
-	"commentStamp" : "",
+		"umlSpecs"
+	],
+	"pools" : [ ],
+	"classvars" : [ ],
 	"instvars" : [
-		"generator" ],
+		"generator"
+	],
 	"name" : "OPUMLBootstrapGeneratorTest",
-	"pools" : [
-		 ],
-	"super" : "TestCase",
-	"type" : "normal" }
+	"type" : "normal"
+}

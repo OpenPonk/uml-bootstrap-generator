@@ -1,5 +1,6 @@
 translating
 generate
+<script>
 | generator model |
 model := OPUMLMetamodelGeneratorTest umlBootstrapModel. 
 generator := OPUMLMetamodelGenerator new.
