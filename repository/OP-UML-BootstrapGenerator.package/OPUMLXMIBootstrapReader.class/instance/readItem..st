@@ -2,7 +2,7 @@ reading
 readItem: anItem
 	| instance groups |
 	anItem isValueItem
-		ifTrue: [ ^ anItem value ].
+		ifTrue: [ ^ self valueFor: anItem value ].
 	anItem isReferenceItem
 		ifTrue: [ ^ anItem referencedElements collect: [ :each | self readItem: each ] ].
 	instanceCache at: (self uniqueIdOf: anItem) ifPresent: [ :match | ^ match ].

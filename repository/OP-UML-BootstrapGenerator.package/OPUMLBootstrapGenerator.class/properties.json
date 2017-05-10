@@ -1,7 +1,7 @@
 {
 	"commentStamp" : "PeterUhnak 4/14/2017 10:35",
 	"super" : "Object",
-	"category" : "OP-UML-BootstrapGenerator-Bootrap-Generator",
+	"category" : "OP-UML-BootstrapGenerator-Bootstrap-Generator",
 	"classinstvars" : [ ],
 	"pools" : [ ],
 	"classvars" : [ ],
