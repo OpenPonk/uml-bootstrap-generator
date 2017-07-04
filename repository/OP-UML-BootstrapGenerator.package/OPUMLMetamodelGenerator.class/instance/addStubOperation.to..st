@@ -19,4 +19,4 @@ addStubOperation: anOperationModel to: aClass
 				withIndexDo: [ :each :i | methodBuilder addComment: '{' , (spec language at: i) , '} ' , each ] ].
 	methodBuilder addLine: ''.
 	methodBuilder addLine: 'self notYetImplemented'.
-	aClass compile: methodBuilder source classified: 'operations - stubs'
+	aClass compile: methodBuilder source withSqueakLineEndings classified: 'operations - stubs'
