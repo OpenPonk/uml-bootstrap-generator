@@ -1,4 +1,4 @@
-tests
+tests - generating - generalizations
 testAddNoDirectGeneralizations
 	| class classModel |
 	class := CBClass new.
@@ -11,6 +11,7 @@ testAddNoDirectGeneralizations
 		assertMethod: (class methodNamed: #initializeSharedGeneralizations) source
 		equals:
 			'initializeSharedGeneralizations
+	sharedGeneralizations at: #NamedElement put: self
 '.
 	self
 		assertMethod: (class methodNamed: #initializeDirectGeneralizations) source

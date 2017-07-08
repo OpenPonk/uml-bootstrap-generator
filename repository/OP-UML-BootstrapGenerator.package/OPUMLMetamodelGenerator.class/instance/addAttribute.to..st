@@ -18,9 +18,9 @@ addAttribute: anAttributeModel to: aClass
 	anAttributeModel isMultivalued & oppositeEnd isNotNil
 		ifTrue: [ oppositeEnd isMultivalued
 				ifTrue: [ getterBuilder
-						defaultValue: 'OPUMLManyToManyLinks on: self opposite: #' , (self attributeNameFor: oppositeEnd) ]
+						defaultValue: 'OPUMLManyToManyLinks on: self identity opposite: #' , (self attributeNameFor: oppositeEnd) ]
 				ifFalse: [ getterBuilder
-						defaultValue: 'OPUMLToManyLinks on: self opposite: #' , (self attributeNameFor: oppositeEnd) , ':' ] ].
+						defaultValue: 'OPUMLToManyLinks on: self identity opposite: #' , (self attributeNameFor: oppositeEnd) , ':' ] ].
 	(self isLiteralSpecification: anAttributeModel defaultValue)
 		ifTrue: [ getterBuilder defaultValue: (self defaultValueFrom: anAttributeModel defaultValue) ].
 	(self isEnumValue: anAttributeModel defaultValue)
@@ -50,7 +50,7 @@ addAttribute: anAttributeModel to: aClass
 									('{attribute}: {argument}
 	"{comment}"
 	{attribute} := OPUMLToOneLink
-		on: self
+		on: self identity
 		update: #{otherSelector}
 		from: {attribute}
 		to: {argument}'
@@ -67,7 +67,7 @@ addAttribute: anAttributeModel to: aClass
 	anOld{attributeCap} := {attribute}.
 	{attribute} := {argument}.
 	OPUMLToOneLink
-		on: self
+		on: self identity
 		thisSelector: #{attribute}
 		otherSelector: #{otherAttribute}
 		from: anOld{attributeCap}

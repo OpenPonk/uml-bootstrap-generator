@@ -7,6 +7,6 @@ testCreateElementMetaInitialize
 		equals:
 			'initialize
 	super initialize.
-	sharedGeneralizations := Dictionary new.
+	sharedGeneralizations := OrderedDictionary new.
 	self initializeSharedGeneralizations.
 	self initializeDirectGeneralizations'

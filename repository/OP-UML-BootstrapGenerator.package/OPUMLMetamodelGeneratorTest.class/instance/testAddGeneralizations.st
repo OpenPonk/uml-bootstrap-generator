@@ -1,4 +1,4 @@
-tests
+tests - generating - generalizations
 testAddGeneralizations
 	| class classModel |
 	class := CBClass new.
@@ -11,7 +11,8 @@ testAddGeneralizations
 		assertMethod: (class methodNamed: #initializeSharedGeneralizations) source
 		equals:
 			'initializeSharedGeneralizations
-	sharedGeneralizations at: #NamedElement put: (MBUTNamedElement newOnShared: sharedGeneralizations)'.
+	sharedGeneralizations at: #NamedElement put: (MBUTNamedElement newOnShared: sharedGeneralizations).
+	sharedGeneralizations at: #RedefinableElement put: self'.
 	self
 		assertMethod: (class methodNamed: #initializeDirectGeneralizations) source
 		equals:

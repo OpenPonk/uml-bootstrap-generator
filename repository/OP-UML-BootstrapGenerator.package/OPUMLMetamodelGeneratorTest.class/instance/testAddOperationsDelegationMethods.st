@@ -1,4 +1,4 @@
-tests
+tests - generating - generalizations
 testAddOperationsDelegationMethods
 	| class classModel methods |
 	class := CBClass new.

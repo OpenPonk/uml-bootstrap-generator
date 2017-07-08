@@ -1,4 +1,4 @@
-tests
+tests - meta
 testCreateElementMeta
 	| cls elCls |
 	cls := generator createElementMeta.

@@ -10,6 +10,7 @@ addGeneralizationsFrom: aClassModel to: cls
 					('sharedGeneralizations at: #<1s> put: (<2s> newOnShared: sharedGeneralizations).'
 						expandMacrosWith: each name
 						with: (self classNameFor: each name)) ].
+	sharedMethod addLine: 'sharedGeneralizations at: #', aClassModel name, ' put: self.'.
 	directMethod := CBMethodBuilder new.
 	directMethod selector: 'initializeDirectGeneralizations'.
 	directMethod addLine: 'directGeneralizations := {'.

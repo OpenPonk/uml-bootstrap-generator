@@ -11,7 +11,7 @@ testAddAttributeOneToMany
 		equals:
 			'ownedAttributes
 	"The attributes owned by the DataType."
-	^ ownedAttributes ifNil: [ ownedAttributes := OPUMLToManyLinks on: self opposite: #datatype: ]'.
+	^ ownedAttributes ifNil: [ ownedAttributes := OPUMLToManyLinks on: self identity opposite: #datatype: ]'.
 	self
 		assertMethod: class methods second source
 		equals:

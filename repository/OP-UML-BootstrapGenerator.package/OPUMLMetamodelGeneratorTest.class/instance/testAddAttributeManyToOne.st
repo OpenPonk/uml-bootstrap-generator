@@ -17,4 +17,4 @@ testAddAttributeManyToOne
 		equals:
 			'datatype: aDataType
 	"The DataType that owns this Property, if any."
-	datatype := OPUMLToOneLink on: self update: #ownedAttributes from: datatype to: aDataType'
+	datatype := OPUMLToOneLink on: self identity update: #ownedAttributes from: datatype to: aDataType'

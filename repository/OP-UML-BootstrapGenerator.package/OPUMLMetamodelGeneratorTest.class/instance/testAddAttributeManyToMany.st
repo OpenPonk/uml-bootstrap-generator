@@ -11,7 +11,7 @@ testAddAttributeManyToMany
 		equals:
 			'generalizations
 	"Designates the instances of Generalization that are members of this GeneralizationSet."
-	^ generalizations ifNil: [ generalizations := OPUMLManyToManyLinks on: self opposite: #generalizationSets ]'.
+	^ generalizations ifNil: [ generalizations := OPUMLManyToManyLinks on: self identity opposite: #generalizationSets ]'.
 	self
 		assertMethod: class methods second source
 		equals:

@@ -20,4 +20,4 @@ testAddAttributeOneToOne
 	|anOldParameteredElement|
 	anOldParameteredElement := parameteredElement.
 	parameteredElement := aParameterableElement.
-	OPUMLToOneLink on: self thisSelector: #parameteredElement otherSelector: #templateParameter from: anOldParameteredElement to: parameteredElement'
+	OPUMLToOneLink on: self identity thisSelector: #parameteredElement otherSelector: #templateParameter from: anOldParameteredElement to: parameteredElement'
