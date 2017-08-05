@@ -1,2 +1,3 @@
 initialization
 initializeSharedGeneralizations
+	sharedGeneralizations at: #MetamodelTestParentElement put: self

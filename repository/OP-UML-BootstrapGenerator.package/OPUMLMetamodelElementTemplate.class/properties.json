@@ -2,16 +2,15 @@
 	"commentStamp" : "PeterUhnak 4/25/2017 00:01",
 	"super" : "Object",
 	"category" : "OP-UML-BootstrapGenerator-Metamodel-Generator",
-	"classinstvars" : [
-		"metaModels"
-	],
+	"classinstvars" : [ ],
 	"pools" : [ ],
 	"classvars" : [ ],
 	"instvars" : [
 		"sharedGeneralizations",
 		"directGeneralizations",
 		"announcer",
-		"uuid"
+		"uuid",
+		"tags"
 	],
 	"name" : "OPUMLMetamodelElementTemplate",
 	"type" : "normal"
