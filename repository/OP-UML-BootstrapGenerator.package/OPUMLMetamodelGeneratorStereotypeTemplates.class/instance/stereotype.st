@@ -1,0 +1,3 @@
+templates
+stereotype
+	^ self useMethodPerAccessor
