@@ -1,0 +1,3 @@
+templates
+extension
+	^ self useMethodPerAccessor

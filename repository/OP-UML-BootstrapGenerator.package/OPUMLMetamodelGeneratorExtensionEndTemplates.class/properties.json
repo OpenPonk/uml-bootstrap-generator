@@ -1,0 +1,11 @@
+{
+	"commentStamp" : "",
+	"super" : "OPUMLMetamodelGeneratorTemplates",
+	"category" : "OP-UML-BootstrapGenerator-Templates",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [ ],
+	"name" : "OPUMLMetamodelGeneratorExtensionEndTemplates",
+	"type" : "normal"
+}
