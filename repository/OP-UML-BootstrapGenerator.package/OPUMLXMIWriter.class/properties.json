@@ -1,0 +1,14 @@
+{
+	"commentStamp" : "",
+	"super" : "Object",
+	"category" : "OP-UML-BootstrapGenerator-Reader",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"classPrefix",
+		"identityCache"
+	],
+	"name" : "OPUMLXMIWriter",
+	"type" : "normal"
+}
