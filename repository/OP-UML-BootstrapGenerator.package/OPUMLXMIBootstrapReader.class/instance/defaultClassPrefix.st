@@ -1,0 +1,3 @@
+accessing
+defaultClassPrefix
+	^ 'BootUML'
