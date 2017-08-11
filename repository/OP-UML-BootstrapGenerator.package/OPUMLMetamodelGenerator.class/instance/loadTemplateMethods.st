@@ -1,8 +1,10 @@
 generating
 loadTemplateMethods
 	| templateClasses allClasses |
-	templateClasses := OPUMLMetamodelGeneratorTemplates allSubclasses.
-	allClasses := (sourceModel packagedElement flatCollect: #packagedElement)
+	templateClasses := OPUMLMetamodelGeneratorTemplates allSubclasses
+		copyWithout: OPUMLMetaGenTemplate.
+	allClasses := (sourceModel packagedElement
+		flatCollect: #packagedElement)
 		select: [ :each | each isKindOf: BootUMLClass ].
 	templateClasses
 		do: [ :cls | 

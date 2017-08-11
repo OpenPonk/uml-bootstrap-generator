@@ -1,3 +1,3 @@
 accessing
 umlMetaClass
-	^ OPUMLSpecsStorage metaClassFor: self
+	^ OPUMLXMISpecsStorage metaClassFor: self

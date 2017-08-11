@@ -4,7 +4,6 @@ showHierarchy
 xmi := OPUMLBootstrapGeneratorTest umlSpecs.
 
 reader := OPUMLXMIReader new.
-reader classPrefix: 'OPUML'.
 model := (reader readXmi: xmi) first.
 
 cls := (model packagedElements flatCollect: #packagedElements) select: [ :each | each isKindOf: OPUMLClass ].

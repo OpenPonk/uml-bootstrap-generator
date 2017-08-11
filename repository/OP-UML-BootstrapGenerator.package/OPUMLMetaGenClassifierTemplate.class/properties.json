@@ -1,0 +1,13 @@
+{
+	"commentStamp" : "",
+	"super" : "OPUMLMetaGenTemplate",
+	"category" : "OP-UML-BootstrapGenerator-Templates",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"sharedGeneralizations"
+	],
+	"name" : "OPUMLMetaGenClassifierTemplate",
+	"type" : "normal"
+}
