@@ -18,5 +18,6 @@ addRealOperation: anOperationModel to: aClass
 			spec body
 				withIndexDo: [ :each :i | methodBuilder addComment: '{' , (spec language at: i) , '} ' , each ] ].
 	methodBuilder addLine: ''.
-	methodBuilder addLine: anOperationModel method first body first.
+	methodBuilder
+		addLine: (self prefixClassNamesInText: anOperationModel method first body first).
 	aClass compile: methodBuilder source classified: 'operations'

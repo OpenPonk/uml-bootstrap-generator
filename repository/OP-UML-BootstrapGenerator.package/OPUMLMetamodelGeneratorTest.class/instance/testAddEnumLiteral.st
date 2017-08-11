@@ -1,4 +1,4 @@
-tests - generating - literals
+tests
 testAddEnumLiteral
 	| class enumModel literal |
 	class := CBClass new.
@@ -10,9 +10,9 @@ testAddEnumLiteral
 	self assert: class methods first protocol equals: 'accessing'.
 	self assertMethod: class methods first source equals: 'composite
 		"Indicates that the Property is aggregated compositely, i.e., the composite object has responsibility for the existence and storage of the composed objects (parts)."
-		^ #AggregationKind::composite'.
+		^ #composite'.
 	self assert: class metaMethods isNotEmpty.
 	self assert: class metaMethods first protocol equals: 'accessing - enum'.
 	self assertMethod: class metaMethods first source equals: 'composite
 		"Indicates that the Property is aggregated compositely, i.e., the composite object has responsibility for the existence and storage of the composed objects (parts)."
-		^ #AggregationKind::composite'.
+		^ #composite'.

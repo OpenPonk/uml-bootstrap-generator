@@ -6,8 +6,7 @@ addEnumLiteral: anEnumLiteral to: aClass
 	anEnumLiteral ownedComment
 		ifNotNil:
 			[ :comments | builder addLine: '"' , (comments first body copyReplaceAll: '"' with: '""') , '"' ].
-	builder
-		addLine: '^ #' , (aClass name withoutPrefix: self classPrefix) , '::' , anEnumLiteral name.
+	builder addLine: '^ #' , anEnumLiteral name.
 	aClass
 		addMethod:
 			(CBMethod new
