@@ -1,3 +1,3 @@
 adding
 add: aPath
-	pathmap at: aPath put: [ OPUMLSpecsStorage current at: aPath ] value
+	self add: aPath retrieveUsing: [ OPUMLSpecsStorage current at: aPath ]

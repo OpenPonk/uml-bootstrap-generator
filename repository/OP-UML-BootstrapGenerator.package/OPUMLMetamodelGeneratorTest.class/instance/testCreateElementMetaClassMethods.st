@@ -4,7 +4,7 @@ testCreateElementMetaClassMethods
 	cls := generator createElementMeta.
 	self
 		assert: (cls metaMethods collect: #selector) sorted
-		equals: #(metaModels newOnShared: umlMetamodel) sorted.
+		equals: #(newOnShared:) sorted.
 	method := cls metaMethods detect: [ :each | each selector = #newOnShared: ].
 	self assert: method protocol equals: 'instance creation'.
 	self

@@ -1,4 +1,5 @@
 writing
 initialize
 	super initialize.
-	identityCache := Dictionary new
+	identityCache := Dictionary new.
+	classPrefix := 'OPUML'

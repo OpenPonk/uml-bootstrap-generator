@@ -1,4 +1,4 @@
-adding
+initialization
 initialize
 	super initialize.
-	pathmap := Dictionary new
+	mapping := Dictionary new
