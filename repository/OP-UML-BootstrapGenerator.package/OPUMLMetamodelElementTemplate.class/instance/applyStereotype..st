@@ -1,4 +1,4 @@
 accessing - stereotypes
 applyStereotype: aStereotype
 	self appliedStereotypes addIfNotPresent: aStereotype.
-	aStereotype appliedTo: self as: self umlClassName
+	self perform: ('extension_' , aStereotype umlClassName , ':') asSymbol with: aStereotype
