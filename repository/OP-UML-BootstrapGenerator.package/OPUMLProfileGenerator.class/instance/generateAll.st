@@ -7,4 +7,5 @@ generateAll
 "	self generateAllEnums."
 	self generateAllClasses.
 	self generateAllDelegationMethods.
+	self generateExtensionMethods.
 	^ self changes
