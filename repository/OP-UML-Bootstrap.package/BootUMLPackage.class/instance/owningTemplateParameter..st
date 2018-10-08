@@ -1,3 +1,0 @@
-accessing - ParameterableElement
-owningTemplateParameter: aTemplateParameter
-	(sharedGeneralizations at: #ParameterableElement) owningTemplateParameter: aTemplateParameter

@@ -1,3 +1,0 @@
-accessing
-packageImport
-	^ packageImport

@@ -1,3 +1,0 @@
-accessing
-owningClass
-	^ owningClass

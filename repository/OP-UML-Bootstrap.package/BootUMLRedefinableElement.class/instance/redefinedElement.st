@@ -1,3 +1,0 @@
-accessing
-redefinedElement
-	^ redefinedElement

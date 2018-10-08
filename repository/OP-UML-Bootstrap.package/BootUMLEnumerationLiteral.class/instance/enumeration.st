@@ -1,3 +1,0 @@
-accessing
-enumeration
-	^ enumeration

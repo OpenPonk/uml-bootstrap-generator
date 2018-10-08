@@ -1,3 +1,0 @@
-implementation
-general
-	^ self parents

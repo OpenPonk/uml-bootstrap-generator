@@ -1,3 +1,0 @@
-accessing
-ownedTemplateSignature: aTemplateSignature
-	ownedTemplateSignature := aTemplateSignature

@@ -1,3 +1,0 @@
-accessing
-fromParent
-	^ 12

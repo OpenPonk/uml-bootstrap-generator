@@ -1,3 +1,0 @@
-implementation
-upper
-	^ self upperBound

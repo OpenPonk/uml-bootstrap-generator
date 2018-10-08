@@ -1,3 +1,0 @@
-accessing
-opaqueExpression
-	^ opaqueExpression

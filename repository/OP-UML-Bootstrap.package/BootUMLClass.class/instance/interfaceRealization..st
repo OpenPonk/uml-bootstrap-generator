@@ -1,3 +1,0 @@
-accessing - BehavioredClassifier
-interfaceRealization: anInterfaceRealization
-	(sharedGeneralizations at: #BehavioredClassifier) interfaceRealization: anInterfaceRealization

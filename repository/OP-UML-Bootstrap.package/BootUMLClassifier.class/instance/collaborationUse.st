@@ -1,3 +1,0 @@
-accessing
-collaborationUse
-	^ collaborationUse

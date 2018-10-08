@@ -1,3 +1,0 @@
-implementation
-mustBeOwned
-	^ false

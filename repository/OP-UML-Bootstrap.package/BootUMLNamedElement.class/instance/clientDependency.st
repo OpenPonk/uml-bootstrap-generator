@@ -1,3 +1,0 @@
-accessing
-clientDependency
-	^ clientDependency

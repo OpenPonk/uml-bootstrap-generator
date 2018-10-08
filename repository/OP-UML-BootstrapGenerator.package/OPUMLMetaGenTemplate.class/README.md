@@ -1,1 +1,0 @@
-I am a base class for classes providing Pharo implemention for some UML metamodel elements.

@@ -1,3 +1,0 @@
-accessing
-profileApplication: aProfileApplication
-	profileApplication := aProfileApplication

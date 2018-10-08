@@ -1,3 +1,0 @@
-accessing
-raisedException
-	^ raisedException
