@@ -1,5 +1,5 @@
 # UML Bootstrap Generator
-[![Build Status](https://travis-ci.org/OpenPonk/uml-bootstrap-generator.svg?branch=master)](https://travis-ci.org/OpenPonk/uml-bootstrap-generator) [![Coverage Status](https://coveralls.io/repos/github/OpenPonk/uml-bootstrap-generator/badge.svg?branch=master)](https://coveralls.io/github/OpenPonk/uml-bootstrap-generator?branch=master)
+[![Build Status](https://travis-ci.com/OpenPonk/uml-bootstrap-generator.svg?branch=master)](https://travis-ci.com/OpenPonk/uml-bootstrap-generator) [![Coverage Status](https://coveralls.io/repos/github/OpenPonk/uml-bootstrap-generator/badge.svg?branch=master)](https://coveralls.io/github/OpenPonk/uml-bootstrap-generator?branch=master)
 
 Utility to bootstrap UML implementation.
 The generated code is available here https://github.com/OpenPonk/uml-metamodel
