@@ -9,7 +9,7 @@ Class {
 		'classes',
 		'defaultValues'
 	],
-	#category : 'OP-UML-BootstrapGenerator-Profile-Generator'
+	#category : #'OP-UML-BootstrapGenerator-Profile-Generator'
 }
 
 { #category : #translating }
@@ -380,28 +380,28 @@ OPUMLProfileGenerator >> createClassFrom: aClassModel in: aCategoryName [
 
 { #category : #'generating - meta' }
 OPUMLProfileGenerator >> createElementMeta [
-	| cls sourceClass |
-	cls := self ensureCreateClass: 'MetaElement' in: 'Meta'.
+	| cls |
+	cls := self
+		ensureCreateClass: 'Element'
+		in: self sourceModel implementationPackage.
 	cls
 		comment:
-			'I am a metaclass for UML classes implementing some behavior for managing the classes and other stuff (like an announcer).'.
-	sourceClass := OPUMLMetamodelElementTemplate.
-	sourceClass instanceVariables do: [ :each | cls addInstVarNamed: each ].
-	sourceClass class instanceVariables do: [ :each | cls addMetaInstVarNamed: each ].
-	sourceClass methods
-		do: [ :each | 
-			cls
-				addMethod:
-					(CBMethod new
-						source: each sourceCode;
-						protocol: each protocol) ].
-	sourceClass class methods
-		do: [ :each | 
-			cls
-				addMetaMethod:
-					(CBMethod new
-						source: each sourceCode;
-						protocol: each protocol) ].
+			'I am an abstract class for ' , classPrefix
+				,
+					' implementing some behavior for managing the classes and other stuff.'.
+	cls
+		addMethod:
+			(CBMethod new
+				source:
+					'umlClassName
+	^ self className withoutPrefix: ''' , classPrefix , '''';
+				protocol: 'accessing');
+		addMethod:
+			(CBMethod new
+				source:
+					'umlMetaClass
+	^ ' , classPrefix , 'ProfileFactory metaClassFor: self';
+				protocol: 'accessing').
 	^ cls
 ]
 
@@ -415,10 +415,36 @@ OPUMLProfileGenerator >> createEnumFrom: anEnumModel in: aCategoryName [
 	^ cls
 ]
 
-{ #category : #'generating - packages' }
-OPUMLProfileGenerator >> createTargetPackage [
-	(RPackage organizer includesPackageNamed: self packageName)
-		ifFalse: [ RPackage organizer createPackageNamed: self packageName ]
+{ #category : #'generating-classes' }
+OPUMLProfileGenerator >> createProfileFactory [
+	| cls |
+	Smalltalk
+		at: (self classNameFor: 'ProfileFactory')
+		ifPresent: [ :existingCls | existingCls reset ].
+	cls := self ensureCreateClass: 'ProfileFactory' in: 'Model'.
+	cls
+		comment: 'I am a class representing the ' , classPrefix , ' profile itself.'.
+	cls addInstVarNamed: 'profile'.
+	cls
+		addMethod:
+			(CBMethod new
+				source:
+					'createProfile
+	profile ifNotNil: [ ^ profile ].
+	profile := OPUMLXMIReader readFrom: self xmi readStream.
+	profile implementationPackage: ''',self packageName,''';
+		implementationPrefix: ''',classPrefix,'''.	
+	profile ownedStereotype do: [ :each | each profile: profile ].
+	^ profile';
+				protocol: 'accessing');
+		addMethod:
+			(CBMethod new
+				source:
+					'xmi
+	^ 
+''' , (OPUMLXMIWriter toString: self sourceModel) , '''';
+				protocol: 'accessing').
+	^ cls
 ]
 
 { #category : #retrieving }
@@ -456,7 +482,10 @@ OPUMLProfileGenerator >> ensureCreateClass: aName in: aTagName [
 		ifAbsentPut: [ CBClass
 				name: (self classNameFor: aName)
 				parent: (self parentFor: aName)
-				package: self packageName , '-' , aTagName ]
+				package:
+					(aTagName = 'Unclassified'
+						ifTrue: [ self packageName ]
+						ifFalse: [ self packageName , '-' , aTagName ]) ]
 ]
 
 { #category : #generating }
@@ -467,14 +496,15 @@ OPUMLProfileGenerator >> generate [
 
 { #category : #generating }
 OPUMLProfileGenerator >> generateAll [
-	classes := Dictionary new.
+	classes := OrderedDictionary new.
 "	self loadTemplateMethods."
-	self createTargetPackage.
-"	self createElementMeta."
-"	self generateAllEnums."
+"	self createTargetPackage."
+	self createElementMeta.
+	self generateAllEnums.
 	self generateAllClasses.
 	self generateAllDelegationMethods.
 	self generateExtensionMethods.
+	self createProfileFactory.
 	^ self changes
 ]
 
@@ -494,11 +524,9 @@ OPUMLProfileGenerator >> generateAllDelegationMethods [
 
 { #category : #generating }
 OPUMLProfileGenerator >> generateAllEnums [
-	self sourceModel packagedElement
-		do: [ :pkg | 
-			pkg packagedElement
-				select: [ :each | each isKindOf: BootUMLEnumeration  ]
-				thenDo: [ :each | self createEnumFrom: each in: pkg name ] ]
+	self sourceModel packagedElements
+		select: [ :each | each isKindOf: BootUMLEnumeration ]
+		thenDo: [ :each | self createEnumFrom: each in: self sourceModel implementationPackage ]
 ]
 
 { #category : #generating }
@@ -515,7 +543,8 @@ OPUMLProfileGenerator >> generateExtensionMethods [
 			extensionGetter := CBMethod new
 				source:
 					('<1s>
-		^ self tagAt: #<1s> ifAbsent: [ nil ]' expandMacrosWith: ext ownedEnd name);
+		^ self tagAt: #<1s> ifAbsent: [ nil ]'
+						expandMacrosWith: ext ownedEnd name);
 				protocol: '*' , self sourceModel implementationPackage.
 			extensionSetter := CBMethod new
 				source:
@@ -540,7 +569,7 @@ OPUMLProfileGenerator >> generateExtensionMethods [
 { #category : #initialization }
 OPUMLProfileGenerator >> initialize [
 	super initialize.
-	classes := Dictionary new
+	classes := OrderedDictionary new
 ]
 
 { #category : #testing }
@@ -595,11 +624,11 @@ OPUMLProfileGenerator >> packageName: anObject [
 
 { #category : #retrieving }
 OPUMLProfileGenerator >> parentFor: aClassName [
-	aClassName = 'MetaElement'
-		ifTrue: [ ^ 'Object' ].
 	aClassName = 'Element'
-		ifTrue: [ ^ self classPrefix , 'MetaElement' ].
-	^ self classPrefix , 'Element'
+		ifTrue: [ ^ 'OPUMLMetaElement' ].
+	aClassName = 'ProfileFactory'
+		ifTrue: [ ^ 'OPUmlCustomProfile' ].
+	^ self classNameFor: 'Element'
 ]
 
 { #category : #'generating - operations' }
