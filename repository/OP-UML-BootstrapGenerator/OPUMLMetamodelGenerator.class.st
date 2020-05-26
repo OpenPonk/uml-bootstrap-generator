@@ -14,7 +14,7 @@ Class {
 		'classes',
 		'defaultValues'
 	],
-	#category : 'OP-UML-BootstrapGenerator-Metamodel-Generator'
+	#category : #'OP-UML-BootstrapGenerator-Metamodel-Generator'
 }
 
 { #category : #translating }
@@ -392,8 +392,9 @@ OPUMLMetamodelGenerator >> createElementMeta [
 		comment:
 			'I am a metaclass for UML classes implementing some behavior for managing the classes and other stuff (like an announcer).'.
 	sourceClass := OPUMLMetamodelElementTemplate.
-	sourceClass instanceVariables do: [ :each | cls addInstVarNamed: each ].
-	sourceClass class instanceVariables do: [ :each | cls addMetaInstVarNamed: each ].
+	sourceClass instVarNames do: [ :each | cls addInstVarNamed: each ].
+	sourceClass class instVarNames
+		do: [ :each | cls addMetaInstVarNamed: each ].
 	sourceClass methods
 		do: [ :each | 
 			cls
