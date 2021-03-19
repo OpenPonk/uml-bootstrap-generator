@@ -1,5 +1,5 @@
 {
 	"include" : [
-		{ "repository" : "OpenPonk/class-editor" }
+		{ "repository" : "OpenPonk/class-editor", "build-dependent" : true }
 	]
 }
