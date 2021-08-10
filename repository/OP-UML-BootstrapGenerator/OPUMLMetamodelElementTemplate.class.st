@@ -11,7 +11,7 @@ Class {
 		'uuid',
 		'tags'
 	],
-	#category : 'OP-UML-BootstrapGenerator-Metamodel-Generator'
+	#category : #'OP-UML-BootstrapGenerator-Metamodel-Generator'
 }
 
 { #category : #'instance creation' }
@@ -135,6 +135,58 @@ OPUMLMetamodelElementTemplate >> initializeWithShared: aDictionary [
 	super initialize.
 	sharedGeneralizations := aDictionary.
 	self initializeDirectGeneralizations
+]
+
+{ #category : #'GTInspector - extensions' }
+OPUMLMetamodelElementTemplate >> inspectionAllProperties [
+
+	<inspectorPresentationOrder: 6 title: 'Properties (All)'>
+	^ SpTablePresenter new
+		  items: self inspectorProperties sorted;
+		  addColumn: (SpStringTableColumn new
+				   title: 'Name';
+				   evaluated: #key;
+				   yourself);
+		  addColumn: (SpStringTableColumn new
+				   title: 'Value';
+				   evaluated: #value;
+				   yourself);
+		  yourself
+]
+
+{ #category : #'GTInspector - extensions' }
+OPUMLMetamodelElementTemplate >> inspectionProperties [
+
+	<inspectorPresentationOrder: 5 title: 'Properties'>
+	^ SpTablePresenter new
+		  items: self nonEmptyinspectorProperties sorted;
+		  addColumn: (SpStringTableColumn new
+				   title: 'Name';
+				   evaluated: #key;
+				   yourself);
+		  addColumn: (SpStringTableColumn new
+				   title: 'Value';
+				   evaluated: #value;
+				   yourself);
+		  yourself
+]
+
+{ #category : #'GTInspector - extensions' }
+OPUMLMetamodelElementTemplate >> inspectionStereotypes [
+
+	<inspectorPresentationOrder: 7 title: 'Stereotypes'>
+	^ SpListPresenter new
+		  items: self appliedStereotypes sorted;
+		  yourself
+]
+
+{ #category : #'GTInspector - extensions' }
+OPUMLMetamodelElementTemplate >> inspectionTags [
+
+	<inspectorPresentationOrder: 7 title: 'Tags'>
+	^ SpListPresenter new
+		  items: self tags sorted;
+		  yourself
 ]
 
 { #category : #'GTInspector - extensions' }

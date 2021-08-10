@@ -5,7 +5,7 @@ Class {
 		'sharedGeneralizations',
 		'generalizations'
 	],
-	#category : 'OP-UML-Bootstrap-Super'
+	#category : #'OP-UML-Bootstrap-Super'
 }
 
 { #category : #'instance creation' }
@@ -76,6 +76,53 @@ OPUMLBootstrapObject >> initializeWithShared: aDictionary [
 	super initialize.
 	sharedGeneralizations := aDictionary.
 	self initializeGeneralizations
+]
+
+{ #category : #'GTInspector - extensions' }
+OPUMLBootstrapObject >> inspectionAllProperties [
+
+	<inspectorPresentationOrder: 6 title: 'Properties (All)'>
+	^ SpTablePresenter new
+		  items:
+			  ((self class methods sorted: [ :a :b | a selector < b selector ])
+				   select: [ :each | 
+					   (each protocol beginsWith: 'accessing') and: [ 
+							   each numArgs = 0 ] ]
+				   thenCollect: [ :each | 
+					   each selector -> (self perform: each selector) ]);
+		  addColumn: (SpStringTableColumn new
+				   title: 'Name';
+				   evaluated: #key;
+				   yourself);
+		  addColumn: (SpStringTableColumn new
+				   title: 'Value';
+				   evaluated: #value;
+				   yourself);
+		  yourself
+]
+
+{ #category : #'GTInspector - extensions' }
+OPUMLBootstrapObject >> inspectionProperties [
+
+	<inspectorPresentationOrder: 5 title: 'Properties'>
+	^ SpTablePresenter new
+		  items:
+			  (((self class methods sorted: [ :a :b | a selector < b selector ])
+				    select: [ :each | 
+					    (each protocol beginsWith: 'accessing') and: [ 
+							    each numArgs = 0 ] ]
+				    thenCollect: [ :each | 
+					    each selector -> (self perform: each selector) ]) select: [ 
+					   :pair | pair value isNotNil ]);
+		  addColumn: (SpStringTableColumn new
+				   title: 'Name';
+				   evaluated: #key;
+				   yourself);
+		  addColumn: (SpStringTableColumn new
+				   title: 'Value';
+				   evaluated: #value;
+				   yourself);
+		  yourself
 ]
 
 { #category : #testing }
