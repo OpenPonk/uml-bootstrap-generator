@@ -7,7 +7,7 @@ Class {
 	#classInstVars : [
 		'umlBootstrapModel'
 	],
-	#category : 'OP-UML-BootstrapGenerator-Tests'
+	#category : #'OP-UML-BootstrapGenerator-Tests'
 }
 
 { #category : #accessing }
@@ -599,14 +599,28 @@ OPUMLMetamodelGeneratorTest >> testCreateElementMetaInitialize [
 
 { #category : #tests }
 OPUMLMetamodelGeneratorTest >> testCreateElementMetaInstanceMethods [
+
 	| cls |
 	cls := generator createElementMeta.
 	self
 		assert: (cls methods collect: #selector) sorted
 		equals:
-			#(announcer announcer: initialize initializeWithShared: initializeDirectGeneralizations initializeSharedGeneralizations gtInspectorAllPropertiesIn: gtInspectorPropertiesIn: printOn: inspectorProperties inspectorPropertiesSelectors nonEmptyinspectorProperties uuid uuid: identity applyStereotype: appliedStereotypes gtInspectorStereotypePropertiesIn: gtInspectorStereotypesIn: gtInspectorTagsIn: hasTagAt: removeTagAt: tags tagAt: tagAt:put: oclAsType: oclClassifierNameFrom: oclIsKindOf: oclIsTypeOf: umlClassName umlMetaClass unapplyStereotype:)
-				sorted.
-	self assert: (cls methodNamed: #initialize) protocol equals: 'initialization'
+			#( #announcer #announcer: #appliedStereotypes #applyStereotype:
+			   #gtInspectorAllPropertiesIn: #gtInspectorPropertiesIn:
+			   #gtInspectorStereotypePropertiesIn:
+			   #gtInspectorStereotypesIn: #gtInspectorTagsIn:
+			   #hasTagAt: #identity #initialize #initializeDirectGeneralizations
+			   #initializeSharedGeneralizations
+			   #initializeWithShared: #inspectionAllProperties
+			   #inspectionProperties #inspectionStereotypes
+			   #inspectionTags #inspectorProperties #inspectorPropertiesSelectors
+			   #nonEmptyinspectorProperties #oclAsType: #oclClassifierNameFrom:
+			   #oclIsKindOf: #oclIsTypeOf: #printOn: #removeTagAt:
+			   #tagAt: #tagAt:put: #tags #umlClassName #umlMetaClass
+			   #unapplyStereotype: #uuid #uuid: ) sorted.
+	self
+		assert: (cls methodNamed: #initialize) protocol
+		equals: 'initialization'
 ]
 
 { #category : #'tests - generating - enums' }

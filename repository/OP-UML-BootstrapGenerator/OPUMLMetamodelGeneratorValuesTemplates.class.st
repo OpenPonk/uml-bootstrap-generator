@@ -1,7 +1,7 @@
 Class {
 	#name : #OPUMLMetamodelGeneratorValuesTemplates,
 	#superclass : #OPUMLMetamodelGeneratorTemplates,
-	#category : 'OP-UML-BootstrapGenerator-Templates'
+	#category : #'OP-UML-BootstrapGenerator-Templates'
 }
 
 { #category : #templates }
@@ -12,7 +12,7 @@ OPUMLMetamodelGeneratorValuesTemplates >> literalBoolean [
 
 { #category : #templates }
 OPUMLMetamodelGeneratorValuesTemplates >> literalInteger [
-	^ {#integerValue -> '^ value'.
+	^ {#integerValue -> '^ self value'.
 	#isComputable -> '^ true'}
 ]
 
