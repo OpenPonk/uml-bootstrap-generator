@@ -9,18 +9,19 @@ Class {
 
 { #category : #baselines }
 BaselineOfUMLBootstrapGenerator >> baseline: spec [
+
 	<baseline>
-	spec
-		for: #common
-		do: [ spec
-				baseline: 'OPXMI'
-				with: [ spec repository: 'github://openponk/xmi:v2.1.x/repository' ].
-			spec
-				baseline: 'ChangesBuilder'
-				with: [ spec repository: 'github://peteruhnak/pharo-changes-builder:v1.x/repository' ].
-			spec package: 'OP-UML-Bootstrap'.
-			spec
-				package: 'OP-UML-BootstrapGenerator'
-				with: [ spec requires: #('OPXMI' 'ChangesBuilder' 'OP-UML-Bootstrap') ].
-			spec group: 'default' with: #('OP-UML-BootstrapGenerator') ]
+	spec for: #common do: [ 
+		spec
+			baseline: 'OPXMI'
+			with: [ spec repository: 'github://openponk/xmi:v3.0.x/repository' ].
+		spec baseline: 'ChangesBuilder' with: [ 
+			spec repository:
+				'github://peteruhnak/pharo-changes-builder:v1.x/repository' ].
+		spec package: 'OP-UML-Bootstrap'.
+		spec
+			package: 'OP-UML-BootstrapGenerator'
+			with: [ 
+			spec requires: #( 'OPXMI' 'ChangesBuilder' 'OP-UML-Bootstrap' ) ].
+		spec group: 'default' with: #( 'OP-UML-BootstrapGenerator' ) ]
 ]
