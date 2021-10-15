@@ -17,7 +17,7 @@ BaselineOfUMLBootstrapGenerator >> baseline: spec [
 			with: [ spec repository: 'github://openponk/xmi:v3.0.x/repository' ].
 		spec baseline: 'ChangesBuilder' with: [ 
 			spec repository:
-				'github://peteruhnak/pharo-changes-builder:v1.x/repository' ].
+				'github://JanBliznicenko/pharo-changes-builder/repository' ].
 		spec package: 'OP-UML-Bootstrap'.
 		spec
 			package: 'OP-UML-BootstrapGenerator'
