@@ -42,65 +42,6 @@ OPUMLMetamodelElementTemplate >> applyStereotype: aStereotype [
 	self perform: ('extension_' , aStereotype umlClassName , ':') asSymbol with: aStereotype
 ]
 
-{ #category : #'GTInspector - extensions' }
-OPUMLMetamodelElementTemplate >> gtInspectorAllPropertiesIn: aComposite [
-	<gtInspectorPresentationOrder: 6>
-	aComposite fastTable
-		title: 'Properties (All)';
-		display: [ self inspectorProperties ];
-		column: 'name' evaluated: [ :each | each key ];
-		column: 'value' evaluated: [ :each | each value ];
-		send: [ :selection | 
-			selection isNil
-				ifTrue: [ nil ]
-				ifFalse: [ selection value ] ]
-]
-
-{ #category : #'GTInspector - extensions' }
-OPUMLMetamodelElementTemplate >> gtInspectorPropertiesIn: aComposite [
-	<gtInspectorPresentationOrder: 5>
-	aComposite fastTable
-		title: 'Properties';
-		display: [ self nonEmptyinspectorProperties ];
-		column: 'name' evaluated: [ :each | each key ];
-		column: 'value' evaluated: [ :each | each value ];
-		send: [ :selection | 
-			selection isNil
-				ifTrue: [ nil ]
-				ifFalse: [ selection value ] ]
-]
-
-{ #category : #'GTInspector - extensions' }
-OPUMLMetamodelElementTemplate >> gtInspectorStereotypePropertiesIn: aComposite [
-	<gtInspectorPresentationOrder: 7>
-	aComposite fastTable
-		title: 'Tagged Values';
-		display: [ self stereotypeProperties ];
-		column: 'name' evaluated: [ :each | each first ] width: 120;
-		column: 'stereotype' evaluated: [ :each | each second ] width: 120;
-		column: 'value' evaluated: [ :each | each third ];
-		send: [ :selection | 
-			selection isNil
-				ifTrue: [ nil ]
-				ifFalse: [ selection value ] ]
-]
-
-{ #category : #'GTInspector - extensions' }
-OPUMLMetamodelElementTemplate >> gtInspectorStereotypesIn: aComposite [
-	<gtInspectorPresentationOrder: 6>
-	^ aComposite fastList
-		title: 'Stereotypes';
-		display: [ self appliedStereotypes ]
-]
-
-{ #category : #'GTInspector - extensions' }
-OPUMLMetamodelElementTemplate >> gtInspectorTagsIn: aComposite [
-	<gtInspectorPresentationOrder: 7>
-	aComposite fastTable
-		title: 'Tags';
-		display: [ self tags ]
-]
-
 { #category : #'accessing - tags' }
 OPUMLMetamodelElementTemplate >> hasTagAt: aKey [
 	^ tags includesKey: aKey
