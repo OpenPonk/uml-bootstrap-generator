@@ -38,8 +38,13 @@ OPUMLMetamodelElementTemplate >> appliedStereotypes [
 
 { #category : #'accessing - stereotypes' }
 OPUMLMetamodelElementTemplate >> applyStereotype: aStereotype [
-	self appliedStereotypes addIfNotPresent: aStereotype.
-	self perform: ('extension_' , aStereotype umlClassName , ':') asSymbol with: aStereotype
+
+	(self appliedStereotypes anySatisfy: [ :any | 
+		 any oclIsTypeOf: aStereotype umlClassName ]) ifTrue: [ ^ self ].
+	self appliedStereotypes add: aStereotype.
+	self
+		perform: ('extension_' , aStereotype umlClassName , ':') asSymbol
+		with: aStereotype
 ]
 
 { #category : #'accessing - tags' }
