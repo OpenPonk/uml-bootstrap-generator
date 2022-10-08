@@ -88,6 +88,7 @@ OPUMLMetamodelElementTemplate >> inspectionAllProperties [
 
 	<inspectorPresentationOrder: 6 title: 'Properties (All)'>
 	^ SpTablePresenter new
+		  beResizable;
 		  items: self inspectorProperties sorted;
 		  addColumn: (SpStringTableColumn new
 				   title: 'Name';
@@ -105,6 +106,7 @@ OPUMLMetamodelElementTemplate >> inspectionProperties [
 
 	<inspectorPresentationOrder: 5 title: 'Properties'>
 	^ SpTablePresenter new
+		  beResizable;
 		  items: self nonEmptyinspectorProperties sorted;
 		  addColumn: (SpStringTableColumn new
 				   title: 'Name';

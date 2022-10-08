@@ -48,6 +48,7 @@ OPUMLBootstrapObject >> inspectionAllProperties [
 
 	<inspectorPresentationOrder: 6 title: 'Properties (All)'>
 	^ SpTablePresenter new
+		  beResizable;
 		  items:
 			  ((self class methods sorted: [ :a :b | a selector < b selector ])
 				   select: [ :each | 
@@ -71,6 +72,7 @@ OPUMLBootstrapObject >> inspectionProperties [
 
 	<inspectorPresentationOrder: 5 title: 'Properties'>
 	^ SpTablePresenter new
+		  beResizable;
 		  items:
 			  (((self class methods sorted: [ :a :b | a selector < b selector ])
 				    select: [ :each | 
