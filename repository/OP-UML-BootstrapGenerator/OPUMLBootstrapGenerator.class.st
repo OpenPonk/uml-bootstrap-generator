@@ -14,28 +14,16 @@ Class {
 		'classes',
 		'cachedRequiredClasses'
 	],
-	#category : 'OP-UML-BootstrapGenerator-Bootstrap-Generator'
+	#classInstVars : [
+		'umlSpecs'
+	],
+	#category : #'OP-UML-BootstrapGenerator-Bootstrap-Generator'
 }
 
 { #category : #utility }
-OPUMLBootstrapGenerator class >> determineRequiredClasses [
-	| file doc |
-	file := 'pathTo/UML.xmi'.
-	doc := XMLDOMParser parse: file readStream.
-	((doc allElementsCollect: [ :each | each attributeAt: #xmi:type ]) asSet
-		select: [ :each | each beginsWith: 'uml:' ]) sorted
-		collect: [ :each | (each splitOn: ':') second asSymbol ]
-]
+OPUMLBootstrapGenerator class >> umlSpecs [
 
-{ #category : #utility }
-OPUMLBootstrapGenerator class >> generateBootstrap [
-	| xmi generator |
-	xmi := OPUMLBootstrapGeneratorTest umlSpecs.
-	generator := OPUMLBootstrapGenerator new.
-	generator sourceXmi: xmi.
-	generator classPrefix: 'BootUML'.
-	generator packageName: 'OP-UML-Bootstrap'.
-	(CBChangesBrowser changes: generator generateAll) open
+	^ OPUMLBootstrapSpecs umlSpecs
 ]
 
 { #category : #retrieving }

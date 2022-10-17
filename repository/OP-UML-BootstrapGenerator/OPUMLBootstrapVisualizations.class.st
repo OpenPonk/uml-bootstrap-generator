@@ -1,13 +1,13 @@
 Class {
 	#name : #OPUMLBootstrapVisualizations,
 	#superclass : #Object,
-	#category : 'OP-UML-BootstrapGenerator-Utilities'
+	#category : #'OP-UML-BootstrapGenerator-Utilities'
 }
 
 { #category : #accessing }
 OPUMLBootstrapVisualizations >> showHierarchy [
 | xmi reader model cls element classifier parents nodes b layers subclasses generalizations |
-xmi := OPUMLBootstrapGeneratorTest umlSpecs.
+xmi := OPUMLBootstrapGenerator umlSpecs.
 
 reader := OPUMLXMIReader new.
 model := (reader readXmi: xmi) first.

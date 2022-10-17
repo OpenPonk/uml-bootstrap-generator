@@ -7,34 +7,14 @@ Class {
 	#classInstVars : [
 		'umlSpecs'
 	],
-	#category : 'OP-UML-BootstrapGenerator-Tests'
+	#category : #'OP-UML-BootstrapGenerator-Tests'
 }
-
-{ #category : #accessing }
-OPUMLBootstrapGeneratorTest class >> retrieveUmlSpecs [
-	| primitives uml mapping result |
-	primitives := 'http://www.omg.org/spec/UML/20131001/PrimitiveTypes.xmi'.
-	uml := 'http://www.omg.org/spec/UML/20131001/UML.xmi'.
-	mapping := Dictionary
-		with: primitives -> (ZnEasy get: primitives) entity readStream contents
-		with: uml -> (ZnEasy get: uml) entity readStream contents.
-	result := OPXMIReader readFromMapping: mapping.
-	^ result at: uml
-]
-
-{ #category : #accessing }
-OPUMLBootstrapGeneratorTest class >> umlSpecs [
-	"umlSpecs := nil"
-
-	<script: 'self umlSpecs inspect'>
-	^ umlSpecs ifNil: [ umlSpecs := self retrieveUmlSpecs ]
-]
 
 { #category : #running }
 OPUMLBootstrapGeneratorTest >> setUp [
 	super setUp.
 	generator := OPUMLBootstrapGenerator new.
-	generator sourceXmi: self class umlSpecs.
+	generator sourceXmi: OPUMLBootstrapGenerator umlSpecs.
 	generator classPrefix: 'BUT'.
 	generator packageName: 'Generated-UMLBootstrapTest'
 ]

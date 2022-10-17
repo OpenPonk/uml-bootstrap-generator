@@ -10,15 +10,15 @@ Class {
 		'classPrefix',
 		'instanceCache'
 	],
-	#category : 'OP-UML-BootstrapGenerator-Reader'
+	#category : #'OP-UML-BootstrapGenerator-Reader'
 }
 
 { #category : #'as yet unclassified' }
 OPUMLXMIBootstrapReader class >> readUml [
 	<script>
 	| xmi reader model |
-	xmi := OPUMLBootstrapGeneratorTest umlSpecs.
-	reader := OPUMLXMIBootstrapReader new.
+	xmi := OPUMLBootstrapGenerator umlSpecs.
+	reader := self new.
 	reader classPrefix: 'BootUML'.
 	model := reader readXmi: xmi.
 	model inspect
