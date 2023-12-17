@@ -89,7 +89,8 @@ OPUMLMetamodelElementTemplate >> inspectionAllProperties [
 	<inspectorPresentationOrder: 6 title: 'Properties (All)'>
 	^ SpTablePresenter new
 		  beResizable;
-		  items: self inspectorProperties sorted;
+		  items: (self inspectorProperties sorted collect: [ :e |
+					   StInspectorAssociationNode hostObject: e ]);
 		  addColumn: (SpStringTableColumn new
 				   title: 'Name';
 				   evaluated: #key;
@@ -107,7 +108,8 @@ OPUMLMetamodelElementTemplate >> inspectionProperties [
 	<inspectorPresentationOrder: 5 title: 'Properties'>
 	^ SpTablePresenter new
 		  beResizable;
-		  items: self nonEmptyinspectorProperties sorted;
+		  items: (self nonEmptyinspectorProperties sorted collect: [ :e |
+					   StInspectorAssociationNode hostObject: e ]);
 		  addColumn: (SpStringTableColumn new
 				   title: 'Name';
 				   evaluated: #key;
@@ -124,7 +126,8 @@ OPUMLMetamodelElementTemplate >> inspectionStereotypes [
 
 	<inspectorPresentationOrder: 7 title: 'Stereotypes'>
 	^ SpListPresenter new
-		  items: self appliedStereotypes sorted;
+		  items: (self appliedStereotypes sorted: [ :a :b |
+					   a umlClassName < b umlClassName ]);
 		  yourself
 ]
 
@@ -132,8 +135,18 @@ OPUMLMetamodelElementTemplate >> inspectionStereotypes [
 OPUMLMetamodelElementTemplate >> inspectionTags [
 
 	<inspectorPresentationOrder: 7 title: 'Tags'>
-	^ SpListPresenter new
-		  items: self tags sorted;
+	^ SpTablePresenter new
+		  beResizable;
+		  items: (self tags associations sorted collect: [ :e |
+					   StInspectorAssociationNode hostObject: e ]);
+		  addColumn: (SpStringTableColumn new
+				   title: 'Name';
+				   evaluated: #key;
+				   yourself);
+		  addColumn: (SpStringTableColumn new
+				   title: 'Value';
+				   evaluated: #value;
+				   yourself);
 		  yourself
 ]
 

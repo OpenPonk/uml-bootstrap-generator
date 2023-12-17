@@ -51,11 +51,12 @@ OPUMLBootstrapObject >> inspectionAllProperties [
 		  beResizable;
 		  items:
 			  ((self class methods sorted: [ :a :b | a selector < b selector ])
-				   select: [ :each | 
-					   (each protocol beginsWith: 'accessing') and: [ 
+				   select: [ :each |
+					   (each protocol beginsWith: 'accessing') and: [
 							   each numArgs = 0 ] ]
-				   thenCollect: [ :each | 
-					   each selector -> (self perform: each selector) ]);
+				   thenCollect: [ :each |
+					   StInspectorAssociationNode hostObject:
+							   each selector -> (self perform: each selector) ]);
 		  addColumn: (SpStringTableColumn new
 				   title: 'Name';
 				   evaluated: #key;
@@ -75,12 +76,13 @@ OPUMLBootstrapObject >> inspectionProperties [
 		  beResizable;
 		  items:
 			  (((self class methods sorted: [ :a :b | a selector < b selector ])
-				    select: [ :each | 
-					    (each protocol beginsWith: 'accessing') and: [ 
+				    select: [ :each |
+					    (each protocol beginsWith: 'accessing') and: [
 							    each numArgs = 0 ] ]
-				    thenCollect: [ :each | 
-					    each selector -> (self perform: each selector) ]) select: [ 
-					   :pair | pair value isNotNil ]);
+				    thenCollect: [ :each |
+					    each selector -> (self perform: each selector) ])
+				   select: [ :pair | pair value isNotNil ]
+				   thenCollect: [ :e | StInspectorAssociationNode hostObject: e ]);
 		  addColumn: (SpStringTableColumn new
 				   title: 'Name';
 				   evaluated: #key;
