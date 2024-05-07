@@ -2,15 +2,17 @@
 Contains UML specs and its sources
 "
 Class {
-	#name : #OPUMLBootstrapSpecs,
-	#superclass : #Object,
+	#name : 'OPUMLBootstrapSpecs',
+	#superclass : 'Object',
 	#classInstVars : [
 		'umlSpecs'
 	],
-	#category : #'OP-UML-BootstrapGenerator-Bootstrap-Generator'
+	#category : 'OP-UML-BootstrapGenerator-Bootstrap-Generator',
+	#package : 'OP-UML-BootstrapGenerator',
+	#tag : 'Bootstrap-Generator'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OPUMLBootstrapSpecs class >> primitiveTypesSpecSource [
 
 	"Original at link in #primitiveTypesSpecUrl"
@@ -18,20 +20,20 @@ OPUMLBootstrapSpecs class >> primitiveTypesSpecSource [
 	^ '<?xml version="1.0" encoding="UTF-8"?><xmi:XMI xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.omg.org/spec/UML/20131001" xmlns:mofext="http://www.omg.org/spec/MOF/20131001"><uml:Package xmi:type="uml:Package" xmi:id="_0" name="PrimitiveTypes" URI="http://www.omg.org/spec/PrimitiveTypes/20131001"><packagedElement xmi:type="uml:PrimitiveType" xmi:id="Boolean" name="Boolean"><ownedComment xmi:type="uml:Comment" xmi:id="Boolean-_ownedComment.0" annotatedElement="Boolean"><body>Boolean is used for logical expressions, consisting of the predefined values true and false.</body></ownedComment></packagedElement><packagedElement xmi:type="uml:PrimitiveType" xmi:id="Integer" name="Integer"><ownedComment xmi:type="uml:Comment" xmi:id="Integer-_ownedComment.0" annotatedElement="Integer"><body>Integer is a primitive type representing integer values.</body></ownedComment></packagedElement><packagedElement xmi:type="uml:PrimitiveType" xmi:id="Real" name="Real"><ownedComment xmi:type="uml:Comment" xmi:id="Real-_ownedComment.0" annotatedElement="Real"><body>Real is a primitive type representing the mathematical concept of real.</body></ownedComment></packagedElement><packagedElement xmi:type="uml:PrimitiveType" xmi:id="String" name="String"><ownedComment xmi:type="uml:Comment" xmi:id="String-_ownedComment.0" annotatedElement="String"><body>String is a sequence of characters in some suitable character set used to display information about the model. Character sets may include non-Roman alphabets and characters.</body></ownedComment></packagedElement><packagedElement xmi:type="uml:PrimitiveType" xmi:id="UnlimitedNatural" name="UnlimitedNatural"><ownedComment xmi:type="uml:Comment" xmi:id="UnlimitedNatural-_ownedComment.0" annotatedElement="UnlimitedNatural"><body>UnlimitedNatural is a primitive type representing unlimited natural values.</body></ownedComment></packagedElement></uml:Package><mofext:Tag xmi:type="mofext:Tag" xmi:id="_1" name="org.omg.xmi.nsPrefix" value="primitives" element="_0"/><mofext:Tag xmi:type="mofext:Tag" xmi:id="_2" name="org.omg.xmi.schemaType" value="http://www.w3.org/2001/XMLSchema#boolean" element="Boolean"/><mofext:Tag xmi:type="mofext:Tag" xmi:id="_3" name="org.omg.xmi.schemaType" value="http://www.w3.org/2001/XMLSchema#integer" element="Integer"/><mofext:Tag xmi:type="mofext:Tag" xmi:id="_4" name="org.omg.xmi.schemaType" value="http://www.w3.org/2001/XMLSchema#double" element="Real"/><mofext:Tag xmi:type="mofext:Tag" xmi:id="_5" name="org.omg.xmi.schemaType" value="http://www.w3.org/2001/XMLSchema#string" element="String"/><mofext:Tag xmi:type="mofext:Tag" xmi:id="_6" name="org.omg.xmi.schemaType" value="http://www.w3.org/2001/XMLSchema#string" element="UnlimitedNatural"/></xmi:XMI>'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OPUMLBootstrapSpecs class >> primitiveTypesSpecUrl [
 
 	^ 'http://www.omg.org/spec/UML/20131001/PrimitiveTypes.xmi'
 ]
 
-{ #category : #utility }
+{ #category : 'utility' }
 OPUMLBootstrapSpecs class >> resetUmlSpecs [
 
 	<script>
 	umlSpecs := nil
 ]
 
-{ #category : #utility }
+{ #category : 'utility' }
 OPUMLBootstrapSpecs class >> retrieveUmlSpecs [
 
 	| mapping result |
@@ -44,7 +46,7 @@ OPUMLBootstrapSpecs class >> retrieveUmlSpecs [
 	^ result at: self umlSpecUrl
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OPUMLBootstrapSpecs class >> umlSpecSource [
 
 	"Original at link in #umlSpecUrl"
@@ -1014,13 +1016,13 @@ Sequence{1..result-&gt;size()}-&gt;forAll(i |
 '
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OPUMLBootstrapSpecs class >> umlSpecUrl [
 
 	^ 'http://www.omg.org/spec/UML/20131001/UML.xmi'
 ]
 
-{ #category : #utility }
+{ #category : 'utility' }
 OPUMLBootstrapSpecs class >> umlSpecs [
 
 	<script: 'self umlSpecs inspect'>

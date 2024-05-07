@@ -1,6 +1,6 @@
 Class {
-	#name : #OPUMLProfileGenerator,
-	#superclass : #Object,
+	#name : 'OPUMLProfileGenerator',
+	#superclass : 'Object',
 	#instVars : [
 		'classPrefix',
 		'packageName',
@@ -9,10 +9,12 @@ Class {
 		'classes',
 		'defaultValues'
 	],
-	#category : #'OP-UML-BootstrapGenerator-Profile-Generator'
+	#category : 'OP-UML-BootstrapGenerator-Profile-Generator',
+	#package : 'OP-UML-BootstrapGenerator',
+	#tag : 'Profile-Generator'
 }
 
-{ #category : #translating }
+{ #category : 'translating' }
 OPUMLProfileGenerator class >> generate [
 	<script>
 	| generator model |
@@ -27,7 +29,7 @@ OPUMLProfileGenerator class >> generate [
 			(CBChangesBrowser changes: generator generateAll) open ]
 ]
 
-{ #category : #'generating - methods' }
+{ #category : 'generating - methods' }
 OPUMLProfileGenerator >> addAccessingDelegationMethodsFrom: aClassModel to: aClass [
 	| redefinedNames |
 	redefinedNames := Set new.
@@ -63,7 +65,7 @@ OPUMLProfileGenerator >> addAccessingDelegationMethodsFrom: aClassModel to: aCla
 					aClass addMethod: delegateMethod ] ]
 ]
 
-{ #category : #'generating - attributes' }
+{ #category : 'generating - attributes' }
 OPUMLProfileGenerator >> addAttribute: anAttributeModel to: aClass [
 	| name comment getterBuilder oppositeEnd |
 	name := self attributeNameFor: anAttributeModel.
@@ -143,19 +145,19 @@ OPUMLProfileGenerator >> addAttribute: anAttributeModel to: aClass [
 			aClass addMethod: setter ]
 ]
 
-{ #category : #'generating - classes' }
+{ #category : 'generating - classes' }
 OPUMLProfileGenerator >> addCommentFrom: aClassModel to: aClass [
 	aClassModel ownedComments ifEmpty: [ ^ self ].
 	aClass comment: aClassModel ownedComments first body
 ]
 
-{ #category : #'generating - methods' }
+{ #category : 'generating - methods' }
 OPUMLProfileGenerator >> addDelegationMethodsFrom: aClassModel to: aClass [
 	self addAccessingDelegationMethodsFrom: aClassModel to: aClass.
 	self addOperationsDelegationMethodsFrom: aClassModel to: aClass
 ]
 
-{ #category : #'generating - enums' }
+{ #category : 'generating - enums' }
 OPUMLProfileGenerator >> addEnumLiteral: anEnumLiteral to: aClass [
 	| builder prohibitedClassSideSelectors |
 	builder := CBMethodBuilder new.
@@ -178,7 +180,7 @@ OPUMLProfileGenerator >> addEnumLiteral: anEnumLiteral to: aClass [
 						source: builder source) ]
 ]
 
-{ #category : #'generating - methods' }
+{ #category : 'generating - methods' }
 OPUMLProfileGenerator >> addGeneralizationsFrom: aClassModel to: cls [
 	| sharedMethod directMethod |
 	sharedMethod := CBMethodBuilder new.
@@ -206,14 +208,14 @@ OPUMLProfileGenerator >> addGeneralizationsFrom: aClassModel to: cls [
 	cls compile: directMethod source trimmed classified: 'initialization'
 ]
 
-{ #category : #'generating - operations' }
+{ #category : 'generating - operations' }
 OPUMLProfileGenerator >> addOperation: anOperationModel to: aClass [
 	self addStubOperation: anOperationModel to: aClass.
 	(anOperationModel method isNotNil and: [ anOperationModel method isNotEmpty ])
 		ifTrue: [ self addRealOperation: anOperationModel to: aClass ]
 ]
 
-{ #category : #'generating - methods' }
+{ #category : 'generating - methods' }
 OPUMLProfileGenerator >> addOperationsDelegationMethodsFrom: aClassModel to: aClass [
 	| redefinedNames |
 	redefinedNames := Set new.
@@ -239,7 +241,7 @@ OPUMLProfileGenerator >> addOperationsDelegationMethodsFrom: aClassModel to: aCl
 					aClass addMethod: delegateMethod ] ]
 ]
 
-{ #category : #'generating - operations' }
+{ #category : 'generating - operations' }
 OPUMLProfileGenerator >> addRealOperation: anOperationModel to: aClass [
 	| name comment methodBuilder |
 	name := self operationNameFor: anOperationModel.
@@ -264,7 +266,7 @@ OPUMLProfileGenerator >> addRealOperation: anOperationModel to: aClass [
 	aClass compile: methodBuilder source classified: 'operations'
 ]
 
-{ #category : #'generating - operations' }
+{ #category : 'generating - operations' }
 OPUMLProfileGenerator >> addStubOperation: anOperationModel to: aClass [
 	| name comment methodBuilder |
 	name := self stubOperationNameFor: anOperationModel.
@@ -288,12 +290,12 @@ OPUMLProfileGenerator >> addStubOperation: anOperationModel to: aClass [
 	aClass compile: methodBuilder source withSqueakLineEndings classified: 'operations - stubs'
 ]
 
-{ #category : #retrieving }
+{ #category : 'retrieving' }
 OPUMLProfileGenerator >> allClassesInModel [
 	^ self sourceModel packagedElements select: [ :each | each oclIsKindOf: #Stereotype ]
 ]
 
-{ #category : #retrieving }
+{ #category : 'retrieving' }
 OPUMLProfileGenerator >> allSuperclassesOf: aClassModel [
 	| generalizations |
 	generalizations := OrderedCollection new.
@@ -303,7 +305,7 @@ OPUMLProfileGenerator >> allSuperclassesOf: aClassModel [
 	^ generalizations asArray
 ]
 
-{ #category : #utility }
+{ #category : 'utility' }
 OPUMLProfileGenerator >> asPlural: aString [
 	(aString endsWith: 's')
 		ifTrue: [ ^ aString , 'es' ].
@@ -312,7 +314,7 @@ OPUMLProfileGenerator >> asPlural: aString [
 	^ aString , 's'
 ]
 
-{ #category : #retrieving }
+{ #category : 'retrieving' }
 OPUMLProfileGenerator >> attributeNameFor: anAttributeModel [
 	| name |
 	name := anAttributeModel name.
@@ -324,7 +326,7 @@ OPUMLProfileGenerator >> attributeNameFor: anAttributeModel [
 	^ name
 ]
 
-{ #category : #changes }
+{ #category : 'changes' }
 OPUMLProfileGenerator >> changes [
 	| changeSet |
 	changeSet := CBChangeSet new.
@@ -332,39 +334,39 @@ OPUMLProfileGenerator >> changes [
 	^ changeSet refactoringChanges
 ]
 
-{ #category : #retrieving }
+{ #category : 'retrieving' }
 OPUMLProfileGenerator >> classNameFor: aString [
 	^ (self classPrefix , aString) asSymbol
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OPUMLProfileGenerator >> classPrefix [
 	^ classPrefix
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OPUMLProfileGenerator >> classPrefix: anObject [
 	classPrefix := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OPUMLProfileGenerator >> classes [
 	^ classes
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OPUMLProfileGenerator >> classes: anObject [
 	classes := anObject
 ]
 
-{ #category : #retrieving }
+{ #category : 'retrieving' }
 OPUMLProfileGenerator >> commentIn: anElement [
 	^ (anElement ownedComments isNil or: [ anElement ownedComments isEmpty ])
 		ifTrue: [ '' ]
 		ifFalse: [ anElement ownedComments first body ]
 ]
 
-{ #category : #'generating - classes' }
+{ #category : 'generating - classes' }
 OPUMLProfileGenerator >> createClassFrom: aClassModel in: aCategoryName [
 	| cls |
 	cls := self ensureCreateClass: aClassModel name in: aCategoryName.
@@ -378,7 +380,7 @@ OPUMLProfileGenerator >> createClassFrom: aClassModel in: aCategoryName [
 	^ cls
 ]
 
-{ #category : #'generating - meta' }
+{ #category : 'generating - meta' }
 OPUMLProfileGenerator >> createElementMeta [
 	| cls |
 	cls := self
@@ -405,7 +407,7 @@ OPUMLProfileGenerator >> createElementMeta [
 	^ cls
 ]
 
-{ #category : #'generating - enums' }
+{ #category : 'generating - enums' }
 OPUMLProfileGenerator >> createEnumFrom: anEnumModel in: aCategoryName [
 	| cls |
 	cls := self ensureCreateClass: anEnumModel name in: aCategoryName.
@@ -415,7 +417,7 @@ OPUMLProfileGenerator >> createEnumFrom: anEnumModel in: aCategoryName [
 	^ cls
 ]
 
-{ #category : #'generating-classes' }
+{ #category : 'generating-classes' }
 OPUMLProfileGenerator >> createProfileFactory [
 	| cls |
 	Smalltalk
@@ -447,7 +449,7 @@ OPUMLProfileGenerator >> createProfileFactory [
 	^ cls
 ]
 
-{ #category : #retrieving }
+{ #category : 'retrieving' }
 OPUMLProfileGenerator >> defaultValueFrom: aDefaultValue [
 	(self isEnumValue: aDefaultValue)
 		ifTrue: [ ^ (self classNameFor: aDefaultValue type name) , ' new ' , aDefaultValue instance name ].
@@ -458,7 +460,7 @@ OPUMLProfileGenerator >> defaultValueFrom: aDefaultValue [
 		ifNone: [ nil ]
 ]
 
-{ #category : #retrieving }
+{ #category : 'retrieving' }
 OPUMLProfileGenerator >> defaultValues [
 	| literals |
 	"	defaultValues ifNotNil: [ ^ defaultValues ]."
@@ -475,7 +477,7 @@ OPUMLProfileGenerator >> defaultValues [
 	^ defaultValues
 ]
 
-{ #category : #'generating - classes' }
+{ #category : 'generating - classes' }
 OPUMLProfileGenerator >> ensureCreateClass: aName in: aTagName [
 	^ classes
 		at: aName
@@ -488,13 +490,13 @@ OPUMLProfileGenerator >> ensureCreateClass: aName in: aTagName [
 						ifFalse: [ self packageName , '-' , aTagName ]) ]
 ]
 
-{ #category : #generating }
+{ #category : 'generating' }
 OPUMLProfileGenerator >> generate [
 	<script: 'self generate'>
 	
 ]
 
-{ #category : #generating }
+{ #category : 'generating' }
 OPUMLProfileGenerator >> generateAll [
 	classes := OrderedDictionary new.
 "	self loadTemplateMethods."
@@ -508,7 +510,7 @@ OPUMLProfileGenerator >> generateAll [
 	^ self changes
 ]
 
-{ #category : #generating }
+{ #category : 'generating' }
 OPUMLProfileGenerator >> generateAllClasses [
 	self sourceModel packagedElements
 		select: [ :each | each oclIsKindOf: #Stereotype ]
@@ -516,20 +518,20 @@ OPUMLProfileGenerator >> generateAllClasses [
 			[ :each | self createClassFrom: each in: self sourceModel implementationPackage ]
 ]
 
-{ #category : #generating }
+{ #category : 'generating' }
 OPUMLProfileGenerator >> generateAllDelegationMethods [
 	self allClassesInModel
 		do: [ :each | self addDelegationMethodsFrom: each to: (classes at: each name) ]
 ]
 
-{ #category : #generating }
+{ #category : 'generating' }
 OPUMLProfileGenerator >> generateAllEnums [
 	self sourceModel packagedElements
 		select: [ :each | each isKindOf: BootUMLEnumeration ]
 		thenDo: [ :each | self createEnumFrom: each in: self sourceModel implementationPackage ]
 ]
 
-{ #category : #generating }
+{ #category : 'generating' }
 OPUMLProfileGenerator >> generateExtensionMethods [
 	| extensions metaClass cls extensionGetter extensionSetter |
 	extensions := self sourceModel packagedElements
@@ -566,23 +568,23 @@ OPUMLProfileGenerator >> generateExtensionMethods [
 			cls addMethod: extensionSetter ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 OPUMLProfileGenerator >> initialize [
 	super initialize.
 	classes := OrderedDictionary new
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 OPUMLProfileGenerator >> isEnumValue: anElement [
 	^ (anElement className endsWith: 'InstanceValue') and: [ anElement type className endsWith: 'Enumeration' ]
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 OPUMLProfileGenerator >> isLiteralSpecification: anElement [
 	^ anElement isNotNil and: [ (anElement instVarNamed: #sharedGeneralizations) includesKey: #LiteralSpecification ]
 ]
 
-{ #category : #generating }
+{ #category : 'generating' }
 OPUMLProfileGenerator >> loadTemplateMethods [
 	| templateClasses allClasses |
 	templateClasses := OPUMLMetamodelGeneratorTemplates allSubclasses
@@ -602,7 +604,7 @@ OPUMLProfileGenerator >> loadTemplateMethods [
 						do: [ :op | op method: (template methodsFor: op inClassNamed: name) ] ] ]
 ]
 
-{ #category : #retrieving }
+{ #category : 'retrieving' }
 OPUMLProfileGenerator >> operationNameFor: anOperationName [
 	| name |
 	name := anOperationName name.
@@ -612,17 +614,17 @@ OPUMLProfileGenerator >> operationNameFor: anOperationName [
 	^ name
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OPUMLProfileGenerator >> packageName [
 	^ packageName
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OPUMLProfileGenerator >> packageName: anObject [
 	packageName := anObject
 ]
 
-{ #category : #retrieving }
+{ #category : 'retrieving' }
 OPUMLProfileGenerator >> parentFor: aClassName [
 	aClassName = 'Element'
 		ifTrue: [ ^ 'OPUMLMetaElement' ].
@@ -631,29 +633,29 @@ OPUMLProfileGenerator >> parentFor: aClassName [
 	^ self classNameFor: 'Element'
 ]
 
-{ #category : #'generating - operations' }
+{ #category : 'generating - operations' }
 OPUMLProfileGenerator >> prefixClassNamesInText: aString [
 	^ aString
 		copyWithRegex: '''%\w+%'''
 		matchesTranslatedUsing: [ :each | self classPrefix , (each copyFrom: 3 to: each size - 2) ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OPUMLProfileGenerator >> sourceModel [
 	^ sourceModel
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OPUMLProfileGenerator >> sourceModel: anObject [
 	sourceModel := anObject
 ]
 
-{ #category : #retrieving }
+{ #category : 'retrieving' }
 OPUMLProfileGenerator >> stubOperationNameFor: anOperationName [
 	^ (self operationNameFor: anOperationName) , 'Stub'
 ]
 
-{ #category : #retrieving }
+{ #category : 'retrieving' }
 OPUMLProfileGenerator >> superclassLayersOf: aClassModel [
 	| subclasses layers layer parents |
 	layers := OrderedCollection new.

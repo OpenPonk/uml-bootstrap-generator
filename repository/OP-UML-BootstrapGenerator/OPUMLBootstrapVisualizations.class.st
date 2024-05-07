@@ -1,10 +1,12 @@
 Class {
-	#name : #OPUMLBootstrapVisualizations,
-	#superclass : #Object,
-	#category : #'OP-UML-BootstrapGenerator-Utilities'
+	#name : 'OPUMLBootstrapVisualizations',
+	#superclass : 'Object',
+	#category : 'OP-UML-BootstrapGenerator-Utilities',
+	#package : 'OP-UML-BootstrapGenerator',
+	#tag : 'Utilities'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OPUMLBootstrapVisualizations >> showHierarchy [
 
 	| xmi reader model cls element classifier parents nodes b layers subclasses generalizations |

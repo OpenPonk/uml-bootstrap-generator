@@ -1,16 +1,18 @@
 Class {
-	#name : #OPUMLMetamodelGeneratorTest,
-	#superclass : #TestCase,
+	#name : 'OPUMLMetamodelGeneratorTest',
+	#superclass : 'TestCase',
 	#instVars : [
 		'generator'
 	],
 	#classInstVars : [
 		'umlBootstrapModel'
 	],
-	#category : #'OP-UML-BootstrapGenerator-Tests'
+	#category : 'OP-UML-BootstrapGenerator-Tests',
+	#package : 'OP-UML-BootstrapGenerator',
+	#tag : 'Tests'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OPUMLMetamodelGeneratorTest class >> umlBootstrapModel [
 	"
 	umlBootstrapModel := nil
@@ -25,43 +27,43 @@ OPUMLMetamodelGeneratorTest class >> umlBootstrapModel [
 			umlBootstrapModel := (reader readXmi: xmi) first ]
 ]
 
-{ #category : #asserting }
+{ #category : 'asserting' }
 OPUMLMetamodelGeneratorTest >> assertMethod: actualCode equals: expectedCode [
 	self
 		assert: (RBParser parseMethod: actualCode) formattedCode withUnixLineEndings
 		equals: (RBParser parseMethod: expectedCode) formattedCode withUnixLineEndings
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OPUMLMetamodelGeneratorTest >> attribute: anAttributeName inClass: aClassName [
 	^ (self findClass: aClassName) ownedAttribute
 		detect: [ :each | each name = anAttributeName ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OPUMLMetamodelGeneratorTest >> findClass: aName [
 	^ (self model packagedElement flatCollect: #packagedElement)
 		detect: [ :each | each name = aName ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OPUMLMetamodelGeneratorTest >> findElement: aName [
 	^ (self model packagedElement flatCollect: #packagedElement)
 		detect: [ :each | each name = aName ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OPUMLMetamodelGeneratorTest >> model [
 	^ self class umlBootstrapModel
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OPUMLMetamodelGeneratorTest >> operation: anOperationName inClass: aClassName [
 	^ (self findClass: aClassName) ownedOperation
 		detect: [ :each | each name = anOperationName ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 OPUMLMetamodelGeneratorTest >> setUp [
 	super setUp.
 	generator := OPUMLMetamodelGenerator new.
@@ -70,30 +72,40 @@ OPUMLMetamodelGeneratorTest >> setUp [
 	generator packageName: 'Generated-UMLMetamodelTest'
 ]
 
-{ #category : #'tests - generating - generalizations' }
+{ #category : 'tests - generating - generalizations' }
 OPUMLMetamodelGeneratorTest >> testAddAccessingDelegationMethods [
+
 	| class classModel methods |
 	class := CBClass new.
 	classModel := self findClass: 'RedefinableElement'.
-	generator createClassFrom: (self findClass: 'Element') in: 'CommonStructure'.
-	generator createClassFrom: (self findClass: 'NamedElement') in: 'CommonStructure'.
+	generator
+		createClassFrom: (self findClass: 'Element')
+		in: 'CommonStructure'.
+	generator
+		createClassFrom: (self findClass: 'NamedElement')
+		in: 'CommonStructure'.
 	generator addDelegationMethodsFrom: classModel to: class.
-	methods := class methods collect: [ :each | each selector -> each protocol ].
-	self assert: (methods includes: 'nameExpression' -> 'accessing - NamedElement').
+	methods := class methods collect: [ :each |
+		           each selector -> each protocolName ].
+	self assert:
+		(methods includes: 'nameExpression' -> 'accessing - NamedElement').
 	self
-		assertMethod: (class methods detect: [ :each | each selector = 'nameExpression' ]) source
-		equals:
-			'nameExpression
+		assertMethod:
+			(class methods detect: [ :each | each selector = 'nameExpression' ])
+				source
+		equals: 'nameExpression
 	^ (sharedGeneralizations at: #NamedElement) nameExpression'.
-	self assert: (methods includes: 'nameExpression:' -> 'accessing - NamedElement').
+	self assert:
+		(methods includes: 'nameExpression:' -> 'accessing - NamedElement').
 	self
-		assertMethod: (class methods detect: [ :each | each selector = 'nameExpression:' ]) source
-		equals:
-			'nameExpression: aStringExpression
-	(sharedGeneralizations at: #NamedElement) nameExpression: aStringExpression'.
+		assertMethod:
+			(class methods detect: [ :each | each selector = 'nameExpression:' ])
+				source
+		equals: 'nameExpression: aStringExpression
+	(sharedGeneralizations at: #NamedElement) nameExpression: aStringExpression'
 ]
 
-{ #category : #'tests - generating - attributes' }
+{ #category : 'tests - generating - attributes' }
 OPUMLMetamodelGeneratorTest >> testAddAttributeManyToMany [
 	| class attribute |
 	class := CBClass new.
@@ -115,7 +127,7 @@ OPUMLMetamodelGeneratorTest >> testAddAttributeManyToMany [
 	self generalizations removeAll; addAll: aGeneralization'
 ]
 
-{ #category : #'tests - generating - attributes' }
+{ #category : 'tests - generating - attributes' }
 OPUMLMetamodelGeneratorTest >> testAddAttributeManyToNone [
 	| class attribute |
 	class := CBClass new.
@@ -131,7 +143,7 @@ self assertMethod: class methods second source equals: 'ownedComments: aComment
 	ownedComments := aComment'
 ]
 
-{ #category : #'tests - generating - attributes' }
+{ #category : 'tests - generating - attributes' }
 OPUMLMetamodelGeneratorTest >> testAddAttributeManyToOne [
 	| class attribute |
 	class := CBClass new.
@@ -153,7 +165,7 @@ OPUMLMetamodelGeneratorTest >> testAddAttributeManyToOne [
 	datatype := OPUMLToOneLink on: self identity update: #ownedAttributes from: datatype to: aDataType'
 ]
 
-{ #category : #'tests - generating - attributes' }
+{ #category : 'tests - generating - attributes' }
 OPUMLMetamodelGeneratorTest >> testAddAttributeNamedClass [
 	| class attribute |
 	class := CBClass new.
@@ -164,7 +176,7 @@ OPUMLMetamodelGeneratorTest >> testAddAttributeNamedClass [
 	self assert: class selectors equals: #(owningClass owningClass:)
 ]
 
-{ #category : #'tests - generating - attributes' }
+{ #category : 'tests - generating - attributes' }
 OPUMLMetamodelGeneratorTest >> testAddAttributeOneToMany [
 	| class attribute |
 	class := CBClass new.
@@ -186,7 +198,7 @@ OPUMLMetamodelGeneratorTest >> testAddAttributeOneToMany [
 	self ownedAttributes removeAll; addAll: aProperty'
 ]
 
-{ #category : #'tests - generating - attributes' }
+{ #category : 'tests - generating - attributes' }
 OPUMLMetamodelGeneratorTest >> testAddAttributeOneToNone [
 	| class attribute |
 	class := CBClass new.
@@ -202,7 +214,7 @@ self assertMethod: class methods second source equals: 'instance: anInstanceSpec
 	instance := anInstanceSpecification'
 ]
 
-{ #category : #'tests - generating - attributes' }
+{ #category : 'tests - generating - attributes' }
 OPUMLMetamodelGeneratorTest >> testAddAttributeOneToOne [
 	| class attribute |
 	class := CBClass new.
@@ -227,7 +239,7 @@ OPUMLMetamodelGeneratorTest >> testAddAttributeOneToOne [
 	OPUMLToOneLink on: self identity thisSelector: #parameteredElement otherSelector: #templateParameter from: anOldParameteredElement to: parameteredElement'
 ]
 
-{ #category : #'tests - generating - attributes' }
+{ #category : 'tests - generating - attributes' }
 OPUMLMetamodelGeneratorTest >> testAddAttributeWithDefaultDefaultValue [
 	| class attribute |
 	class := CBClass new.
@@ -239,7 +251,7 @@ OPUMLMetamodelGeneratorTest >> testAddAttributeWithDefaultDefaultValue [
 	^ isReadOnly ifNil: [ isReadOnly := false ]'
 ]
 
-{ #category : #'tests - generating - attributes' }
+{ #category : 'tests - generating - attributes' }
 OPUMLMetamodelGeneratorTest >> testAddAttributeWithDefaultValue [
 	| class attribute |
 	class := CBClass new.
@@ -250,7 +262,7 @@ OPUMLMetamodelGeneratorTest >> testAddAttributeWithDefaultValue [
 	^ value ifNil: [ value := 0 ]'
 ]
 
-{ #category : #'tests - generating - attributes' }
+{ #category : 'tests - generating - attributes' }
 OPUMLMetamodelGeneratorTest >> testAddAttributeWithEnumDefaultValue [
 	| class attribute |
 	class := CBClass new.
@@ -262,7 +274,7 @@ OPUMLMetamodelGeneratorTest >> testAddAttributeWithEnumDefaultValue [
 	^ direction ifNil: [ direction := MBUTParameterDirectionKind new in ]'
 ]
 
-{ #category : #'tests - generating - classes' }
+{ #category : 'tests - generating - classes' }
 OPUMLMetamodelGeneratorTest >> testAddComment [
 	| class |
 	class := CBClass new.
@@ -274,27 +286,31 @@ OPUMLMetamodelGeneratorTest >> testAddComment [
 			'An Element is a constituent of a model. As such, it has the capability of owning other Elements.'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 OPUMLMetamodelGeneratorTest >> testAddEnumLiteral [
+
 	| class enumModel literal |
 	class := CBClass new.
 	class name: 'AggregationKind'.
 	enumModel := self findElement: 'AggregationKind'.
-	literal := enumModel ownedLiteral detect: [ :each | each name = 'composite' ].
+	literal := enumModel ownedLiteral detect: [ :each |
+		           each name = 'composite' ].
 	generator addEnumLiteral: literal to: class.
-	self assert: class selectors equals: #(composite).
-	self assert: class methods first protocol equals: 'accessing'.
+	self assert: class selectors equals: #( composite ).
+	self assert: class methods first protocolName equals: 'accessing'.
 	self assertMethod: class methods first source equals: 'composite
 		"Indicates that the Property is aggregated compositely, i.e., the composite object has responsibility for the existence and storage of the composed objects (parts)."
 		^ #composite'.
 	self assert: class metaMethods isNotEmpty.
-	self assert: class metaMethods first protocol equals: 'accessing - enum'.
+	self
+		assert: class metaMethods first protocolName
+		equals: 'accessing - enum'.
 	self assertMethod: class metaMethods first source equals: 'composite
 		"Indicates that the Property is aggregated compositely, i.e., the composite object has responsibility for the existence and storage of the composed objects (parts)."
-		^ #composite'.
+		^ #composite'
 ]
 
-{ #category : #'tests - generating - literals' }
+{ #category : 'tests - generating - literals' }
 OPUMLMetamodelGeneratorTest >> testAddEnumLiteralNotPackage [
 	| class enumModel literal |
 	class := CBClass new.
@@ -306,7 +322,7 @@ OPUMLMetamodelGeneratorTest >> testAddEnumLiteralNotPackage [
 	self assert: class metaMethods isEmpty
 ]
 
-{ #category : #'tests - generating - generalizations' }
+{ #category : 'tests - generating - generalizations' }
 OPUMLMetamodelGeneratorTest >> testAddGeneralizations [
 	| class classModel |
 	class := CBClass new.
@@ -330,7 +346,7 @@ OPUMLMetamodelGeneratorTest >> testAddGeneralizations [
 	}'
 ]
 
-{ #category : #'tests - generating - generalizations' }
+{ #category : 'tests - generating - generalizations' }
 OPUMLMetamodelGeneratorTest >> testAddNoDirectGeneralizations [
 	| class classModel |
 	class := CBClass new.
@@ -353,34 +369,27 @@ OPUMLMetamodelGeneratorTest >> testAddNoDirectGeneralizations [
 	}'
 ]
 
-{ #category : #'tests - generating - operations' }
+{ #category : 'tests - generating - operations' }
 OPUMLMetamodelGeneratorTest >> testAddOperationWithMethod [
+
 	| class operation realMethod stubMethod |
 	class := CBClass new.
 	operation := self operation: 'isNull' inClass: 'ValueSpecification'.
-	operation
-		method:
-			(OPUMLMetamodelGeneratorValuesTemplates new
-				methodsFor: operation
-				inClassNamed: 'ValueSpecification').
+	operation method: (OPUMLMetamodelGeneratorValuesTemplates new
+			 methodsFor: operation
+			 inClassNamed: 'ValueSpecification').
 	generator addOperation: operation to: class.
 	realMethod := class methodNamed: 'isNull'.
 	stubMethod := class methodNamed: 'isNullStub'.
-	self assert: realMethod protocol equals: 'operations'.
-	self
-		assertMethod: realMethod source
-		equals:
-			'isNull
+	self assert: realMethod protocolName equals: 'operations'.
+	self assertMethod: realMethod source equals: 'isNull
 	"The query isNull() returns true when it can be computed that the value is null."
 	
 	"{OCL} result = (false)"
 	
 	^ false'.
-	self assert: stubMethod protocol equals: 'operations - stubs'.
-	self
-		assertMethod: stubMethod source
-		equals:
-			'isNullStub
+	self assert: stubMethod protocolName equals: 'operations - stubs'.
+	self assertMethod: stubMethod source equals: 'isNullStub
 	"The query isNull() returns true when it can be computed that the value is null."
 	
 	"{OCL} result = (false)"
@@ -389,19 +398,21 @@ OPUMLMetamodelGeneratorTest >> testAddOperationWithMethod [
 '
 ]
 
-{ #category : #'tests - generating - operations' }
+{ #category : 'tests - generating - operations' }
 OPUMLMetamodelGeneratorTest >> testAddOperationWithOCL [
+
 	| class operation |
 	class := CBClass new.
-	operation := self operation: 'lowerBound' inClass: 'MultiplicityElement'.
+	operation := self
+		             operation: 'lowerBound'
+		             inClass: 'MultiplicityElement'.
 	generator addOperation: operation to: class.
 	self
-		assert: (class methodNamed: 'lowerBoundStub') protocol
+		assert: (class methodNamed: 'lowerBoundStub') protocolName
 		equals: 'operations - stubs'.
 	self
 		assertMethod: (class methodNamed: 'lowerBoundStub') source
-		equals:
-			'lowerBoundStub
+		equals: 'lowerBoundStub
 	"The query lowerBound() returns the lower bound of the multiplicity as an integer, which is the integerValue of lowerValue, if this is given, and 1 otherwise."
 	
 	"{OCL} result = (if (lowerValue=null or lowerValue.integerValue()=null) then 1 else lowerValue.integerValue() endif)"
@@ -409,7 +420,7 @@ OPUMLMetamodelGeneratorTest >> testAddOperationWithOCL [
 	self notYetImplemented'
 ]
 
-{ #category : #'tests - generating - operations' }
+{ #category : 'tests - generating - operations' }
 OPUMLMetamodelGeneratorTest >> testAddOperationWithPreConditions [
 	| class operation |
 	class := CBClass new.
@@ -425,7 +436,7 @@ OPUMLMetamodelGeneratorTest >> testAddOperationWithPreConditions [
 	self notYetImplemented'
 ]
 
-{ #category : #'tests - generating - operations' }
+{ #category : 'tests - generating - operations' }
 OPUMLMetamodelGeneratorTest >> testAddOperationWithoutBody [
 	| class operation |
 	class := CBClass new.
@@ -450,14 +461,19 @@ endif
 	self notYetImplemented'
 ]
 
-{ #category : #'tests - generating - operations' }
+{ #category : 'tests - generating - operations' }
 OPUMLMetamodelGeneratorTest >> testAddOperationWithoutMethod [
+
 	| class operation |
 	class := CBClass new.
 	operation := self operation: 'isNull' inClass: 'ValueSpecification'.
 	generator addOperation: operation to: class.
-	self assert: (class methodNamed: 'isNullStub') protocol equals: 'operations - stubs'.
-	self assertMethod: (class methodNamed: 'isNullStub') source equals: 'isNullStub
+	self
+		assert: (class methodNamed: 'isNullStub') protocolName
+		equals: 'operations - stubs'.
+	self
+		assertMethod: (class methodNamed: 'isNullStub') source
+		equals: 'isNullStub
 	"The query isNull() returns true when it can be computed that the value is null."
 	
 	"{OCL} result = (false)"
@@ -465,28 +481,41 @@ OPUMLMetamodelGeneratorTest >> testAddOperationWithoutMethod [
 	self notYetImplemented'
 ]
 
-{ #category : #'tests - generating - generalizations' }
+{ #category : 'tests - generating - generalizations' }
 OPUMLMetamodelGeneratorTest >> testAddOperationsDelegationMethods [
+
 	| class classModel methods |
 	class := CBClass new.
 	classModel := self findClass: 'LiteralSpecification'.
 	generator loadTemplateMethods.
-	generator createClassFrom: (self findClass: 'NamedElement') in: 'Anywhere'.
-	generator createClassFrom: (self findClass: 'ParameterableElement') in: 'Anywhere'.
-	generator createClassFrom: (self findClass: 'TypedElement') in: 'Anywhere'.
-	generator createClassFrom: (self findClass: 'PackageableElement') in: 'Anywhere'.
-	generator createClassFrom: (self findClass: 'ValueSpecification') in: 'Anywhere'.
+	generator
+		createClassFrom: (self findClass: 'NamedElement')
+		in: 'Anywhere'.
+	generator
+		createClassFrom: (self findClass: 'ParameterableElement')
+		in: 'Anywhere'.
+	generator
+		createClassFrom: (self findClass: 'TypedElement')
+		in: 'Anywhere'.
+	generator
+		createClassFrom: (self findClass: 'PackageableElement')
+		in: 'Anywhere'.
+	generator
+		createClassFrom: (self findClass: 'ValueSpecification')
+		in: 'Anywhere'.
 	generator addDelegationMethodsFrom: classModel to: class.
-	methods := class methods collect: [ :each | each selector -> each protocol ].
-	self assert: (methods includes: 'stringValue' -> 'operations - ValueSpecification').
+	methods := class methods collect: [ :each |
+		           each selector -> each protocolName ].
+	self assert:
+		(methods includes:
+			 'stringValue' -> 'operations - ValueSpecification').
 	self
 		assertMethod: (class methodNamed: #stringValue) source
-		equals:
-			'stringValue
+		equals: 'stringValue
 	^ (sharedGeneralizations at: #ValueSpecification) stringValue'
 ]
 
-{ #category : #'tests - retrieving' }
+{ #category : 'tests - retrieving' }
 OPUMLMetamodelGeneratorTest >> testAllSuperclasses [
 	| class |
 	class := self findClass: 'StructuralFeature'.
@@ -495,7 +524,7 @@ OPUMLMetamodelGeneratorTest >> testAllSuperclasses [
 		equals: #(NamedElement RedefinableElement MultiplicityElement TypedElement Feature)
 ]
 
-{ #category : #'testing - test meta' }
+{ #category : 'testing - test meta' }
 OPUMLMetamodelGeneratorTest >> testAttributeInClass [
 	| attribute |
 	attribute := self attribute: 'ownedComment' inClass: 'Element'.
@@ -503,7 +532,7 @@ OPUMLMetamodelGeneratorTest >> testAttributeInClass [
 	self assert: attribute name equals: 'ownedComment'
 ]
 
-{ #category : #'tests - testing' }
+{ #category : 'tests - testing' }
 OPUMLMetamodelGeneratorTest >> testAttributeName [
 	self
 		assert: (generator attributeNameFor: (self attribute: 'owner' inClass: 'Element'))
@@ -516,12 +545,12 @@ OPUMLMetamodelGeneratorTest >> testAttributeName [
 		equals: 'ownedComments'
 ]
 
-{ #category : #'tests - retrieving' }
+{ #category : 'tests - retrieving' }
 OPUMLMetamodelGeneratorTest >> testClassNameFor [
 	self assert: (generator classNameFor: 'Hello') equals: 'MBUTHello'
 ]
 
-{ #category : #'tests - retrieving' }
+{ #category : 'tests - retrieving' }
 OPUMLMetamodelGeneratorTest >> testCommentIn [
 	self
 		assert: (generator commentIn: (self operation: 'lowerBound' inClass: 'MultiplicityElement'))
@@ -529,7 +558,7 @@ OPUMLMetamodelGeneratorTest >> testCommentIn [
 			'The query lowerBound() returns the lower bound of the multiplicity as an integer, which is the integerValue of lowerValue, if this is given, and 1 otherwise.'
 ]
 
-{ #category : #'tests - generating - classes' }
+{ #category : 'tests - generating - classes' }
 OPUMLMetamodelGeneratorTest >> testCreateClass [
 	| classModel class |
 	classModel := BootUMLClass new name: 'Simple'.
@@ -537,7 +566,7 @@ OPUMLMetamodelGeneratorTest >> testCreateClass [
 	self assert: class name equals: 'MBUTSimple'
 ]
 
-{ #category : #'tests - meta' }
+{ #category : 'tests - meta' }
 OPUMLMetamodelGeneratorTest >> testCreateElementMeta [
 	| cls elCls |
 	cls := generator createElementMeta.
@@ -548,7 +577,7 @@ OPUMLMetamodelGeneratorTest >> testCreateElementMeta [
 	self assert: elCls parent equals: 'MBUTMetaElement'
 ]
 
-{ #category : #'tests - meta' }
+{ #category : 'tests - meta' }
 OPUMLMetamodelGeneratorTest >> testCreateElementMetaAttributes [
 	| cls |
 	cls := generator createElementMeta.
@@ -557,7 +586,7 @@ OPUMLMetamodelGeneratorTest >> testCreateElementMetaAttributes [
 		equals: #(announcer directGeneralizations sharedGeneralizations tags uuid)
 ]
 
-{ #category : #'tests - meta' }
+{ #category : 'tests - meta' }
 OPUMLMetamodelGeneratorTest >> testCreateElementMetaClassMethods [
 	| cls method |
 	cls := generator createElementMeta.
@@ -565,7 +594,7 @@ OPUMLMetamodelGeneratorTest >> testCreateElementMetaClassMethods [
 		assert: (cls metaMethods collect: #selector) sorted
 		equals: #(newOnShared:) sorted.
 	method := cls metaMethods detect: [ :each | each selector = #newOnShared: ].
-	self assert: method protocol equals: 'instance creation'.
+	self assert: method protocolName equals: 'instance creation'.
 	self
 		assertMethod: method source
 		equals:
@@ -575,14 +604,14 @@ OPUMLMetamodelGeneratorTest >> testCreateElementMetaClassMethods [
 		yourself'
 ]
 
-{ #category : #'tests - meta' }
+{ #category : 'tests - meta' }
 OPUMLMetamodelGeneratorTest >> testCreateElementMetaComment [
 	| cls |
 	cls := generator createElementMeta.
 	self assert: cls comment isNotNil
 ]
 
-{ #category : #'tests - meta' }
+{ #category : 'tests - meta' }
 OPUMLMetamodelGeneratorTest >> testCreateElementMetaInitialize [
 	| cls |
 	cls := generator createElementMeta.
@@ -597,7 +626,7 @@ OPUMLMetamodelGeneratorTest >> testCreateElementMetaInitialize [
 	self initializeDirectGeneralizations'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 OPUMLMetamodelGeneratorTest >> testCreateElementMetaInstanceMethods [
 
 	| cls |
@@ -616,11 +645,11 @@ OPUMLMetamodelGeneratorTest >> testCreateElementMetaInstanceMethods [
 			   #tagAt: #tagAt:put: #tags #umlClassName #umlMetaClass
 			   #unapplyStereotype: #uuid #uuid: ) sorted.
 	self
-		assert: (cls methodNamed: #initialize) protocol
+		assert: (cls methodNamed: #initialize) protocolName
 		equals: 'initialization'
 ]
 
-{ #category : #'tests - generating - enums' }
+{ #category : 'tests - generating - enums' }
 OPUMLMetamodelGeneratorTest >> testCreateEnum [
 	| enumModel class |
 	enumModel := BootUMLEnumeration new name: 'SimpleEnum'.
@@ -629,7 +658,7 @@ OPUMLMetamodelGeneratorTest >> testCreateEnum [
 	self assert: class parent equals: 'MBUTEnumeration'
 ]
 
-{ #category : #'tests - generating - enums' }
+{ #category : 'tests - generating - enums' }
 OPUMLMetamodelGeneratorTest >> testCreateEnumWithLiterals [
 	| enumModel class |
 	enumModel := self findElement: 'AggregationKind'.
@@ -637,28 +666,29 @@ OPUMLMetamodelGeneratorTest >> testCreateEnumWithLiterals [
 	self assert: class selectors sorted equals: #(composite none shared)
 ]
 
-{ #category : #'tests - generating - packages' }
+{ #category : 'tests - generating - packages' }
 OPUMLMetamodelGeneratorTest >> testCreateTargetPackage [
+
 	generator packageName: 'TestGenerated123'.
 	generator createTargetPackage.
-	self assert: (RPackage organizer includesPackageNamed: 'TestGenerated123').
+	self assert: (self packageOrganizer hasPackage: 'TestGenerated123')
 ]
 
-{ #category : #'tests - retrieving' }
+{ #category : 'tests - retrieving' }
 OPUMLMetamodelGeneratorTest >> testDefaultDefaultValue [
 	| attribute |
 	attribute := self attribute: 'isReadOnly' inClass: 'Activity'.
 	self assert: (generator defaultValueFrom: attribute defaultValue) equals: false
 ]
 
-{ #category : #'tests - retrieving' }
+{ #category : 'tests - retrieving' }
 OPUMLMetamodelGeneratorTest >> testDefaultValue [
 	| attribute |
 	attribute := self attribute: 'value' inClass: 'LiteralInteger'.
 	self assert: (generator defaultValueFrom: attribute defaultValue) equals: 0
 ]
 
-{ #category : #'tests - retrieving' }
+{ #category : 'tests - retrieving' }
 OPUMLMetamodelGeneratorTest >> testDefaultValues [
 	| result |
 	result := generator defaultValues.
@@ -666,7 +696,7 @@ OPUMLMetamodelGeneratorTest >> testDefaultValues [
 	self assert: (result includes: 'LiteralNull' -> nil)
 ]
 
-{ #category : #'tests - generating - generalizations' }
+{ #category : 'tests - generating - generalizations' }
 OPUMLMetamodelGeneratorTest >> testDontAddDelegationMethodsForRedefined [
 	| class classModel methods |
 	class := CBClass new.
@@ -676,12 +706,12 @@ OPUMLMetamodelGeneratorTest >> testDontAddDelegationMethodsForRedefined [
 	generator createClassFrom: (self findClass: 'ParameterableElement') in: 'Somewhere'.
 	generator createClassFrom: (self findClass: 'PackageableElement') in: 'Somewhere'.
 	generator addDelegationMethodsFrom: classModel to: class.
-	methods := class methods collect: [ :each | each selector -> each protocol ].
+	methods := class methods collect: [ :each | each selector -> each protocolName ].
 	self deny: (methods includes: 'specification' -> 'accessing - Constraint').
 	self deny: (methods includes: 'specification:' -> 'accessing - Constraint').
 ]
 
-{ #category : #'tests - generating - generalizations' }
+{ #category : 'tests - generating - generalizations' }
 OPUMLMetamodelGeneratorTest >> testDontAddOperationsDelegationMethods [
 	| class classModel methods |
 	class := CBClass new.
@@ -693,12 +723,12 @@ OPUMLMetamodelGeneratorTest >> testDontAddOperationsDelegationMethods [
 	generator createClassFrom: (self findClass: 'ValueSpecification') in: 'Anywhere'.
 	generator createClassFrom: (self findClass: 'LiteralSpecification') in: 'Anywhere'.
 	generator addDelegationMethodsFrom: classModel to: class.
-	methods := class methods collect: [ :each | each selector -> each protocol ].
-	methods := class methods collect: [ :each | each selector -> each protocol ].
+	methods := class methods collect: [ :each | each selector -> each protocolName ].
+	methods := class methods collect: [ :each | each selector -> each protocolName ].
 	self deny: (methods includes: 'stringValue' -> 'operations - ValueSpecification')
 ]
 
-{ #category : #'tests - generating - classes' }
+{ #category : 'tests - generating - classes' }
 OPUMLMetamodelGeneratorTest >> testEnsureCreateClass [
 	| result1 result2 |
 	result1 := generator ensureCreateClass: 'GeneratedClassXXX' in: 'Generated-Package'.
@@ -709,7 +739,7 @@ OPUMLMetamodelGeneratorTest >> testEnsureCreateClass [
 	self assert: result1 == result2 description: 'should be the same identity'
 ]
 
-{ #category : #'tests - retrieving' }
+{ #category : 'tests - retrieving' }
 OPUMLMetamodelGeneratorTest >> testEnumDefaultValue [
 	| attribute |
 	attribute := self attribute: 'direction' inClass: 'Parameter'.
@@ -718,7 +748,7 @@ OPUMLMetamodelGeneratorTest >> testEnumDefaultValue [
 		equals: (generator classNameFor: 'ParameterDirectionKind') , ' new in'
 ]
 
-{ #category : #'testing - test meta' }
+{ #category : 'testing - test meta' }
 OPUMLMetamodelGeneratorTest >> testFindClass [
 	| aClass |
 	aClass := self findClass: 'Comment'.
@@ -726,7 +756,7 @@ OPUMLMetamodelGeneratorTest >> testFindClass [
 	self assert: aClass name equals: 'Comment'
 ]
 
-{ #category : #'testing - test meta' }
+{ #category : 'testing - test meta' }
 OPUMLMetamodelGeneratorTest >> testFindElement [
 	| anElement |
 	anElement := self findElement: 'AggregationKind'.
@@ -734,21 +764,21 @@ OPUMLMetamodelGeneratorTest >> testFindElement [
 	self assert: anElement name equals: 'AggregationKind'
 ]
 
-{ #category : #'tests - generating' }
+{ #category : 'tests - generating' }
 OPUMLMetamodelGeneratorTest >> testGenerateAll [
 	| result |
 	result := generator generateAll.
 	self assert: result isNotEmpty
 ]
 
-{ #category : #'tests - testing' }
+{ #category : 'tests - testing' }
 OPUMLMetamodelGeneratorTest >> testIsEnumValue [
 	self
 		assert:
 			(generator isEnumValue: (self attribute: 'direction' inClass: 'Parameter') defaultValue)
 ]
 
-{ #category : #'tests - testing' }
+{ #category : 'tests - testing' }
 OPUMLMetamodelGeneratorTest >> testIsMultivalued [
 	self
 		deny: (self attribute: 'owner' inClass: 'Element') isMultivalued
@@ -767,7 +797,7 @@ OPUMLMetamodelGeneratorTest >> testIsMultivalued [
 		description: '1..2'
 ]
 
-{ #category : #'tests - testing' }
+{ #category : 'tests - testing' }
 OPUMLMetamodelGeneratorTest >> testLiteralSpecification [
 	self
 		assert:
@@ -779,7 +809,7 @@ OPUMLMetamodelGeneratorTest >> testLiteralSpecification [
 				isLiteralSpecification: (self attribute: 'direction' inClass: 'Parameter') defaultValue)
 ]
 
-{ #category : #'tests - generating - operations' }
+{ #category : 'tests - generating - operations' }
 OPUMLMetamodelGeneratorTest >> testLoadTemplateMethods [
 	| operation |
 	operation := self operation: 'isNull' inClass: 'ValueSpecification'.
@@ -791,14 +821,14 @@ OPUMLMetamodelGeneratorTest >> testLoadTemplateMethods [
 	self assert: operation method first language first equals: 'Pharo'
 ]
 
-{ #category : #'tests - generating - operations' }
+{ #category : 'tests - generating - operations' }
 OPUMLMetamodelGeneratorTest >> testLoadTemplateMethodsVarious [
 	generator loadTemplateMethods.
 	self assert: (self operation: 'isNull' inClass: 'ValueSpecification') method isNotNil.
 	self assert: (self operation: 'lower' inClass: 'MultiplicityElement') method isNotNil.
 ]
 
-{ #category : #'testing - test meta' }
+{ #category : 'testing - test meta' }
 OPUMLMetamodelGeneratorTest >> testOperationInClass [
 	| operation |
 	operation := self operation: 'lowerBound' inClass: 'MultiplicityElement'.
@@ -806,7 +836,7 @@ OPUMLMetamodelGeneratorTest >> testOperationInClass [
 	self assert: operation name equals: 'lowerBound'
 ]
 
-{ #category : #'tests - generating - operations' }
+{ #category : 'tests - generating - operations' }
 OPUMLMetamodelGeneratorTest >> testOperationName [
 	self
 		assert: (generator operationNameFor: (self operation: 'lower' inClass: 'MultiplicityElement'))
@@ -816,28 +846,28 @@ OPUMLMetamodelGeneratorTest >> testOperationName [
 		equals: 'context'
 ]
 
-{ #category : #'tests - retrieving' }
+{ #category : 'tests - retrieving' }
 OPUMLMetamodelGeneratorTest >> testParent [
 	self assert: (generator parentFor: 'MetaElement') equals: 'Object'.
 	self assert: (generator parentFor: 'Element') equals: 'MBUTMetaElement'.
 	self assert: (generator parentFor: 'Port') equals: 'MBUTElement'
 ]
 
-{ #category : #'tests - utility' }
+{ #category : 'tests - utility' }
 OPUMLMetamodelGeneratorTest >> testPlural [
 	self assert: (generator asPlural: 'owner') equals: 'owners'.
 	self assert: (generator asPlural: 'superClass') equals: 'superClasses'.
 	self assert: (generator asPlural: 'subsettedProperty') equals: 'subsettedProperties'
 ]
 
-{ #category : #'tests - generating - operations' }
+{ #category : 'tests - generating - operations' }
 OPUMLMetamodelGeneratorTest >> testPrefixClassNames [
 	self
 		assert: (generator prefixClassNamesInText: '^ self aggregation = ''%AggregationKind%'' composite')
 		equals: '^ self aggregation = MBUTAggregationKind composite'
 ]
 
-{ #category : #'tests - retrieving' }
+{ #category : 'tests - retrieving' }
 OPUMLMetamodelGeneratorTest >> testStubOperationName [
 	self
 		assert: (generator stubOperationNameFor: (self operation: 'lower' inClass: 'MultiplicityElement'))
@@ -847,7 +877,7 @@ OPUMLMetamodelGeneratorTest >> testStubOperationName [
 		equals: 'contextStub'
 ]
 
-{ #category : #'tests - retrieving' }
+{ #category : 'tests - retrieving' }
 OPUMLMetamodelGeneratorTest >> testSuperclassLayers [
 	| class |
 	class := self findClass: 'StructuralFeature'.

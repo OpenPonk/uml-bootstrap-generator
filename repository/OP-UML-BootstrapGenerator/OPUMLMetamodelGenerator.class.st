@@ -4,8 +4,8 @@ I generate the UML metamodel from the bootstrap metamodel representation.
 See class-side for usage.
 "
 Class {
-	#name : #OPUMLMetamodelGenerator,
-	#superclass : #Object,
+	#name : 'OPUMLMetamodelGenerator',
+	#superclass : 'Object',
 	#instVars : [
 		'classPrefix',
 		'packageName',
@@ -14,10 +14,12 @@ Class {
 		'classes',
 		'defaultValues'
 	],
-	#category : #'OP-UML-BootstrapGenerator-Metamodel-Generator'
+	#category : 'OP-UML-BootstrapGenerator-Metamodel-Generator',
+	#package : 'OP-UML-BootstrapGenerator',
+	#tag : 'Metamodel-Generator'
 }
 
-{ #category : #translating }
+{ #category : 'translating' }
 OPUMLMetamodelGenerator class >> generate [
 <script>
 | generator model |
@@ -29,7 +31,7 @@ generator packageName: 'OP-UML-Metamodel'.
 (CBChangesBrowser changes: generator generateAll) open
 ]
 
-{ #category : #'generating - methods' }
+{ #category : 'generating - methods' }
 OPUMLMetamodelGenerator >> addAccessingDelegationMethodsFrom: aClassModel to: aClass [
 	| redefinedNames |
 	redefinedNames := Set new.
@@ -44,7 +46,7 @@ OPUMLMetamodelGenerator >> addAccessingDelegationMethodsFrom: aClassModel to: aC
 		do: [ :superClassModel | 
 			| superClass methods |
 			superClass := classes at: superClassModel name.
-			methods := (superClass methods select: [ :method | method protocol = 'accessing' ])
+			methods := (superClass methods select: [ :method | method protocolName = 'accessing' ])
 				reject: [ :method | 
 					(redefinedNames includes: method selector)
 						or: [ redefinedNames includes: (method selector withoutSuffix: ':') asSymbol ] ].
@@ -56,16 +58,16 @@ OPUMLMetamodelGenerator >> addAccessingDelegationMethodsFrom: aClassModel to: aC
 						ifTrue: [ CBMethod new
 								getter: node selector
 									delegateFrom: '(sharedGeneralizations at: #' , (superClass name withoutPrefix: self classPrefix) , ')';
-								protocol: 'accessing - ' , (superClass name withoutPrefix: self classPrefix) ]
+								protocolName: 'accessing - ' , (superClass name withoutPrefix: self classPrefix) ]
 						ifFalse: [ CBMethod new
 								setter: (node selector withoutSuffix: ':')
 									argument: ((node argumentNames first withoutPrefix: 'a') withoutPrefix: 'n')
 									delegateTo: '(sharedGeneralizations at: #' , (superClass name withoutPrefix: self classPrefix) , ')';
-								protocol: 'accessing - ' , (superClass name withoutPrefix: self classPrefix) ].
+								protocolName: 'accessing - ' , (superClass name withoutPrefix: self classPrefix) ].
 					aClass addMethod: delegateMethod ] ]
 ]
 
-{ #category : #'generating - attributes' }
+{ #category : 'generating - attributes' }
 OPUMLMetamodelGenerator >> addAttribute: anAttributeModel to: aClass [
 	| name comment getterBuilder oppositeEnd |
 	name := self attributeNameFor: anAttributeModel.
@@ -99,7 +101,7 @@ OPUMLMetamodelGenerator >> addAttribute: anAttributeModel to: aClass [
 		ifNotNil: [ :assoc | 
 			| setter |
 			setter := CBMethod new.
-			setter protocol: 'accessing'.
+			setter protocolName: 'accessing'.
 			anAttributeModel isMultivalued
 				ifTrue: [ setter
 						source:
@@ -148,19 +150,19 @@ OPUMLMetamodelGenerator >> addAttribute: anAttributeModel to: aClass [
 			aClass addMethod: setter ]
 ]
 
-{ #category : #'generating - classes' }
+{ #category : 'generating - classes' }
 OPUMLMetamodelGenerator >> addCommentFrom: aClassModel to: aClass [
 	aClassModel ownedComment ifNil: [ ^ self ].
 	aClass comment: aClassModel ownedComment first body
 ]
 
-{ #category : #'generating - methods' }
+{ #category : 'generating - methods' }
 OPUMLMetamodelGenerator >> addDelegationMethodsFrom: aClassModel to: aClass [
 	self addAccessingDelegationMethodsFrom: aClassModel to: aClass.
 	self addOperationsDelegationMethodsFrom: aClassModel to: aClass
 ]
 
-{ #category : #'generating - enums' }
+{ #category : 'generating - enums' }
 OPUMLMetamodelGenerator >> addEnumLiteral: anEnumLiteral to: aClass [
 	| builder prohibitedClassSideSelectors |
 	builder := CBMethodBuilder new.
@@ -172,18 +174,18 @@ OPUMLMetamodelGenerator >> addEnumLiteral: anEnumLiteral to: aClass [
 	aClass
 		addMethod:
 			(CBMethod new
-				protocol: 'accessing';
+				protocolName: 'accessing';
 				source: builder source).
 	prohibitedClassSideSelectors := #(package).
 	(prohibitedClassSideSelectors includes: anEnumLiteral name)
 		ifFalse: [ aClass
 				addMetaMethod:
 					(CBMethod new
-						protocol: 'accessing - enum';
+						protocolName: 'accessing - enum';
 						source: builder source) ]
 ]
 
-{ #category : #'generating - methods' }
+{ #category : 'generating - methods' }
 OPUMLMetamodelGenerator >> addGeneralizationsFrom: aClassModel to: cls [
 	| sharedMethod directMethod |
 	sharedMethod := CBMethodBuilder new.
@@ -211,40 +213,48 @@ OPUMLMetamodelGenerator >> addGeneralizationsFrom: aClassModel to: cls [
 	cls compile: directMethod source trimmed classified: 'initialization'
 ]
 
-{ #category : #'generating - operations' }
+{ #category : 'generating - operations' }
 OPUMLMetamodelGenerator >> addOperation: anOperationModel to: aClass [
 	self addStubOperation: anOperationModel to: aClass.
 	(anOperationModel method isNotNil and: [ anOperationModel method isNotEmpty ])
 		ifTrue: [ self addRealOperation: anOperationModel to: aClass ]
 ]
 
-{ #category : #'generating - methods' }
+{ #category : 'generating - methods' }
 OPUMLMetamodelGenerator >> addOperationsDelegationMethodsFrom: aClassModel to: aClass [
+
 	| redefinedNames |
 	redefinedNames := Set new.
-	aClassModel ownedOperation
-		ifNotNil:
-			[ :ops | ops select: [ :op | op method isNotNil ] thenDo: [ :op | redefinedNames add: op name ] ].
-	(self allSuperclassesOf: aClassModel)
-		do: [ :superClassModel | 
-			| superClass methods |
-			superClass := classes at: superClassModel name.
-			methods := (superClass methods select: [ :method | method protocol = 'operations' ])
-				reject: [ :method | 
-					(redefinedNames includes: method selector)
-						or: [ redefinedNames includes: (method selector withoutSuffix: ':') asSymbol ] ].
-			methods
-				do: [ :method | 
-					| delegateMethod node |
-					node := RBParser parseMethod: method source lines first.
-					delegateMethod := CBMethod new
-						getter: node selector
-							delegateFrom: '(sharedGeneralizations at: #' , (superClass name withoutPrefix: self classPrefix) , ')';
-						protocol: 'operations - ' , (superClass name withoutPrefix: self classPrefix).
-					aClass addMethod: delegateMethod ] ]
+	aClassModel ownedOperation ifNotNil: [ :ops |
+		ops
+			select: [ :op | op method isNotNil ]
+			thenDo: [ :op | redefinedNames add: op name ] ].
+	(self allSuperclassesOf: aClassModel) do: [ :superClassModel |
+		| superClass methods |
+		superClass := classes at: superClassModel name.
+		methods := (superClass methods select: [ :method |
+			            method protocolName = 'operations' ]) reject: [ :method |
+			           (redefinedNames includes: method selector) or: [
+				           redefinedNames includes:
+					           (method selector withoutSuffix: ':') asSymbol ] ].
+		methods do: [ :method |
+			| delegateMethod node |
+			node := RBParser parseMethod: method source lines first.
+			delegateMethod := CBMethod new
+				                  getter: node selector
+				                  delegateFrom: '(sharedGeneralizations at: #'
+					                  ,
+						                  (superClass name withoutPrefix:
+								                   self classPrefix) , ')';
+				                  protocolName:
+					                  'operations - '
+					                  ,
+						                  (superClass name withoutPrefix:
+								                   self classPrefix).
+			aClass addMethod: delegateMethod ] ]
 ]
 
-{ #category : #'generating - operations' }
+{ #category : 'generating - operations' }
 OPUMLMetamodelGenerator >> addRealOperation: anOperationModel to: aClass [
 	| name comment methodBuilder |
 	name := self operationNameFor: anOperationModel.
@@ -269,7 +279,7 @@ OPUMLMetamodelGenerator >> addRealOperation: anOperationModel to: aClass [
 	aClass compile: methodBuilder source classified: 'operations'
 ]
 
-{ #category : #'generating - operations' }
+{ #category : 'generating - operations' }
 OPUMLMetamodelGenerator >> addStubOperation: anOperationModel to: aClass [
 
 	| name comment methodBuilder |
@@ -295,13 +305,13 @@ OPUMLMetamodelGenerator >> addStubOperation: anOperationModel to: aClass [
 		classified: 'operations - stubs'
 ]
 
-{ #category : #retrieving }
+{ #category : 'retrieving' }
 OPUMLMetamodelGenerator >> allClassesInModel [
 	^ self sourceModel packagedElement
 		flatCollect: [ :pkg | pkg packagedElement select: [ :each | each isKindOf: BootUMLClass ] ]
 ]
 
-{ #category : #retrieving }
+{ #category : 'retrieving' }
 OPUMLMetamodelGenerator >> allSuperclassesOf: aClassModel [
 	| generalizations |
 	generalizations := OrderedCollection new.
@@ -311,7 +321,7 @@ OPUMLMetamodelGenerator >> allSuperclassesOf: aClassModel [
 	^ generalizations asArray
 ]
 
-{ #category : #utility }
+{ #category : 'utility' }
 OPUMLMetamodelGenerator >> asPlural: aString [
 	(aString endsWith: 's')
 		ifTrue: [ ^ aString , 'es' ].
@@ -320,7 +330,7 @@ OPUMLMetamodelGenerator >> asPlural: aString [
 	^ aString , 's'
 ]
 
-{ #category : #retrieving }
+{ #category : 'retrieving' }
 OPUMLMetamodelGenerator >> attributeNameFor: anAttributeModel [
 	| name |
 	name := anAttributeModel name.
@@ -332,7 +342,7 @@ OPUMLMetamodelGenerator >> attributeNameFor: anAttributeModel [
 	^ name
 ]
 
-{ #category : #changes }
+{ #category : 'changes' }
 OPUMLMetamodelGenerator >> changes [
 	| changeSet |
 	changeSet := CBChangeSet new.
@@ -340,39 +350,39 @@ OPUMLMetamodelGenerator >> changes [
 	^ changeSet refactoringChanges
 ]
 
-{ #category : #retrieving }
+{ #category : 'retrieving' }
 OPUMLMetamodelGenerator >> classNameFor: aString [
 	^ (self classPrefix , aString) asSymbol
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OPUMLMetamodelGenerator >> classPrefix [
 	^ classPrefix
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OPUMLMetamodelGenerator >> classPrefix: anObject [
 	classPrefix := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OPUMLMetamodelGenerator >> classes [
 	^ classes
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OPUMLMetamodelGenerator >> classes: anObject [
 	classes := anObject
 ]
 
-{ #category : #retrieving }
+{ #category : 'retrieving' }
 OPUMLMetamodelGenerator >> commentIn: anElement [
 	^ (anElement ownedComment isNil or: [ anElement ownedComment isEmpty ])
 		ifTrue: [ '' ]
 		ifFalse: [ anElement ownedComment first body ]
 ]
 
-{ #category : #'generating - classes' }
+{ #category : 'generating - classes' }
 OPUMLMetamodelGenerator >> createClassFrom: aClassModel in: aCategoryName [
 	| cls |
 	cls := self ensureCreateClass: aClassModel name in: aCategoryName.
@@ -386,7 +396,7 @@ OPUMLMetamodelGenerator >> createClassFrom: aClassModel in: aCategoryName [
 	^ cls
 ]
 
-{ #category : #'generating - meta' }
+{ #category : 'generating - meta' }
 OPUMLMetamodelGenerator >> createElementMeta [
 	| cls sourceClass |
 	cls := self ensureCreateClass: 'MetaElement' in: 'Meta'.
@@ -403,18 +413,18 @@ OPUMLMetamodelGenerator >> createElementMeta [
 				addMethod:
 					(CBMethod new
 						source: each sourceCode;
-						protocol: each protocol) ].
+						protocolName: each protocolName) ].
 	sourceClass class methods
 		do: [ :each | 
 			cls
 				addMetaMethod:
 					(CBMethod new
 						source: each sourceCode;
-						protocol: each protocol) ].
+						protocolName: each protocolName) ].
 	^ cls
 ]
 
-{ #category : #'generating - enums' }
+{ #category : 'generating - enums' }
 OPUMLMetamodelGenerator >> createEnumFrom: anEnumModel in: aCategoryName [
 	| cls |
 	cls := self ensureCreateClass: anEnumModel name in: aCategoryName.
@@ -424,13 +434,14 @@ OPUMLMetamodelGenerator >> createEnumFrom: anEnumModel in: aCategoryName [
 	^ cls
 ]
 
-{ #category : #'generating - packages' }
+{ #category : 'generating - packages' }
 OPUMLMetamodelGenerator >> createTargetPackage [
-	(RPackage organizer includesPackageNamed: self packageName)
-		ifFalse: [ RPackage organizer createPackageNamed: self packageName ]
+
+	(self packageOrganizer hasPackage: self packageName) ifFalse: [
+		self packageOrganizer addPackage: self packageName ]
 ]
 
-{ #category : #retrieving }
+{ #category : 'retrieving' }
 OPUMLMetamodelGenerator >> defaultValueFrom: aDefaultValue [
 	(self isEnumValue: aDefaultValue)
 		ifTrue: [ ^ (self classNameFor: aDefaultValue type name) , ' new ' , aDefaultValue instance name ].
@@ -441,7 +452,7 @@ OPUMLMetamodelGenerator >> defaultValueFrom: aDefaultValue [
 		ifNone: [ nil ]
 ]
 
-{ #category : #retrieving }
+{ #category : 'retrieving' }
 OPUMLMetamodelGenerator >> defaultValues [
 	| literals |
 	"	defaultValues ifNotNil: [ ^ defaultValues ]."
@@ -458,7 +469,7 @@ OPUMLMetamodelGenerator >> defaultValues [
 	^ defaultValues
 ]
 
-{ #category : #'generating - classes' }
+{ #category : 'generating - classes' }
 OPUMLMetamodelGenerator >> ensureCreateClass: aName in: aTagName [
 	^ classes
 		at: aName
@@ -468,7 +479,7 @@ OPUMLMetamodelGenerator >> ensureCreateClass: aName in: aTagName [
 				package: self packageName , '-' , aTagName ]
 ]
 
-{ #category : #generating }
+{ #category : 'generating' }
 OPUMLMetamodelGenerator >> generateAll [
 	classes := Dictionary new.
 	self loadTemplateMethods.
@@ -480,7 +491,7 @@ OPUMLMetamodelGenerator >> generateAll [
 	^ self changes
 ]
 
-{ #category : #generating }
+{ #category : 'generating' }
 OPUMLMetamodelGenerator >> generateAllClasses [
 	self sourceModel packagedElement
 		do: [ :pkg | 
@@ -489,13 +500,13 @@ OPUMLMetamodelGenerator >> generateAllClasses [
 				thenDo: [ :each | self createClassFrom: each in: pkg name ] ]
 ]
 
-{ #category : #generating }
+{ #category : 'generating' }
 OPUMLMetamodelGenerator >> generateAllDelegationMethods [
 	self allClassesInModel
 		do: [ :each | self addDelegationMethodsFrom: each to: (classes at: each name) ]
 ]
 
-{ #category : #generating }
+{ #category : 'generating' }
 OPUMLMetamodelGenerator >> generateAllEnums [
 	self sourceModel packagedElement
 		do: [ :pkg | 
@@ -504,23 +515,23 @@ OPUMLMetamodelGenerator >> generateAllEnums [
 				thenDo: [ :each | self createEnumFrom: each in: pkg name ] ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 OPUMLMetamodelGenerator >> initialize [
 	super initialize.
 	classes := Dictionary new
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 OPUMLMetamodelGenerator >> isEnumValue: anElement [
 	^ (anElement className endsWith: 'InstanceValue') and: [ anElement type className endsWith: 'Enumeration' ]
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 OPUMLMetamodelGenerator >> isLiteralSpecification: anElement [
 	^ anElement isNotNil and: [ (anElement instVarNamed: #sharedGeneralizations) includesKey: #LiteralSpecification ]
 ]
 
-{ #category : #generating }
+{ #category : 'generating' }
 OPUMLMetamodelGenerator >> loadTemplateMethods [
 	| templateClasses allClasses |
 	templateClasses := OPUMLMetamodelGeneratorTemplates allSubclasses
@@ -541,7 +552,7 @@ OPUMLMetamodelGenerator >> loadTemplateMethods [
 						do: [ :op | op method: (template methodsFor: op inClassNamed: name) ] ] ]
 ]
 
-{ #category : #retrieving }
+{ #category : 'retrieving' }
 OPUMLMetamodelGenerator >> operationNameFor: anOperationName [
 	| name |
 	name := anOperationName name.
@@ -551,17 +562,17 @@ OPUMLMetamodelGenerator >> operationNameFor: anOperationName [
 	^ name
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OPUMLMetamodelGenerator >> packageName [
 	^ packageName
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OPUMLMetamodelGenerator >> packageName: anObject [
 	packageName := anObject
 ]
 
-{ #category : #retrieving }
+{ #category : 'retrieving' }
 OPUMLMetamodelGenerator >> parentFor: aClassName [
 	aClassName = 'MetaElement'
 		ifTrue: [ ^ 'Object' ].
@@ -570,29 +581,29 @@ OPUMLMetamodelGenerator >> parentFor: aClassName [
 	^ self classPrefix , 'Element'
 ]
 
-{ #category : #'generating - operations' }
+{ #category : 'generating - operations' }
 OPUMLMetamodelGenerator >> prefixClassNamesInText: aString [
 	^ aString
 		copyWithRegex: '''%\w+%'''
 		matchesTranslatedUsing: [ :each | self classPrefix , (each copyFrom: 3 to: each size - 2) ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OPUMLMetamodelGenerator >> sourceModel [
 	^ sourceModel
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OPUMLMetamodelGenerator >> sourceModel: anObject [
 	sourceModel := anObject
 ]
 
-{ #category : #retrieving }
+{ #category : 'retrieving' }
 OPUMLMetamodelGenerator >> stubOperationNameFor: anOperationName [
 	^ (self operationNameFor: anOperationName) , 'Stub'
 ]
 
-{ #category : #retrieving }
+{ #category : 'retrieving' }
 OPUMLMetamodelGenerator >> superclassLayersOf: aClassModel [
 	| subclasses layers layer parents |
 	layers := OrderedCollection new.

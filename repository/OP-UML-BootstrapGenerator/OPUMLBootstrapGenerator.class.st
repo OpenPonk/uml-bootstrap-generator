@@ -4,8 +4,8 @@ I generate the core necessary UML infrastructure to be able to properly represen
 So roughly it should be equivalent to to UML portions used in MOF.
 "
 Class {
-	#name : #OPUMLBootstrapGenerator,
-	#superclass : #Object,
+	#name : 'OPUMLBootstrapGenerator',
+	#superclass : 'Object',
 	#instVars : [
 		'classPrefix',
 		'packageName',
@@ -17,16 +17,18 @@ Class {
 	#classInstVars : [
 		'umlSpecs'
 	],
-	#category : #'OP-UML-BootstrapGenerator-Bootstrap-Generator'
+	#category : 'OP-UML-BootstrapGenerator-Bootstrap-Generator',
+	#package : 'OP-UML-BootstrapGenerator',
+	#tag : 'Bootstrap-Generator'
 }
 
-{ #category : #utility }
+{ #category : 'utility' }
 OPUMLBootstrapGenerator class >> umlSpecs [
 
 	^ OPUMLBootstrapSpecs umlSpecs
 ]
 
-{ #category : #retrieving }
+{ #category : 'retrieving' }
 OPUMLBootstrapGenerator >> allTransitiveSuperclassesOf: aName in: aCollectionOfPairs [
 	| pairs keys layer |
 	pairs := OrderedCollection new.
@@ -40,18 +42,18 @@ OPUMLBootstrapGenerator >> allTransitiveSuperclassesOf: aName in: aCollectionOfP
 	^ ((pairs collect: #key) , (pairs collect: #value)) asSet sorted
 ]
 
-{ #category : #selecting }
+{ #category : 'selecting' }
 OPUMLBootstrapGenerator >> associationsIn: aPackageElement [
 	^ aPackageElement containedItems
 		select: [ :each | each xmiName = 'packagedElement' and: [ each xmiType = 'uml:Association' ] ]
 ]
 
-{ #category : #selecting }
+{ #category : 'selecting' }
 OPUMLBootstrapGenerator >> attributesIn: aClassElement [
 	^ aClassElement containedItems select: [ :each | each xmiName = 'ownedAttribute' ]
 ]
 
-{ #category : #changes }
+{ #category : 'changes' }
 OPUMLBootstrapGenerator >> changes [
 	| changeSet |
 	changeSet := CBChangeSet new.
@@ -59,47 +61,47 @@ OPUMLBootstrapGenerator >> changes [
 	^ changeSet refactoringChanges
 ]
 
-{ #category : #retrieving }
+{ #category : 'retrieving' }
 OPUMLBootstrapGenerator >> classNameFor: aString [
 	^ (self classPrefix , aString) asSymbol
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OPUMLBootstrapGenerator >> classPrefix [
 	^ classPrefix
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OPUMLBootstrapGenerator >> classPrefix: aString [
 	classPrefix := aString
 ]
 
-{ #category : #selecting }
+{ #category : 'selecting' }
 OPUMLBootstrapGenerator >> classesIn: aPackageElement [
 	^ aPackageElement containedItems
 		select: [ :each | each xmiName = 'packagedElement' and: [ each xmiType = 'uml:Class' ] ]
 ]
 
-{ #category : #selecting }
+{ #category : 'selecting' }
 OPUMLBootstrapGenerator >> collectGeneralizationsInClass: aClassElement [
 	^ (self generalizationsIn: aClassElement)
 		collect:
 			[ :each | aClassElement nameValue -> (each elementNamed: 'general') referencedElement nameValue ]
 ]
 
-{ #category : #selecting }
+{ #category : 'selecting' }
 OPUMLBootstrapGenerator >> collectGeneralizationsInPackage: aPackage [
 	^ (self classesIn: aPackage)
 		flatCollect: [ :each | self collectGeneralizationsInClass: each ]
 ]
 
-{ #category : #selecting }
+{ #category : 'selecting' }
 OPUMLBootstrapGenerator >> collectGeneralizationsInPackages: aCollectionOfPackages [
 	^ aCollectionOfPackages
 		flatCollect: [ :each | self collectGeneralizationsInPackage: each ]
 ]
 
-{ #category : #generating }
+{ #category : 'generating' }
 OPUMLBootstrapGenerator >> createAccessorsFrom: anAttributeElement in: aClass [
 	| name comment typeName |
 	name := (anAttributeElement elementNamed: 'name') value.
@@ -112,7 +114,7 @@ OPUMLBootstrapGenerator >> createAccessorsFrom: anAttributeElement in: aClass [
 	aClass addMethod: (CBMethod new setter: name argument: typeName)
 ]
 
-{ #category : #generating }
+{ #category : 'generating' }
 OPUMLBootstrapGenerator >> createAssociationFrom: anAssociationElement [
 	| oneEnd otherEnd oneClass otherClass oneClassName otherClassName |
 	oneEnd := (anAssociationElement elementNamed: 'memberEnd') referencedElements first.
@@ -125,7 +127,7 @@ OPUMLBootstrapGenerator >> createAssociationFrom: anAssociationElement [
 	self createAccessorsFrom: otherEnd in: otherClass
 ]
 
-{ #category : #generating }
+{ #category : 'generating' }
 OPUMLBootstrapGenerator >> createClassFrom: anElement in: aTagName [
 	| className cls |
 	className := (anElement elementNamed: 'name') value.
@@ -135,34 +137,53 @@ OPUMLBootstrapGenerator >> createClassFrom: anElement in: aTagName [
 	^ cls
 ]
 
-{ #category : #generating }
+{ #category : 'generating' }
 OPUMLBootstrapGenerator >> createDelegationMethods: aCollectionOfLayers for: aClassName [
+
 	| cls supers |
 	cls := classes at: aClassName ifAbsent: [ ^ self ].
-	supers := (self withoutDuplicates: (aCollectionOfLayers gather: #yourself))
-		collect: [ :each | classes at: each ifAbsent: [ nil ] ]
-		thenReject: #isNil.
-	supers
-		do: [ :superClass | 
-			superClass methods
-				select: [ :method | method protocol = 'accessing' ]
-				thenDo: [ :method | 
-					| delegateMethod node |
-					node := RBParser parseMethod: method source lines first.
-					delegateMethod := node numArgs = 0
-						ifTrue: [ CBMethod new
-								getter: node selector
-									delegateFrom: '(sharedGeneralizations at: #' , (superClass name withoutPrefix: self classPrefix) , ')';
-								protocol: 'accessing - ' , (superClass name withoutPrefix: self classPrefix) ]
-						ifFalse: [ CBMethod new
-								setter: (node selector withoutSuffix: ':')
-									argument: ((node argumentNames first withoutPrefix: 'a') withoutPrefix: 'n')
-									delegateTo: '(sharedGeneralizations at: #' , (superClass name withoutPrefix: self classPrefix) , ')';
-								protocol: 'accessing - ' , (superClass name withoutPrefix: self classPrefix) ].
-					cls addMethod: delegateMethod ] ]
+	supers := (self withoutDuplicates:
+		           (aCollectionOfLayers gather: #yourself))
+		          collect: [ :each | classes at: each ifAbsent: [ nil ] ]
+		          thenReject: #isNil.
+	supers do: [ :superClass |
+		superClass methods
+			select: [ :method | method protocolName = 'accessing' ]
+			thenDo: [ :method |
+				| delegateMethod node |
+				node := RBParser parseMethod: method source lines first.
+				delegateMethod := node numArgs = 0
+					                  ifTrue: [
+						                  CBMethod new
+							                  getter: node selector
+							                  delegateFrom: '(sharedGeneralizations at: #'
+								                  ,
+									                  (superClass name withoutPrefix:
+											                   self classPrefix) , ')';
+							                  protocolName:
+								                  'accessing - '
+								                  ,
+									                  (superClass name withoutPrefix:
+											                   self classPrefix) ]
+					                  ifFalse: [
+						                  CBMethod new
+							                  setter: (node selector withoutSuffix: ':')
+							                  argument:
+								                  ((node argumentNames first withoutPrefix:
+										                    'a') withoutPrefix: 'n')
+							                  delegateTo: '(sharedGeneralizations at: #'
+								                  ,
+									                  (superClass name withoutPrefix:
+											                   self classPrefix) , ')';
+							                  protocolName:
+								                  'accessing - '
+								                  ,
+									                  (superClass name withoutPrefix:
+											                   self classPrefix) ].
+				cls addMethod: delegateMethod ] ]
 ]
 
-{ #category : #generating }
+{ #category : 'generating' }
 OPUMLBootstrapGenerator >> createSuperclasses: aCollectionOfLayers for: aClassName [
 	| cls added sharedMethod directMethod |
 	cls := classes at: aClassName ifAbsent: [ ^ self ].
@@ -195,28 +216,30 @@ OPUMLBootstrapGenerator >> createSuperclasses: aCollectionOfLayers for: aClassNa
 	cls compile: directMethod source classified: 'initialization'
 ]
 
-{ #category : #generating }
+{ #category : 'generating' }
 OPUMLBootstrapGenerator >> createTargetPackage [
-	(RPackage organizer includesPackageNamed: self packageName)
-		ifFalse: [ RPackage organizer createPackageNamed: self packageName ]
+
+	(self packageOrganizer hasPackage: self packageName) ifFalse: [
+		self packageOrganizer addPackage: self packageName ]
 ]
 
-{ #category : #generating }
+{ #category : 'generating' }
 OPUMLBootstrapGenerator >> ensureCreateClass: aName in: aTagName [
-	^ classes
-		at: aName
-		ifAbsentPut: [ CBClass
-				name: (self classNameFor: aName)
-				parent: self rootClassName
-				package: self packageName , '-' , aTagName ]
+
+	^ classes at: aName ifAbsentPut: [
+		  CBClass
+			  name: (self classNameFor: aName)
+			  parent: self rootClassName
+			  package: self packageName
+			  tag: aTagName ]
 ]
 
-{ #category : #selecting }
+{ #category : 'selecting' }
 OPUMLBootstrapGenerator >> generalizationsIn: aClassElement [
 	^ aClassElement containedItems select: [ :each | each xmiName = 'generalization' ]
 ]
 
-{ #category : #generating }
+{ #category : 'generating' }
 OPUMLBootstrapGenerator >> generateAll [
 	classes := Dictionary new.
 	self createTargetPackage.
@@ -227,24 +250,28 @@ OPUMLBootstrapGenerator >> generateAll [
 	^ self changes
 ]
 
-{ #category : #generating }
+{ #category : 'generating' }
 OPUMLBootstrapGenerator >> generateAssociationsInPackage: aPackageElement [
 	(self associationsIn: aPackageElement) do: [ :each | self createAssociationFrom: each ]
 ]
 
-{ #category : #generating }
+{ #category : 'generating' }
 OPUMLBootstrapGenerator >> generateClassesInPackage: aPackageElement [
-	self packageName asPackage addClassTag: aPackageElement nameValue.
+
+	self packageName asPackage ensureTag: aPackageElement nameValue.
 	(self classesIn: aPackageElement)
-		select: [ :clsElement | self requiredClasses includes: clsElement nameValue ]
-		thenDo: [ :clsElement | 
+		select: [ :clsElement |
+		self requiredClasses includes: clsElement nameValue ]
+		thenDo: [ :clsElement |
 			| cls |
-			cls := self createClassFrom: clsElement in: aPackageElement nameValue.
-			(self attributesIn: clsElement)
-				do: [ :attribElement | self createAccessorsFrom: attribElement in: cls ] ]
+			cls := self
+				       createClassFrom: clsElement
+				       in: aPackageElement nameValue.
+			(self attributesIn: clsElement) do: [ :attribElement |
+				self createAccessorsFrom: attribElement in: cls ] ]
 ]
 
-{ #category : #generating }
+{ #category : 'generating' }
 OPUMLBootstrapGenerator >> generateGeneralizations: aCollectionOfPairs [
 	| keys |
 	keys := self withoutDuplicates: ((aCollectionOfPairs collect: #key) , (aCollectionOfPairs collect: #value)).
@@ -258,12 +285,12 @@ OPUMLBootstrapGenerator >> generateGeneralizations: aCollectionOfPairs [
 				for: each ]
 ]
 
-{ #category : #selecting }
+{ #category : 'selecting' }
 OPUMLBootstrapGenerator >> generatedPackages [
 	^ self packagesIn: sourceXmi
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 OPUMLBootstrapGenerator >> initialize [
 	super initialize.
 	classPrefix := 'OPUML'.
@@ -272,7 +299,7 @@ OPUMLBootstrapGenerator >> initialize [
 	classes := Dictionary new
 ]
 
-{ #category : #selecting }
+{ #category : 'selecting' }
 OPUMLBootstrapGenerator >> layeredSuperclassesFor: aKey in: aCollection [
 	| pairs keys layer |
 	pairs := OrderedCollection new.
@@ -284,23 +311,23 @@ OPUMLBootstrapGenerator >> layeredSuperclassesFor: aKey in: aCollection [
 	^ (pairs reject: #isEmpty) reverse
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OPUMLBootstrapGenerator >> packageName [
 	^ packageName
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OPUMLBootstrapGenerator >> packageName: aString [
 	packageName := aString
 ]
 
-{ #category : #selecting }
+{ #category : 'selecting' }
 OPUMLBootstrapGenerator >> packagesIn: anXmi [
 	^ (anXmi elementNamed: 'Package') containedItems
 		select: [ :each | each xmiName = 'packagedElement' and: [ each xmiType = 'uml:Package' ] ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OPUMLBootstrapGenerator >> requiredClasses [
 	"all required classes and all their combined superclasses"
 
@@ -312,7 +339,7 @@ OPUMLBootstrapGenerator >> requiredClasses [
 				asSet sorted ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OPUMLBootstrapGenerator >> requiredRealClasses [
 	"An EMOF metamodel is restricted to use the following concrete metaclasses from UML’s Kernel
 	(see MOF2.5. specs)
@@ -324,27 +351,27 @@ OPUMLBootstrapGenerator >> requiredRealClasses [
 	"	^ #(Association Class Comment DataType Enumeration EnumerationLiteral Generalization InstanceSpecification InstanceValue LiteralBoolean LiteralInteger LiteralNull LiteralReal LiteralString LiteralUnlimitedNatural Operation Package Parameter PrimitiveType Property Slot)"
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OPUMLBootstrapGenerator >> rootClassName [
 	^ rootClassName
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OPUMLBootstrapGenerator >> rootClassName: aString [
 	rootClassName := aString
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OPUMLBootstrapGenerator >> sourceXmi [
 	^ sourceXmi
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OPUMLBootstrapGenerator >> sourceXmi: anXmi [
 	sourceXmi := anXmi
 ]
 
-{ #category : #retrieving }
+{ #category : 'retrieving' }
 OPUMLBootstrapGenerator >> typeOf: anElement [
 	anElement isObjectElement
 		ifTrue: [ anElement xmiType = 'uml:PrimitiveType'
@@ -354,7 +381,7 @@ OPUMLBootstrapGenerator >> typeOf: anElement [
 	self error: 'Unexpected Type'
 ]
 
-{ #category : #utility }
+{ #category : 'utility' }
 OPUMLBootstrapGenerator >> withoutDuplicates: aCollection [
 	| dict |
 	dict := OrderedDictionary new.
