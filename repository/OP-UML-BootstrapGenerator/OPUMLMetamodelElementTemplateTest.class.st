@@ -6,6 +6,28 @@ Class {
 	#tag : 'Tests'
 }
 
+{ #category : 'running' }
+OPUMLMetamodelElementTemplateTest >> setUp [
+
+	| generator metaElementClassName |
+	super setUp.
+
+	generator := OPUMLMetamodelGenerator newDefault.
+	metaElementClassName := generator classNameFor:
+		                        generator metaElementName.
+
+	(Smalltalk globals includesKey: metaElementClassName) ifTrue: [
+		^ self ].
+
+	Object classInstaller make: [ :builder |
+		builder
+			superclass: Object;
+			name: metaElementClassName asSymbol;
+			package: generator packageName;
+			tag: generator metaTag;
+			environment: Object environment ]
+]
+
 { #category : 'tests' }
 OPUMLMetamodelElementTemplateTest >> testAddTag [
 	| el |

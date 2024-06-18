@@ -182,12 +182,13 @@ OPUMLMetamodelElementTemplate >> oclAsType: aClassifier [
 
 { #category : 'ocl-experimental' }
 OPUMLMetamodelElementTemplate >> oclClassifierNameFrom: anObject [
-	(anObject isKindOf: OPUMLMetaElement class)
-		ifTrue: [ ^ anObject name withoutPrefix: 'OPUML' ].
-	(anObject isKindOf: OPUMLMetaElement)
-		ifTrue: [ ^ anObject name ].
-	anObject isString
-		ifTrue: [ ^ anObject ].
+
+	| metaElementClass |
+	metaElementClass := Smalltalk globals at: #OPUMLMetaElement.
+	(anObject isKindOf: metaElementClass class) ifTrue: [
+		^ anObject name withoutPrefix: 'OPUML' ].
+	(anObject isKindOf: metaElementClass) ifTrue: [ ^ anObject name ].
+	anObject isString ifTrue: [ ^ anObject ].
 	self error: 'Unknown classifier ' , anObject asString
 ]
 

@@ -21,14 +21,22 @@ Class {
 
 { #category : 'translating' }
 OPUMLMetamodelGenerator class >> generate [
-<script>
-| generator model |
-model := OPUMLMetamodelGeneratorTest umlBootstrapModel. 
-generator := OPUMLMetamodelGenerator new.
-generator sourceModel: model.
-generator classPrefix: 'OPUML'.
-generator packageName: 'OP-UML-Metamodel'.
-(CBChangesBrowser changes: generator generateAll) open
+
+	<script>
+	(CBChangesBrowser changes: self newDefault generateAll) open
+]
+
+{ #category : 'translating' }
+OPUMLMetamodelGenerator class >> newDefault [
+
+	<script: 'self newDefault inspect'>
+	| generator model |
+	model := OPUMLMetamodelGeneratorTest umlBootstrapModel.
+	generator := self new.
+	generator sourceModel: model.
+	generator classPrefix: 'OPUML'.
+	generator packageName: 'OP-UML-Metamodel'.
+	^ generator
 ]
 
 { #category : 'generating - methods' }
@@ -398,29 +406,23 @@ OPUMLMetamodelGenerator >> createClassFrom: aClassModel in: aCategoryName [
 
 { #category : 'generating - meta' }
 OPUMLMetamodelGenerator >> createElementMeta [
+
 	| cls sourceClass |
-	cls := self ensureCreateClass: 'MetaElement' in: 'Meta'.
-	cls
-		comment:
-			'I am a metaclass for UML classes implementing some behavior for managing the classes and other stuff (like an announcer).'.
+	cls := self ensureCreateClass: self metaElementName in: self metaTag.
+	cls comment:
+		'I am a metaclass for UML classes implementing some behavior for managing the classes and other stuff (like an announcer).'.
 	sourceClass := OPUMLMetamodelElementTemplate.
 	sourceClass instVarNames do: [ :each | cls addInstVarNamed: each ].
-	sourceClass class instVarNames
-		do: [ :each | cls addMetaInstVarNamed: each ].
-	sourceClass methods
-		do: [ :each | 
-			cls
-				addMethod:
-					(CBMethod new
-						source: each sourceCode;
-						protocolName: each protocolName) ].
-	sourceClass class methods
-		do: [ :each | 
-			cls
-				addMetaMethod:
-					(CBMethod new
-						source: each sourceCode;
-						protocolName: each protocolName) ].
+	sourceClass class instVarNames do: [ :each |
+		cls addMetaInstVarNamed: each ].
+	sourceClass methods do: [ :each |
+		cls addMethod: (CBMethod new
+				 source: each sourceCode;
+				 protocolName: each protocolName) ].
+	sourceClass class methods do: [ :each |
+		cls addMetaMethod: (CBMethod new
+				 source: each sourceCode;
+				 protocolName: each protocolName) ].
 	^ cls
 ]
 
@@ -550,6 +552,18 @@ OPUMLMetamodelGenerator >> loadTemplateMethods [
 					classModel := allClasses detect: [ :each | each name = name ].
 					classModel ownedOperation
 						do: [ :op | op method: (template methodsFor: op inClassNamed: name) ] ] ]
+]
+
+{ #category : 'generating - meta' }
+OPUMLMetamodelGenerator >> metaElementName [
+
+	^ 'MetaElement'
+]
+
+{ #category : 'generating - meta' }
+OPUMLMetamodelGenerator >> metaTag [
+
+	^ 'Meta'
 ]
 
 { #category : 'retrieving' }
