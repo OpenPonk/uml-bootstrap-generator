@@ -2,12 +2,13 @@
 Baseline for https://github.com/OpenPonk/uml-bootstrap-generator
 "
 Class {
-	#name : #BaselineOfUMLBootstrapGenerator,
-	#superclass : #BaselineOf,
-	#category : #BaselineOfUMLBootstrapGenerator
+	#name : 'BaselineOfUMLBootstrapGenerator',
+	#superclass : 'BaselineOf',
+	#category : 'BaselineOfUMLBootstrapGenerator',
+	#package : 'BaselineOfUMLBootstrapGenerator'
 }
 
-{ #category : #baselines }
+{ #category : 'baselines' }
 BaselineOfUMLBootstrapGenerator >> baseline: spec [
 	<baseline>
 	spec

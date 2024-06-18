@@ -1,49 +1,51 @@
 Class {
-	#name : #OPUMLBootstrapObject,
-	#superclass : #Object,
+	#name : 'OPUMLBootstrapObject',
+	#superclass : 'Object',
 	#instVars : [
 		'sharedGeneralizations',
 		'generalizations'
 	],
-	#category : #'OP-UML-Bootstrap-Super'
+	#category : 'OP-UML-Bootstrap-Super',
+	#package : 'OP-UML-Bootstrap',
+	#tag : 'Super'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 OPUMLBootstrapObject class >> newOnShared: aDictionary [
 	^ self basicNew
 		initializeWithShared: aDictionary;
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OPUMLBootstrapObject >> generalizations [
 	^ generalizations
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OPUMLBootstrapObject >> generalizations: anObject [
 	generalizations := anObject
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 OPUMLBootstrapObject >> initialize [
 	super initialize.
 	sharedGeneralizations := Dictionary new
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 OPUMLBootstrapObject >> initializeGeneralizations [
 	generalizations := {}
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 OPUMLBootstrapObject >> initializeWithShared: aDictionary [
 	super initialize.
 	sharedGeneralizations := aDictionary.
 	self initializeGeneralizations
 ]
 
-{ #category : #'GTInspector - extensions' }
+{ #category : 'GTInspector - extensions' }
 OPUMLBootstrapObject >> inspectionAllProperties [
 
 	<inspectorPresentationOrder: 6 title: 'Properties (All)'>
@@ -68,7 +70,7 @@ OPUMLBootstrapObject >> inspectionAllProperties [
 		  yourself
 ]
 
-{ #category : #'GTInspector - extensions' }
+{ #category : 'GTInspector - extensions' }
 OPUMLBootstrapObject >> inspectionProperties [
 
 	<inspectorPresentationOrder: 5 title: 'Properties'>
@@ -94,7 +96,7 @@ OPUMLBootstrapObject >> inspectionProperties [
 		  yourself
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 OPUMLBootstrapObject >> isMultivalued [
 	((sharedGeneralizations includesKey: 'MultiplicityElement')
 		and: [ self class selectors includes: #lowerValue ])
@@ -103,7 +105,7 @@ OPUMLBootstrapObject >> isMultivalued [
 	^ (self upperValue value = '1') not
 ]
 
-{ #category : #printing }
+{ #category : 'printing' }
 OPUMLBootstrapObject >> printOn: aStream [
 	super printOn: aStream.
 	(sharedGeneralizations includesKey: 'LiteralSpecification')

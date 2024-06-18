@@ -1,44 +1,46 @@
 Class {
-	#name : #BootUMLTemplateableElement,
-	#superclass : #OPUMLBootstrapObject,
+	#name : 'BootUMLTemplateableElement',
+	#superclass : 'OPUMLBootstrapObject',
 	#instVars : [
 		'ownedTemplateSignature',
 		'templateBinding'
 	],
-	#category : 'OP-UML-Bootstrap-CommonStructure'
+	#category : 'OP-UML-Bootstrap-CommonStructure',
+	#package : 'OP-UML-Bootstrap',
+	#tag : 'CommonStructure'
 }
 
-{ #category : #'accessing - Element' }
+{ #category : 'accessing - Element' }
 BootUMLTemplateableElement >> comment [
 	^ (sharedGeneralizations at: #Element) comment
 ]
 
-{ #category : #'accessing - Element' }
+{ #category : 'accessing - Element' }
 BootUMLTemplateableElement >> comment: aComment [
 	(sharedGeneralizations at: #Element) comment: aComment
 ]
 
-{ #category : #'accessing - Element' }
+{ #category : 'accessing - Element' }
 BootUMLTemplateableElement >> constraint [
 	^ (sharedGeneralizations at: #Element) constraint
 ]
 
-{ #category : #'accessing - Element' }
+{ #category : 'accessing - Element' }
 BootUMLTemplateableElement >> constraint: aConstraint [
 	(sharedGeneralizations at: #Element) constraint: aConstraint
 ]
 
-{ #category : #'accessing - Element' }
+{ #category : 'accessing - Element' }
 BootUMLTemplateableElement >> directedRelationship [
 	^ (sharedGeneralizations at: #Element) directedRelationship
 ]
 
-{ #category : #'accessing - Element' }
+{ #category : 'accessing - Element' }
 BootUMLTemplateableElement >> directedRelationship: aDirectedRelationship [
 	(sharedGeneralizations at: #Element) directedRelationship: aDirectedRelationship
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 BootUMLTemplateableElement >> initialize [
 	super initialize.
 	sharedGeneralizations at: #Element put: (BootUMLElement newOnShared: sharedGeneralizations).
@@ -46,7 +48,7 @@ BootUMLTemplateableElement >> initialize [
 
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 BootUMLTemplateableElement >> initializeGeneralizations [
 	generalizations := {
 		sharedGeneralizations at: #Element.
@@ -54,62 +56,62 @@ BootUMLTemplateableElement >> initializeGeneralizations [
 
 ]
 
-{ #category : #'accessing - Element' }
+{ #category : 'accessing - Element' }
 BootUMLTemplateableElement >> ownedComment [
 	^ (sharedGeneralizations at: #Element) ownedComment
 ]
 
-{ #category : #'accessing - Element' }
+{ #category : 'accessing - Element' }
 BootUMLTemplateableElement >> ownedComment: aComment [
 	(sharedGeneralizations at: #Element) ownedComment: aComment
 ]
 
-{ #category : #'accessing - Element' }
+{ #category : 'accessing - Element' }
 BootUMLTemplateableElement >> ownedElement [
 	^ (sharedGeneralizations at: #Element) ownedElement
 ]
 
-{ #category : #'accessing - Element' }
+{ #category : 'accessing - Element' }
 BootUMLTemplateableElement >> ownedElement: anElement [
 	(sharedGeneralizations at: #Element) ownedElement: anElement
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BootUMLTemplateableElement >> ownedTemplateSignature [
 	^ ownedTemplateSignature
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BootUMLTemplateableElement >> ownedTemplateSignature: aTemplateSignature [
 	ownedTemplateSignature := aTemplateSignature
 ]
 
-{ #category : #'accessing - Element' }
+{ #category : 'accessing - Element' }
 BootUMLTemplateableElement >> owner [
 	^ (sharedGeneralizations at: #Element) owner
 ]
 
-{ #category : #'accessing - Element' }
+{ #category : 'accessing - Element' }
 BootUMLTemplateableElement >> owner: anElement [
 	(sharedGeneralizations at: #Element) owner: anElement
 ]
 
-{ #category : #'accessing - Element' }
+{ #category : 'accessing - Element' }
 BootUMLTemplateableElement >> relationship [
 	^ (sharedGeneralizations at: #Element) relationship
 ]
 
-{ #category : #'accessing - Element' }
+{ #category : 'accessing - Element' }
 BootUMLTemplateableElement >> relationship: aRelationship [
 	(sharedGeneralizations at: #Element) relationship: aRelationship
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BootUMLTemplateableElement >> templateBinding [
 	^ templateBinding
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BootUMLTemplateableElement >> templateBinding: aTemplateBinding [
 	templateBinding := aTemplateBinding
 ]

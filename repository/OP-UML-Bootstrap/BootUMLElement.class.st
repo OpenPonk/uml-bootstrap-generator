@@ -1,6 +1,6 @@
 Class {
-	#name : #BootUMLElement,
-	#superclass : #OPUMLBootstrapObject,
+	#name : 'BootUMLElement',
+	#superclass : 'OPUMLBootstrapObject',
 	#instVars : [
 		'relationship',
 		'comment',
@@ -10,89 +10,91 @@ Class {
 		'ownedElement',
 		'directedRelationship'
 	],
-	#category : 'OP-UML-Bootstrap-CommonStructure'
+	#category : 'OP-UML-Bootstrap-CommonStructure',
+	#package : 'OP-UML-Bootstrap',
+	#tag : 'CommonStructure'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BootUMLElement >> comment [
 	^ comment
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BootUMLElement >> comment: aComment [
 	comment := aComment
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BootUMLElement >> constraint [
 	^ constraint
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BootUMLElement >> constraint: aConstraint [
 	constraint := aConstraint
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BootUMLElement >> directedRelationship [
 	^ directedRelationship
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BootUMLElement >> directedRelationship: aDirectedRelationship [
 	directedRelationship := aDirectedRelationship
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 BootUMLElement >> initialize [
 	super initialize.
 	self initializeGeneralizations.
 
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 BootUMLElement >> initializeGeneralizations [
 	generalizations := {
 	}
 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BootUMLElement >> ownedComment [
 	^ ownedComment
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BootUMLElement >> ownedComment: aComment [
 	ownedComment := aComment
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BootUMLElement >> ownedElement [
 	^ ownedElement
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BootUMLElement >> ownedElement: anElement [
 	ownedElement := anElement
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BootUMLElement >> owner [
 	^ owner
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BootUMLElement >> owner: anElement [
 	owner := anElement
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BootUMLElement >> relationship [
 	^ relationship
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BootUMLElement >> relationship: aRelationship [
 	relationship := aRelationship
 ]
