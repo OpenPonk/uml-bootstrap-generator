@@ -54,7 +54,7 @@ OPUMLBootstrapObject >> inspectionAllProperties [
 		  items:
 			  ((self class methods sorted: [ :a :b | a selector < b selector ])
 				   select: [ :each |
-					   (each protocol beginsWith: 'accessing') and: [
+					   (each protocolName beginsWith: 'accessing') and: [
 							   each numArgs = 0 ] ]
 				   thenCollect: [ :each |
 					   StInspectorAssociationNode hostObject:
@@ -79,7 +79,7 @@ OPUMLBootstrapObject >> inspectionProperties [
 		  items:
 			  (((self class methods sorted: [ :a :b | a selector < b selector ])
 				    select: [ :each |
-					    (each protocol beginsWith: 'accessing') and: [
+					    (each protocolName beginsWith: 'accessing') and: [
 							    each numArgs = 0 ] ]
 				    thenCollect: [ :each |
 					    each selector -> (self perform: each selector) ])

@@ -44,7 +44,7 @@ OPUMLProfileGenerator >> addAccessingDelegationMethodsFrom: aClassModel to: aCla
 		do: [ :superClassModel | 
 			| superClass methods |
 			superClass := classes at: superClassModel name.
-			methods := (superClass methods select: [ :method | method protocol = 'accessing' ])
+			methods := (superClass methods select: [ :method | method protocolName = 'accessing' ])
 				reject: [ :method | 
 					(redefinedNames includes: method selector)
 						or: [ redefinedNames includes: (method selector withoutSuffix: ':') asSymbol ] ].
@@ -56,12 +56,12 @@ OPUMLProfileGenerator >> addAccessingDelegationMethodsFrom: aClassModel to: aCla
 						ifTrue: [ CBMethod new
 								getter: node selector
 									delegateFrom: '(sharedGeneralizations at: #' , (superClass name withoutPrefix: self classPrefix) , ')';
-								protocol: 'accessing - ' , (superClass name withoutPrefix: self classPrefix) ]
+								protocolName: 'accessing - ' , (superClass name withoutPrefix: self classPrefix) ]
 						ifFalse: [ CBMethod new
 								setter: (node selector withoutSuffix: ':')
 									argument: ((node argumentNames first withoutPrefix: 'a') withoutPrefix: 'n')
 									delegateTo: '(sharedGeneralizations at: #' , (superClass name withoutPrefix: self classPrefix) , ')';
-								protocol: 'accessing - ' , (superClass name withoutPrefix: self classPrefix) ].
+								protocolName: 'accessing - ' , (superClass name withoutPrefix: self classPrefix) ].
 					aClass addMethod: delegateMethod ] ]
 ]
 
