@@ -67,6 +67,7 @@ OPUMLProfileGenerator >> addAccessingDelegationMethodsFrom: aClassModel to: aCla
 
 { #category : 'generating - attributes' }
 OPUMLProfileGenerator >> addAttribute: anAttributeModel to: aClass [
+
 	| name comment getterBuilder oppositeEnd |
 	name := self attributeNameFor: anAttributeModel.
 	oppositeEnd := anAttributeModel opposite.
@@ -75,57 +76,61 @@ OPUMLProfileGenerator >> addAttribute: anAttributeModel to: aClass [
 	(getterBuilder := OPUMLBootstrapGetterMethodBuilder new)
 		selector: name;
 		comment: comment.
-	anAttributeModel isMultivalued & oppositeEnd isNotNil
-		ifTrue: [ oppositeEnd isMultivalued
-				ifTrue: [ getterBuilder
-						defaultValue:
-							'OPUMLManyToManyLinks on: self identity opposite: #'
-								, (self attributeNameFor: oppositeEnd) ]
-				ifFalse: [ getterBuilder
-						defaultValue:
-							'OPUMLToManyLinks on: self identity opposite: #' , (self attributeNameFor: oppositeEnd)
-								, ':' ] ].
-	(self isLiteralSpecification: anAttributeModel defaultValue)
-		ifTrue: [ getterBuilder defaultValue: (self defaultValueFrom: anAttributeModel defaultValue) ].
-	(self isEnumValue: anAttributeModel defaultValue)
-		ifTrue: [ getterBuilder defaultValue: (self defaultValueFrom: anAttributeModel defaultValue) ].
+	anAttributeModel isMultivalued & oppositeEnd isNotNil ifTrue: [
+		oppositeEnd isMultivalued
+			ifTrue: [
+				getterBuilder defaultValue:
+					'OPUMLManyToManyLinks on: self identity opposite: #'
+					, (self attributeNameFor: oppositeEnd) ]
+			ifFalse: [
+				getterBuilder defaultValue:
+					'OPUMLToManyLinks on: self identity opposite: #'
+					, (self attributeNameFor: oppositeEnd) , ':' ] ].
+	(self isLiteralSpecification: anAttributeModel defaultValue) ifTrue: [
+		getterBuilder defaultValue:
+			(self defaultValueFrom: anAttributeModel defaultValue) ].
+	(self isEnumValue: anAttributeModel defaultValue) ifTrue: [
+		getterBuilder defaultValue:
+			(self defaultValueFrom: anAttributeModel defaultValue) ].
 	aClass addMethod: getterBuilder build.
 	oppositeEnd
-		ifNil: [ aClass
-				addMethod: (CBMethod new setter: name argument: anAttributeModel type name comment: comment) ]
-		ifNotNil: [ :assoc | 
+		ifNil: [
+			aClass addMethod: (CBMethod new
+					 setter: name
+					 argument: anAttributeModel type name
+					 comment: comment) ]
+		ifNotNil: [ :assoc |
 			| setter |
 			setter := CBMethod new.
-			setter protocol: 'accessing'.
+			setter protocolName: 'accessing'.
 			anAttributeModel isMultivalued
-				ifTrue: [ setter
-						source:
-							('<1s>: <2s>
+				ifTrue: [
+					setter source: ('<1s>: <2s>
 	"<3s>"
 	self <1s>
 		removeAll;
 		addAll: <2s>'
-								expandMacrosWith: name
-								with: (setter asArgumentName: anAttributeModel type name)
-								with: (setter asComment: comment)) ]
-				ifFalse: [ oppositeEnd isMultivalued
-						ifTrue: [ setter
-								source:
-									('{attribute}: {argument}
+							 expandMacrosWith: name
+							 with: (setter asArgumentName: anAttributeModel type name)
+							 with: (setter asComment: comment)) ]
+				ifFalse: [
+					oppositeEnd isMultivalued
+						ifTrue: [
+							setter source: ('{attribute}: {argument}
 	"{comment}"
 	{attribute} := OPUMLToOneLink
 		on: self identity
 		update: #{otherSelector}
 		from: {attribute}
-		to: {argument}'
-										format:
-											{#attribute -> name.
-											#argument -> (setter asArgumentName: anAttributeModel type name).
-											#comment -> (setter asComment: comment).
-											#otherSelector -> (self attributeNameFor: oppositeEnd)} asDictionary) ]
-						ifFalse: [ setter
-								source:
-									('{attribute}: {argument}
+		to: {argument}' format: {
+										 (#attribute -> name).
+										 (#argument
+										  -> (setter asArgumentName: anAttributeModel type name)).
+										 (#comment -> (setter asComment: comment)).
+										 (#otherSelector -> (self attributeNameFor: oppositeEnd)) }
+										 asDictionary) ]
+						ifFalse: [
+							setter source: ('{attribute}: {argument}
 	"{comment}"
 	|anOld{attributeCap}|
 	anOld{attributeCap} := {attribute}.
@@ -135,13 +140,14 @@ OPUMLProfileGenerator >> addAttribute: anAttributeModel to: aClass [
 		thisSelector: #{attribute}
 		otherSelector: #{otherAttribute}
 		from: anOld{attributeCap}
-		to: {attribute}'
-										format:
-											{#attribute -> name.
-											#attributeCap -> name capitalized.
-											#argument -> (setter asArgumentName: anAttributeModel type name).
-											#comment -> (setter asComment: comment).
-											#otherAttribute -> (self attributeNameFor: oppositeEnd)} asDictionary) ] ].
+		to: {attribute}' format: {
+										 (#attribute -> name).
+										 (#attributeCap -> name capitalized).
+										 (#argument
+										  -> (setter asArgumentName: anAttributeModel type name)).
+										 (#comment -> (setter asComment: comment)).
+										 (#otherAttribute -> (self attributeNameFor: oppositeEnd)) }
+										 asDictionary) ] ].
 			aClass addMethod: setter ]
 ]
 
@@ -217,28 +223,36 @@ OPUMLProfileGenerator >> addOperation: anOperationModel to: aClass [
 
 { #category : 'generating - methods' }
 OPUMLProfileGenerator >> addOperationsDelegationMethodsFrom: aClassModel to: aClass [
+
 	| redefinedNames |
 	redefinedNames := Set new.
-	aClassModel ownedOperations
-		ifNotNil:
-			[ :ops | ops select: [ :op | op method isNotNil ] thenDo: [ :op | redefinedNames add: op name ] ].
-	(self allSuperclassesOf: aClassModel)
-		do: [ :superClassModel | 
-			| superClass methods |
-			superClass := classes at: superClassModel name.
-			methods := (superClass methods select: [ :method | method protocol = 'operations' ])
-				reject: [ :method | 
-					(redefinedNames includes: method selector)
-						or: [ redefinedNames includes: (method selector withoutSuffix: ':') asSymbol ] ].
-			methods
-				do: [ :method | 
-					| delegateMethod node |
-					node := RBParser parseMethod: method source lines first.
-					delegateMethod := CBMethod new
-						getter: node selector
-							delegateFrom: '(sharedGeneralizations at: #' , (superClass name withoutPrefix: self classPrefix) , ')';
-						protocol: 'operations - ' , (superClass name withoutPrefix: self classPrefix).
-					aClass addMethod: delegateMethod ] ]
+	aClassModel ownedOperations ifNotNil: [ :ops |
+		ops
+			select: [ :op | op method isNotNil ]
+			thenDo: [ :op | redefinedNames add: op name ] ].
+	(self allSuperclassesOf: aClassModel) do: [ :superClassModel |
+		| superClass methods |
+		superClass := classes at: superClassModel name.
+		methods := (superClass methods select: [ :method |
+			            method protocolName = 'operations' ]) reject: [ :method |
+			           (redefinedNames includes: method selector) or: [
+				           redefinedNames includes:
+					           (method selector withoutSuffix: ':') asSymbol ] ].
+		methods do: [ :method |
+			| delegateMethod node |
+			node := RBParser parseMethod: method source lines first.
+			delegateMethod := CBMethod new
+				                  getter: node selector
+				                  delegateFrom: '(sharedGeneralizations at: #'
+					                  ,
+						                  (superClass name withoutPrefix:
+								                   self classPrefix) , ')';
+				                  protocol:
+					                  'operations - '
+					                  ,
+						                  (superClass name withoutPrefix:
+								                   self classPrefix).
+			aClass addMethod: delegateMethod ] ]
 ]
 
 { #category : 'generating - operations' }
@@ -382,28 +396,23 @@ OPUMLProfileGenerator >> createClassFrom: aClassModel in: aCategoryName [
 
 { #category : 'generating - meta' }
 OPUMLProfileGenerator >> createElementMeta [
+
 	| cls |
 	cls := self
-		ensureCreateClass: 'Element'
-		in: self sourceModel implementationPackage.
+		       ensureCreateClass: 'Element'
+		       in: self sourceModel implementationPackage.
+	cls comment: 'I am an abstract class for ' , classPrefix
+		,
+		' implementing some behavior for managing the classes and other stuff.'.
 	cls
-		comment:
-			'I am an abstract class for ' , classPrefix
-				,
-					' implementing some behavior for managing the classes and other stuff.'.
-	cls
-		addMethod:
-			(CBMethod new
-				source:
-					'umlClassName
+		addMethod: (CBMethod new
+				 source: 'umlClassName
 	^ self className withoutPrefix: ''' , classPrefix , '''';
-				protocol: 'accessing');
-		addMethod:
-			(CBMethod new
-				source:
-					'umlMetaClass
+				 protocolName: 'accessing');
+		addMethod: (CBMethod new
+				 source: 'umlMetaClass
 	^ ' , classPrefix , 'ProfileFactory metaClassFor: self';
-				protocol: 'accessing').
+				 protocolName: 'accessing').
 	^ cls
 ]
 
@@ -419,33 +428,30 @@ OPUMLProfileGenerator >> createEnumFrom: anEnumModel in: aCategoryName [
 
 { #category : 'generating-classes' }
 OPUMLProfileGenerator >> createProfileFactory [
+
 	| cls |
 	Smalltalk
 		at: (self classNameFor: 'ProfileFactory')
 		ifPresent: [ :existingCls | existingCls reset ].
 	cls := self ensureCreateClass: 'ProfileFactory' in: 'Model'.
-	cls
-		comment: 'I am a class representing the ' , classPrefix , ' profile itself.'.
+	cls comment:
+		'I am a class representing the ' , classPrefix , ' profile itself.'.
 	cls addInstVarNamed: 'profile'.
 	cls
-		addMethod:
-			(CBMethod new
-				source:
-					'createProfile
+		addMethod: (CBMethod new
+				 source: 'createProfile
 	profile ifNotNil: [ ^ profile ].
 	profile := OPUMLXMIReader readFrom: self xmi readStream.
-	profile implementationPackage: ''',self packageName,''';
-		implementationPrefix: ''',classPrefix,'''.	
+	profile implementationPackage: ''' , self packageName , ''';
+		implementationPrefix: ''' , classPrefix , '''.	
 	profile ownedStereotype do: [ :each | each profile: profile ].
 	^ profile';
-				protocol: 'accessing');
-		addMethod:
-			(CBMethod new
-				source:
-					'xmi
+				 protocolName: 'accessing');
+		addMethod: (CBMethod new
+				 source: 'xmi
 	^ 
 ''' , (OPUMLXMIWriter toString: self sourceModel) , '''';
-				protocol: 'accessing').
+				 protocol: 'accessing').
 	^ cls
 ]
 
@@ -533,24 +539,23 @@ OPUMLProfileGenerator >> generateAllEnums [
 
 { #category : 'generating' }
 OPUMLProfileGenerator >> generateExtensionMethods [
+
 	| extensions metaClass cls extensionGetter extensionSetter |
-	extensions := self sourceModel packagedElements
-		select: [ :each | each oclIsKindOf: #Extension ].
-	extensions
-		do: [ :ext | 
-			metaClass := self class environment
-				at: ('OPUML' , ext ownedEnd opposite type name) asSymbol.
-			cls := CBClass fromClass: metaClass.
-			classes at: cls name put: cls.
-			extensionGetter := CBMethod new
-				source:
-					('<1s>
-		^ self tagAt: #<1s> ifAbsent: [ nil ]'
-						expandMacrosWith: ext ownedEnd name);
-				protocol: '*' , self sourceModel implementationPackage.
-			extensionSetter := CBMethod new
-				source:
-					('<1s>: a<2s>
+	extensions := self sourceModel packagedElements select: [ :each |
+		              each oclIsKindOf: #Extension ].
+	extensions do: [ :ext |
+		metaClass := self class environment at:
+			             ('OPUML' , ext ownedEnd opposite type name) asSymbol.
+		cls := CBClass fromClass: metaClass.
+		classes at: cls name put: cls.
+		extensionGetter := CBMethod new
+			                   source: ('<1s>
+		^ self tagAt: #<1s> ifAbsent: [ nil ]' expandMacrosWith:
+						                    ext ownedEnd name);
+			                   protocolName:
+				                   '*' , self sourceModel implementationPackage.
+		extensionSetter := CBMethod new
+			                   source: ('<1s>: a<2s>
 	| old<2s> |
 	old<2s> := self <1s>.
 	self tagAt: #<1s> put: a<2s>.
@@ -560,12 +565,13 @@ OPUMLProfileGenerator >> generateExtensionMethods [
 		otherSelector: #<3s>
 		updateFrom: old<2s>
 		to: a<2s>'
-						expandMacrosWith: ext ownedEnd name
-						with: ext ownedEnd type name
-						with: ext ownedEnd opposite name);
-				protocol: '*' , self sourceModel implementationPackage.
-			cls addMethod: extensionGetter.
-			cls addMethod: extensionSetter ]
+					                    expandMacrosWith: ext ownedEnd name
+					                    with: ext ownedEnd type name
+					                    with: ext ownedEnd opposite name);
+			                   protocolName:
+				                   '*' , self sourceModel implementationPackage.
+		cls addMethod: extensionGetter.
+		cls addMethod: extensionSetter ]
 ]
 
 { #category : 'initialization' }
