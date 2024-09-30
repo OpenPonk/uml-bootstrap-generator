@@ -2,22 +2,23 @@
 Baseline for https://github.com/OpenPonk/uml-bootstrap-generator
 "
 Class {
-	#name : #BaselineOfUMLBootstrapGenerator,
-	#superclass : #BaselineOf,
-	#category : #BaselineOfUMLBootstrapGenerator
+	#name : 'BaselineOfUMLBootstrapGenerator',
+	#superclass : 'BaselineOf',
+	#category : 'BaselineOfUMLBootstrapGenerator',
+	#package : 'BaselineOfUMLBootstrapGenerator'
 }
 
-{ #category : #baselines }
+{ #category : 'baselines' }
 BaselineOfUMLBootstrapGenerator >> baseline: spec [
 
 	<baseline>
 	spec for: #common do: [ 
 		spec
 			baseline: 'OPXMI'
-			with: [ spec repository: 'github://openponk/xmi:v3.0.x/repository' ].
+			with: [ spec repository: 'github://openponk/xmi:v4.0.x' ].
 		spec baseline: 'ChangesBuilder' with: [ 
 			spec repository:
-				'github://JanBliznicenko/pharo-changes-builder/repository' ].
+				'github://JanBliznicenko/pharo-changes-builder:v4.0.x' ].
 		spec package: 'OP-UML-Bootstrap'.
 		spec
 			package: 'OP-UML-BootstrapGenerator'

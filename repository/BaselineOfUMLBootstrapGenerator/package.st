@@ -1,1 +1,1 @@
-Package { #name : #BaselineOfUMLBootstrapGenerator }
+Package { #name : 'BaselineOfUMLBootstrapGenerator' }
