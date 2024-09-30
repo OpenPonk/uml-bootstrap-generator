@@ -1,1 +1,1 @@
-Package { #name : #'OP-UML-Bootstrap' }
+Package { #name : 'OP-UML-Bootstrap' }

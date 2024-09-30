@@ -2,8 +2,8 @@
 I am a template implementation for UML Element handling things like multiple inheritance and whatnot.
 "
 Class {
-	#name : #OPUMLMetamodelElementTemplate,
-	#superclass : #Object,
+	#name : 'OPUMLMetamodelElementTemplate',
+	#superclass : 'Object',
 	#instVars : [
 		'sharedGeneralizations',
 		'directGeneralizations',
@@ -11,107 +11,55 @@ Class {
 		'uuid',
 		'tags'
 	],
-	#category : #'OP-UML-BootstrapGenerator-Metamodel-Generator'
+	#category : 'OP-UML-BootstrapGenerator-Metamodel-Generator',
+	#package : 'OP-UML-BootstrapGenerator',
+	#tag : 'Metamodel-Generator'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 OPUMLMetamodelElementTemplate class >> newOnShared: aDictionary [
 	^ self basicNew
 		initializeWithShared: aDictionary;
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OPUMLMetamodelElementTemplate >> announcer [
 	^ announcer ifNil: [ announcer := Announcer new ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OPUMLMetamodelElementTemplate >> announcer: anAnnouncer [
 	announcer := anAnnouncer
 ]
 
-{ #category : #'accessing - stereotypes' }
+{ #category : 'accessing - stereotypes' }
 OPUMLMetamodelElementTemplate >> appliedStereotypes [
 	^ self tags at: #appliedStereotypes ifAbsentPut: [ OrderedCollection new ]
 ]
 
-{ #category : #'accessing - stereotypes' }
+{ #category : 'accessing - stereotypes' }
 OPUMLMetamodelElementTemplate >> applyStereotype: aStereotype [
-	self appliedStereotypes addIfNotPresent: aStereotype.
-	self perform: ('extension_' , aStereotype umlClassName , ':') asSymbol with: aStereotype
+
+	(self appliedStereotypes anySatisfy: [ :any | 
+		 any oclIsTypeOf: aStereotype umlClassName ]) ifTrue: [ ^ self ].
+	self appliedStereotypes add: aStereotype.
+	self
+		perform: ('extension_' , aStereotype umlClassName , ':') asSymbol
+		with: aStereotype
 ]
 
-{ #category : #'GTInspector - extensions' }
-OPUMLMetamodelElementTemplate >> gtInspectorAllPropertiesIn: aComposite [
-	<gtInspectorPresentationOrder: 6>
-	aComposite fastTable
-		title: 'Properties (All)';
-		display: [ self inspectorProperties ];
-		column: 'name' evaluated: [ :each | each key ];
-		column: 'value' evaluated: [ :each | each value ];
-		send: [ :selection | 
-			selection isNil
-				ifTrue: [ nil ]
-				ifFalse: [ selection value ] ]
-]
-
-{ #category : #'GTInspector - extensions' }
-OPUMLMetamodelElementTemplate >> gtInspectorPropertiesIn: aComposite [
-	<gtInspectorPresentationOrder: 5>
-	aComposite fastTable
-		title: 'Properties';
-		display: [ self nonEmptyinspectorProperties ];
-		column: 'name' evaluated: [ :each | each key ];
-		column: 'value' evaluated: [ :each | each value ];
-		send: [ :selection | 
-			selection isNil
-				ifTrue: [ nil ]
-				ifFalse: [ selection value ] ]
-]
-
-{ #category : #'GTInspector - extensions' }
-OPUMLMetamodelElementTemplate >> gtInspectorStereotypePropertiesIn: aComposite [
-	<gtInspectorPresentationOrder: 7>
-	aComposite fastTable
-		title: 'Tagged Values';
-		display: [ self stereotypeProperties ];
-		column: 'name' evaluated: [ :each | each first ] width: 120;
-		column: 'stereotype' evaluated: [ :each | each second ] width: 120;
-		column: 'value' evaluated: [ :each | each third ];
-		send: [ :selection | 
-			selection isNil
-				ifTrue: [ nil ]
-				ifFalse: [ selection value ] ]
-]
-
-{ #category : #'GTInspector - extensions' }
-OPUMLMetamodelElementTemplate >> gtInspectorStereotypesIn: aComposite [
-	<gtInspectorPresentationOrder: 6>
-	^ aComposite fastList
-		title: 'Stereotypes';
-		display: [ self appliedStereotypes ]
-]
-
-{ #category : #'GTInspector - extensions' }
-OPUMLMetamodelElementTemplate >> gtInspectorTagsIn: aComposite [
-	<gtInspectorPresentationOrder: 7>
-	aComposite fastTable
-		title: 'Tags';
-		display: [ self tags ]
-]
-
-{ #category : #'accessing - tags' }
+{ #category : 'accessing - tags' }
 OPUMLMetamodelElementTemplate >> hasTagAt: aKey [
 	^ tags includesKey: aKey
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OPUMLMetamodelElementTemplate >> identity [
 	^ sharedGeneralizations values last
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 OPUMLMetamodelElementTemplate >> initialize [
 	super initialize.
 	sharedGeneralizations := OrderedDictionary new.
@@ -120,29 +68,31 @@ OPUMLMetamodelElementTemplate >> initialize [
 	self initializeDirectGeneralizations
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 OPUMLMetamodelElementTemplate >> initializeDirectGeneralizations [
 	^ self subclassResponsibility
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 OPUMLMetamodelElementTemplate >> initializeSharedGeneralizations [
 	^ self subclassResponsibility
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 OPUMLMetamodelElementTemplate >> initializeWithShared: aDictionary [
 	super initialize.
 	sharedGeneralizations := aDictionary.
 	self initializeDirectGeneralizations
 ]
 
-{ #category : #'GTInspector - extensions' }
+{ #category : 'GTInspector - extensions' }
 OPUMLMetamodelElementTemplate >> inspectionAllProperties [
 
 	<inspectorPresentationOrder: 6 title: 'Properties (All)'>
 	^ SpTablePresenter new
-		  items: self inspectorProperties sorted;
+		  beResizable;
+		  items: (self inspectorProperties sorted collect: [ :e |
+					   StInspectorAssociationNode hostObject: e ]);
 		  addColumn: (SpStringTableColumn new
 				   title: 'Name';
 				   evaluated: #key;
@@ -154,12 +104,14 @@ OPUMLMetamodelElementTemplate >> inspectionAllProperties [
 		  yourself
 ]
 
-{ #category : #'GTInspector - extensions' }
+{ #category : 'GTInspector - extensions' }
 OPUMLMetamodelElementTemplate >> inspectionProperties [
 
 	<inspectorPresentationOrder: 5 title: 'Properties'>
 	^ SpTablePresenter new
-		  items: self nonEmptyinspectorProperties sorted;
+		  beResizable;
+		  items: (self nonEmptyinspectorProperties sorted collect: [ :e |
+					   StInspectorAssociationNode hostObject: e ]);
 		  addColumn: (SpStringTableColumn new
 				   title: 'Name';
 				   evaluated: #key;
@@ -171,30 +123,41 @@ OPUMLMetamodelElementTemplate >> inspectionProperties [
 		  yourself
 ]
 
-{ #category : #'GTInspector - extensions' }
+{ #category : 'GTInspector - extensions' }
 OPUMLMetamodelElementTemplate >> inspectionStereotypes [
 
 	<inspectorPresentationOrder: 7 title: 'Stereotypes'>
 	^ SpListPresenter new
-		  items: self appliedStereotypes sorted;
+		  items: (self appliedStereotypes sorted: [ :a :b |
+					   a umlClassName < b umlClassName ]);
 		  yourself
 ]
 
-{ #category : #'GTInspector - extensions' }
+{ #category : 'GTInspector - extensions' }
 OPUMLMetamodelElementTemplate >> inspectionTags [
 
 	<inspectorPresentationOrder: 7 title: 'Tags'>
-	^ SpListPresenter new
-		  items: self tags sorted;
+	^ SpTablePresenter new
+		  beResizable;
+		  items: (self tags associations sorted collect: [ :e |
+					   StInspectorAssociationNode hostObject: e ]);
+		  addColumn: (SpStringTableColumn new
+				   title: 'Name';
+				   evaluated: #key;
+				   yourself);
+		  addColumn: (SpStringTableColumn new
+				   title: 'Value';
+				   evaluated: #value;
+				   yourself);
 		  yourself
 ]
 
-{ #category : #'GTInspector - extensions' }
+{ #category : 'GTInspector - extensions' }
 OPUMLMetamodelElementTemplate >> inspectorProperties [
 	^ self inspectorPropertiesSelectors collect: [ :each | each -> (self perform: each) ]
 ]
 
-{ #category : #'GTInspector - extensions' }
+{ #category : 'GTInspector - extensions' }
 OPUMLMetamodelElementTemplate >> inspectorPropertiesSelectors [
 	| classes class |
 	classes := Set new.
@@ -203,32 +166,33 @@ OPUMLMetamodelElementTemplate >> inspectorPropertiesSelectors [
 		whileFalse: [ classes add: class.
 			class := class superclass ].
 	^ ((((classes flatCollect: #methods) select: [ :each | each numArgs = 0 ])
-		select: [ :each | each protocol beginsWith: 'accessing' ]) collect: #selector) sorted
+		select: [ :each | each protocolName beginsWith: 'accessing' ]) collect: #selector) sorted
 ]
 
-{ #category : #'GTInspector - extensions' }
+{ #category : 'GTInspector - extensions' }
 OPUMLMetamodelElementTemplate >> nonEmptyinspectorProperties [
 	^ self inspectorProperties
 		reject: [ :pair | pair value isNil or: [ pair value isCollection and: [ pair value isEmpty ] ] ]
 ]
 
-{ #category : #'ocl-experimental' }
+{ #category : 'ocl-experimental' }
 OPUMLMetamodelElementTemplate >> oclAsType: aClassifier [
 	^ sharedGeneralizations at: (self oclClassifierNameFrom: aClassifier)
 ]
 
-{ #category : #'ocl-experimental' }
+{ #category : 'ocl-experimental' }
 OPUMLMetamodelElementTemplate >> oclClassifierNameFrom: anObject [
-	(anObject isKindOf: OPUMLMetaElement class)
-		ifTrue: [ ^ anObject name withoutPrefix: 'OPUML' ].
-	(anObject isKindOf: OPUMLMetaElement)
-		ifTrue: [ ^ anObject name ].
-	anObject isString
-		ifTrue: [ ^ anObject ].
+
+	| metaElementClass |
+	metaElementClass := Smalltalk globals at: #OPUMLMetaElement.
+	(anObject isKindOf: metaElementClass class) ifTrue: [
+		^ anObject name withoutPrefix: 'OPUML' ].
+	(anObject isKindOf: metaElementClass) ifTrue: [ ^ anObject name ].
+	anObject isString ifTrue: [ ^ anObject ].
 	self error: 'Unknown classifier ' , anObject asString
 ]
 
-{ #category : #'ocl-experimental' }
+{ #category : 'ocl-experimental' }
 OPUMLMetamodelElementTemplate >> oclIsKindOf: aClassifier [
 	"Element is not part of the shared generalization, so extra check is needed."
 	aClassifier = #Element
@@ -236,15 +200,13 @@ OPUMLMetamodelElementTemplate >> oclIsKindOf: aClassifier [
 	^ sharedGeneralizations includesKey: (self oclClassifierNameFrom: aClassifier)
 ]
 
-{ #category : #'ocl-experimental' }
+{ #category : 'ocl-experimental' }
 OPUMLMetamodelElementTemplate >> oclIsTypeOf: aClassifier [
-	"Element is not part of the shared generalization, so extra check is needed."
-	aClassifier = #Element
-		ifTrue: [ ^ true ].
+
 	^ sharedGeneralizations keys last = (self oclClassifierNameFrom: aClassifier)
 ]
 
-{ #category : #printing }
+{ #category : 'printing' }
 OPUMLMetamodelElementTemplate >> printOn: aStream [
 	super printOn: aStream.
 	(self class selectors includes: #name)
@@ -254,48 +216,48 @@ OPUMLMetamodelElementTemplate >> printOn: aStream [
 				<< ')' ]
 ]
 
-{ #category : #'accessing - tags' }
+{ #category : 'accessing - tags' }
 OPUMLMetamodelElementTemplate >> removeTagAt: aKey [
 	tags removeKey: aKey
 ]
 
-{ #category : #'accessing - tags' }
+{ #category : 'accessing - tags' }
 OPUMLMetamodelElementTemplate >> tagAt: aKey [
 	^ tags at: aKey
 ]
 
-{ #category : #'accessing - tags' }
+{ #category : 'accessing - tags' }
 OPUMLMetamodelElementTemplate >> tagAt: aKey put: aValue [
 	tags at: aKey put: aValue
 ]
 
-{ #category : #'accessing - tags' }
+{ #category : 'accessing - tags' }
 OPUMLMetamodelElementTemplate >> tags [
 	^ tags
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OPUMLMetamodelElementTemplate >> umlClassName [
 	^ self className withoutPrefix: 'OPUML'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OPUMLMetamodelElementTemplate >> umlMetaClass [
 	^ OPUMLXMISpecsStorage metaClassFor: self
 ]
 
-{ #category : #'accessing - stereotypes' }
+{ #category : 'accessing - stereotypes' }
 OPUMLMetamodelElementTemplate >> unapplyStereotype: aStereotype [
 	self appliedStereotypes remove: aStereotype ifAbsent: [  ].
 	self perform: ('extension_' , aStereotype umlClassName , ':') asSymbol with: nil
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OPUMLMetamodelElementTemplate >> uuid [
 	^ uuid ifNil: [ uuid := UUID new ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OPUMLMetamodelElementTemplate >> uuid: aUUID [
 	uuid := aUUID
 ]

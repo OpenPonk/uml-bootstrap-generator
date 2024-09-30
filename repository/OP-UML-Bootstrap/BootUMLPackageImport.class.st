@@ -1,65 +1,67 @@
 Class {
-	#name : #BootUMLPackageImport,
-	#superclass : #OPUMLBootstrapObject,
+	#name : 'BootUMLPackageImport',
+	#superclass : 'OPUMLBootstrapObject',
 	#instVars : [
 		'importedPackage',
 		'importingNamespace',
 		'visibility'
 	],
-	#category : 'OP-UML-Bootstrap-CommonStructure'
+	#category : 'OP-UML-Bootstrap-CommonStructure',
+	#package : 'OP-UML-Bootstrap',
+	#tag : 'CommonStructure'
 }
 
-{ #category : #'accessing - Element' }
+{ #category : 'accessing - Element' }
 BootUMLPackageImport >> comment [
 	^ (sharedGeneralizations at: #Element) comment
 ]
 
-{ #category : #'accessing - Element' }
+{ #category : 'accessing - Element' }
 BootUMLPackageImport >> comment: aComment [
 	(sharedGeneralizations at: #Element) comment: aComment
 ]
 
-{ #category : #'accessing - Element' }
+{ #category : 'accessing - Element' }
 BootUMLPackageImport >> constraint [
 	^ (sharedGeneralizations at: #Element) constraint
 ]
 
-{ #category : #'accessing - Element' }
+{ #category : 'accessing - Element' }
 BootUMLPackageImport >> constraint: aConstraint [
 	(sharedGeneralizations at: #Element) constraint: aConstraint
 ]
 
-{ #category : #'accessing - Element' }
+{ #category : 'accessing - Element' }
 BootUMLPackageImport >> directedRelationship [
 	^ (sharedGeneralizations at: #Element) directedRelationship
 ]
 
-{ #category : #'accessing - Element' }
+{ #category : 'accessing - Element' }
 BootUMLPackageImport >> directedRelationship: aDirectedRelationship [
 	(sharedGeneralizations at: #Element) directedRelationship: aDirectedRelationship
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BootUMLPackageImport >> importedPackage [
 	^ importedPackage
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BootUMLPackageImport >> importedPackage: aPackage [
 	importedPackage := aPackage
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BootUMLPackageImport >> importingNamespace [
 	^ importingNamespace
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BootUMLPackageImport >> importingNamespace: aNamespace [
 	importingNamespace := aNamespace
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 BootUMLPackageImport >> initialize [
 	super initialize.
 	sharedGeneralizations at: #Element put: (BootUMLElement newOnShared: sharedGeneralizations).
@@ -69,7 +71,7 @@ BootUMLPackageImport >> initialize [
 
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 BootUMLPackageImport >> initializeGeneralizations [
 	generalizations := {
 		sharedGeneralizations at: #DirectedRelationship.
@@ -77,82 +79,82 @@ BootUMLPackageImport >> initializeGeneralizations [
 
 ]
 
-{ #category : #'accessing - Element' }
+{ #category : 'accessing - Element' }
 BootUMLPackageImport >> ownedComment [
 	^ (sharedGeneralizations at: #Element) ownedComment
 ]
 
-{ #category : #'accessing - Element' }
+{ #category : 'accessing - Element' }
 BootUMLPackageImport >> ownedComment: aComment [
 	(sharedGeneralizations at: #Element) ownedComment: aComment
 ]
 
-{ #category : #'accessing - Element' }
+{ #category : 'accessing - Element' }
 BootUMLPackageImport >> ownedElement [
 	^ (sharedGeneralizations at: #Element) ownedElement
 ]
 
-{ #category : #'accessing - Element' }
+{ #category : 'accessing - Element' }
 BootUMLPackageImport >> ownedElement: anElement [
 	(sharedGeneralizations at: #Element) ownedElement: anElement
 ]
 
-{ #category : #'accessing - Element' }
+{ #category : 'accessing - Element' }
 BootUMLPackageImport >> owner [
 	^ (sharedGeneralizations at: #Element) owner
 ]
 
-{ #category : #'accessing - Element' }
+{ #category : 'accessing - Element' }
 BootUMLPackageImport >> owner: anElement [
 	(sharedGeneralizations at: #Element) owner: anElement
 ]
 
-{ #category : #'accessing - Relationship' }
+{ #category : 'accessing - Relationship' }
 BootUMLPackageImport >> relatedElement [
 	^ (sharedGeneralizations at: #Relationship) relatedElement
 ]
 
-{ #category : #'accessing - Relationship' }
+{ #category : 'accessing - Relationship' }
 BootUMLPackageImport >> relatedElement: anElement [
 	(sharedGeneralizations at: #Relationship) relatedElement: anElement
 ]
 
-{ #category : #'accessing - Element' }
+{ #category : 'accessing - Element' }
 BootUMLPackageImport >> relationship [
 	^ (sharedGeneralizations at: #Element) relationship
 ]
 
-{ #category : #'accessing - Element' }
+{ #category : 'accessing - Element' }
 BootUMLPackageImport >> relationship: aRelationship [
 	(sharedGeneralizations at: #Element) relationship: aRelationship
 ]
 
-{ #category : #'accessing - DirectedRelationship' }
+{ #category : 'accessing - DirectedRelationship' }
 BootUMLPackageImport >> source [
 	^ (sharedGeneralizations at: #DirectedRelationship) source
 ]
 
-{ #category : #'accessing - DirectedRelationship' }
+{ #category : 'accessing - DirectedRelationship' }
 BootUMLPackageImport >> source: anElement [
 	(sharedGeneralizations at: #DirectedRelationship) source: anElement
 ]
 
-{ #category : #'accessing - DirectedRelationship' }
+{ #category : 'accessing - DirectedRelationship' }
 BootUMLPackageImport >> target [
 	^ (sharedGeneralizations at: #DirectedRelationship) target
 ]
 
-{ #category : #'accessing - DirectedRelationship' }
+{ #category : 'accessing - DirectedRelationship' }
 BootUMLPackageImport >> target: anElement [
 	(sharedGeneralizations at: #DirectedRelationship) target: anElement
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BootUMLPackageImport >> visibility [
 	^ visibility
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BootUMLPackageImport >> visibility: aVisibilityKind [
 	visibility := aVisibilityKind
 ]

@@ -1,6 +1,6 @@
 Class {
-	#name : #BootUMLConstraint,
-	#superclass : #OPUMLBootstrapObject,
+	#name : 'BootUMLConstraint',
+	#superclass : 'OPUMLBootstrapObject',
 	#instVars : [
 		'constrainedElement',
 		'specification',
@@ -9,100 +9,102 @@ Class {
 		'postContext',
 		'preContext'
 	],
-	#category : 'OP-UML-Bootstrap-CommonStructure'
+	#category : 'OP-UML-Bootstrap-CommonStructure',
+	#package : 'OP-UML-Bootstrap',
+	#tag : 'CommonStructure'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BootUMLConstraint >> bodyContext [
 	^ bodyContext
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BootUMLConstraint >> bodyContext: anOperation [
 	bodyContext := anOperation
 ]
 
-{ #category : #'accessing - NamedElement' }
+{ #category : 'accessing - NamedElement' }
 BootUMLConstraint >> clientDependency [
 	^ (sharedGeneralizations at: #NamedElement) clientDependency
 ]
 
-{ #category : #'accessing - NamedElement' }
+{ #category : 'accessing - NamedElement' }
 BootUMLConstraint >> clientDependency: aDependency [
 	(sharedGeneralizations at: #NamedElement) clientDependency: aDependency
 ]
 
-{ #category : #'accessing - Element' }
+{ #category : 'accessing - Element' }
 BootUMLConstraint >> comment [
 	^ (sharedGeneralizations at: #Element) comment
 ]
 
-{ #category : #'accessing - Element' }
+{ #category : 'accessing - Element' }
 BootUMLConstraint >> comment: aComment [
 	(sharedGeneralizations at: #Element) comment: aComment
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BootUMLConstraint >> constrainedElement [
 	^ constrainedElement
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BootUMLConstraint >> constrainedElement: anElement [
 	constrainedElement := anElement
 ]
 
-{ #category : #'accessing - Element' }
+{ #category : 'accessing - Element' }
 BootUMLConstraint >> constraint [
 	^ (sharedGeneralizations at: #Element) constraint
 ]
 
-{ #category : #'accessing - Element' }
+{ #category : 'accessing - Element' }
 BootUMLConstraint >> constraint: aConstraint [
 	(sharedGeneralizations at: #Element) constraint: aConstraint
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BootUMLConstraint >> context [
 	^ context
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BootUMLConstraint >> context: aNamespace [
 	context := aNamespace
 ]
 
-{ #category : #'accessing - PackageableElement' }
+{ #category : 'accessing - PackageableElement' }
 BootUMLConstraint >> deploymentTarget [
 	^ (sharedGeneralizations at: #PackageableElement) deploymentTarget
 ]
 
-{ #category : #'accessing - PackageableElement' }
+{ #category : 'accessing - PackageableElement' }
 BootUMLConstraint >> deploymentTarget: aDeploymentTarget [
 	(sharedGeneralizations at: #PackageableElement) deploymentTarget: aDeploymentTarget
 ]
 
-{ #category : #'accessing - Element' }
+{ #category : 'accessing - Element' }
 BootUMLConstraint >> directedRelationship [
 	^ (sharedGeneralizations at: #Element) directedRelationship
 ]
 
-{ #category : #'accessing - Element' }
+{ #category : 'accessing - Element' }
 BootUMLConstraint >> directedRelationship: aDirectedRelationship [
 	(sharedGeneralizations at: #Element) directedRelationship: aDirectedRelationship
 ]
 
-{ #category : #'accessing - NamedElement' }
+{ #category : 'accessing - NamedElement' }
 BootUMLConstraint >> inheritingClassifier [
 	^ (sharedGeneralizations at: #NamedElement) inheritingClassifier
 ]
 
-{ #category : #'accessing - NamedElement' }
+{ #category : 'accessing - NamedElement' }
 BootUMLConstraint >> inheritingClassifier: aClassifier [
 	(sharedGeneralizations at: #NamedElement) inheritingClassifier: aClassifier
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 BootUMLConstraint >> initialize [
 	super initialize.
 	sharedGeneralizations at: #Element put: (BootUMLElement newOnShared: sharedGeneralizations).
@@ -113,7 +115,7 @@ BootUMLConstraint >> initialize [
 
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 BootUMLConstraint >> initializeGeneralizations [
 	generalizations := {
 		sharedGeneralizations at: #PackageableElement.
@@ -121,162 +123,162 @@ BootUMLConstraint >> initializeGeneralizations [
 
 ]
 
-{ #category : #'accessing - NamedElement' }
+{ #category : 'accessing - NamedElement' }
 BootUMLConstraint >> memberNamespace [
 	^ (sharedGeneralizations at: #NamedElement) memberNamespace
 ]
 
-{ #category : #'accessing - NamedElement' }
+{ #category : 'accessing - NamedElement' }
 BootUMLConstraint >> memberNamespace: aNamespace [
 	(sharedGeneralizations at: #NamedElement) memberNamespace: aNamespace
 ]
 
-{ #category : #'accessing - NamedElement' }
+{ #category : 'accessing - NamedElement' }
 BootUMLConstraint >> name [
 	^ (sharedGeneralizations at: #NamedElement) name
 ]
 
-{ #category : #'accessing - NamedElement' }
+{ #category : 'accessing - NamedElement' }
 BootUMLConstraint >> name: aString [
 	(sharedGeneralizations at: #NamedElement) name: aString
 ]
 
-{ #category : #'accessing - NamedElement' }
+{ #category : 'accessing - NamedElement' }
 BootUMLConstraint >> nameExpression [
 	^ (sharedGeneralizations at: #NamedElement) nameExpression
 ]
 
-{ #category : #'accessing - NamedElement' }
+{ #category : 'accessing - NamedElement' }
 BootUMLConstraint >> nameExpression: aStringExpression [
 	(sharedGeneralizations at: #NamedElement) nameExpression: aStringExpression
 ]
 
-{ #category : #'accessing - PackageableElement' }
+{ #category : 'accessing - PackageableElement' }
 BootUMLConstraint >> namespace [
 	^ (sharedGeneralizations at: #PackageableElement) namespace
 ]
 
-{ #category : #'accessing - PackageableElement' }
+{ #category : 'accessing - PackageableElement' }
 BootUMLConstraint >> namespace: aNamespace [
 	(sharedGeneralizations at: #PackageableElement) namespace: aNamespace
 ]
 
-{ #category : #'accessing - Element' }
+{ #category : 'accessing - Element' }
 BootUMLConstraint >> ownedComment [
 	^ (sharedGeneralizations at: #Element) ownedComment
 ]
 
-{ #category : #'accessing - Element' }
+{ #category : 'accessing - Element' }
 BootUMLConstraint >> ownedComment: aComment [
 	(sharedGeneralizations at: #Element) ownedComment: aComment
 ]
 
-{ #category : #'accessing - Element' }
+{ #category : 'accessing - Element' }
 BootUMLConstraint >> ownedElement [
 	^ (sharedGeneralizations at: #Element) ownedElement
 ]
 
-{ #category : #'accessing - Element' }
+{ #category : 'accessing - Element' }
 BootUMLConstraint >> ownedElement: anElement [
 	(sharedGeneralizations at: #Element) ownedElement: anElement
 ]
 
-{ #category : #'accessing - Element' }
+{ #category : 'accessing - Element' }
 BootUMLConstraint >> owner [
 	^ (sharedGeneralizations at: #Element) owner
 ]
 
-{ #category : #'accessing - Element' }
+{ #category : 'accessing - Element' }
 BootUMLConstraint >> owner: anElement [
 	(sharedGeneralizations at: #Element) owner: anElement
 ]
 
-{ #category : #'accessing - PackageableElement' }
+{ #category : 'accessing - PackageableElement' }
 BootUMLConstraint >> owningPackage [
 	^ (sharedGeneralizations at: #PackageableElement) owningPackage
 ]
 
-{ #category : #'accessing - PackageableElement' }
+{ #category : 'accessing - PackageableElement' }
 BootUMLConstraint >> owningPackage: aPackage [
 	(sharedGeneralizations at: #PackageableElement) owningPackage: aPackage
 ]
 
-{ #category : #'accessing - ParameterableElement' }
+{ #category : 'accessing - ParameterableElement' }
 BootUMLConstraint >> owningTemplateParameter [
 	^ (sharedGeneralizations at: #ParameterableElement) owningTemplateParameter
 ]
 
-{ #category : #'accessing - ParameterableElement' }
+{ #category : 'accessing - ParameterableElement' }
 BootUMLConstraint >> owningTemplateParameter: aTemplateParameter [
 	(sharedGeneralizations at: #ParameterableElement) owningTemplateParameter: aTemplateParameter
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BootUMLConstraint >> postContext [
 	^ postContext
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BootUMLConstraint >> postContext: anOperation [
 	postContext := anOperation
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BootUMLConstraint >> preContext [
 	^ preContext
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BootUMLConstraint >> preContext: anOperation [
 	preContext := anOperation
 ]
 
-{ #category : #'accessing - NamedElement' }
+{ #category : 'accessing - NamedElement' }
 BootUMLConstraint >> qualifiedName [
 	^ (sharedGeneralizations at: #NamedElement) qualifiedName
 ]
 
-{ #category : #'accessing - NamedElement' }
+{ #category : 'accessing - NamedElement' }
 BootUMLConstraint >> qualifiedName: aString [
 	(sharedGeneralizations at: #NamedElement) qualifiedName: aString
 ]
 
-{ #category : #'accessing - Element' }
+{ #category : 'accessing - Element' }
 BootUMLConstraint >> relationship [
 	^ (sharedGeneralizations at: #Element) relationship
 ]
 
-{ #category : #'accessing - Element' }
+{ #category : 'accessing - Element' }
 BootUMLConstraint >> relationship: aRelationship [
 	(sharedGeneralizations at: #Element) relationship: aRelationship
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BootUMLConstraint >> specification [
 	^ specification
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BootUMLConstraint >> specification: aValueSpecification [
 	specification := aValueSpecification
 ]
 
-{ #category : #'accessing - ParameterableElement' }
+{ #category : 'accessing - ParameterableElement' }
 BootUMLConstraint >> templateParameter [
 	^ (sharedGeneralizations at: #ParameterableElement) templateParameter
 ]
 
-{ #category : #'accessing - ParameterableElement' }
+{ #category : 'accessing - ParameterableElement' }
 BootUMLConstraint >> templateParameter: aTemplateParameter [
 	(sharedGeneralizations at: #ParameterableElement) templateParameter: aTemplateParameter
 ]
 
-{ #category : #'accessing - PackageableElement' }
+{ #category : 'accessing - PackageableElement' }
 BootUMLConstraint >> visibility [
 	^ (sharedGeneralizations at: #PackageableElement) visibility
 ]
 
-{ #category : #'accessing - PackageableElement' }
+{ #category : 'accessing - PackageableElement' }
 BootUMLConstraint >> visibility: aVisibilityKind [
 	(sharedGeneralizations at: #PackageableElement) visibility: aVisibilityKind
 ]

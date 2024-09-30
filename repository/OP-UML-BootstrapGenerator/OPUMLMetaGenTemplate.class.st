@@ -2,12 +2,14 @@
 I am a base class for classes providing Pharo implemention for some UML metamodel elements.
 "
 Class {
-	#name : #OPUMLMetaGenTemplate,
-	#superclass : #OPUMLMetamodelGeneratorTemplates,
-	#category : 'OP-UML-BootstrapGenerator-Templates'
+	#name : 'OPUMLMetaGenTemplate',
+	#superclass : 'OPUMLMetamodelGeneratorTemplates',
+	#category : 'OP-UML-BootstrapGenerator-Templates',
+	#package : 'OP-UML-BootstrapGenerator',
+	#tag : 'Templates'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OPUMLMetaGenTemplate >> implementedMethods [
 	^ (self class methodsInProtocol: #implementation)
 		collect: [ :method | 
@@ -16,7 +18,7 @@ OPUMLMetaGenTemplate >> implementedMethods [
 			method selector -> (body source copyFrom: body start to: body stop) ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OPUMLMetaGenTemplate >> methodsFor: anOperation inClassNamed: aClassName [
 	| methodBehavior |
 	(self supportsClass: aClassName)
@@ -27,12 +29,12 @@ OPUMLMetaGenTemplate >> methodsFor: anOperation inClassNamed: aClassName [
 	^ methodBehavior ifNil: [ #() ] ifNotNil: [ {methodBehavior} ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OPUMLMetaGenTemplate >> supportedClasses [
 	^ {(self className withoutPrefix: 'OPUMLMetaGen') withoutSuffix: 'Template'}
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 OPUMLMetaGenTemplate >> supportsClass: aClassName [
 	^ self className = (#OPUMLMetaGen , aClassName , #Template)
 ]

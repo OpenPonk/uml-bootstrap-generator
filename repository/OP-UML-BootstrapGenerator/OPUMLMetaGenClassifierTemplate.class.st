@@ -1,13 +1,15 @@
 Class {
-	#name : #OPUMLMetaGenClassifierTemplate,
-	#superclass : #OPUMLMetaGenTemplate,
+	#name : 'OPUMLMetaGenClassifierTemplate',
+	#superclass : 'OPUMLMetaGenTemplate',
 	#instVars : [
 		'sharedGeneralizations'
 	],
-	#category : 'OP-UML-BootstrapGenerator-Templates'
+	#category : 'OP-UML-BootstrapGenerator-Templates',
+	#package : 'OP-UML-BootstrapGenerator',
+	#tag : 'Templates'
 }
 
-{ #category : #implementation }
+{ #category : 'implementation' }
 OPUMLMetaGenClassifierTemplate >> allAttributes [
 	| allAttributes |
 	allAttributes := OrderedCollection new.
@@ -19,17 +21,17 @@ OPUMLMetaGenClassifierTemplate >> allAttributes [
 	^ (allAttributes collect: [ :each | each -> 1 ]) asOrderedDictionary keys
 ]
 
-{ #category : #implementation }
+{ #category : 'implementation' }
 OPUMLMetaGenClassifierTemplate >> allParents [
 	^ self parents union: (self parents flatCollect: #allParents)
 ]
 
-{ #category : #implementation }
+{ #category : 'implementation' }
 OPUMLMetaGenClassifierTemplate >> general [
 	^ self parents
 ]
 
-{ #category : #implementation }
+{ #category : 'implementation' }
 OPUMLMetaGenClassifierTemplate >> parents [
 	^ (self generalizations collect: #general) asSet
 ]

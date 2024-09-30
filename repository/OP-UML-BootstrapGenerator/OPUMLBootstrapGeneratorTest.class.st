@@ -1,50 +1,32 @@
 Class {
-	#name : #OPUMLBootstrapGeneratorTest,
-	#superclass : #TestCase,
+	#name : 'OPUMLBootstrapGeneratorTest',
+	#superclass : 'TestCase',
 	#instVars : [
 		'generator'
 	],
 	#classInstVars : [
 		'umlSpecs'
 	],
-	#category : 'OP-UML-BootstrapGenerator-Tests'
+	#category : 'OP-UML-BootstrapGenerator-Tests',
+	#package : 'OP-UML-BootstrapGenerator',
+	#tag : 'Tests'
 }
 
-{ #category : #accessing }
-OPUMLBootstrapGeneratorTest class >> retrieveUmlSpecs [
-	| primitives uml mapping result |
-	primitives := 'http://www.omg.org/spec/UML/20131001/PrimitiveTypes.xmi'.
-	uml := 'http://www.omg.org/spec/UML/20131001/UML.xmi'.
-	mapping := Dictionary
-		with: primitives -> (ZnEasy get: primitives) entity readStream contents
-		with: uml -> (ZnEasy get: uml) entity readStream contents.
-	result := OPXMIReader readFromMapping: mapping.
-	^ result at: uml
-]
-
-{ #category : #accessing }
-OPUMLBootstrapGeneratorTest class >> umlSpecs [
-	"umlSpecs := nil"
-
-	<script: 'self umlSpecs inspect'>
-	^ umlSpecs ifNil: [ umlSpecs := self retrieveUmlSpecs ]
-]
-
-{ #category : #running }
+{ #category : 'running' }
 OPUMLBootstrapGeneratorTest >> setUp [
 	super setUp.
 	generator := OPUMLBootstrapGenerator new.
-	generator sourceXmi: self class umlSpecs.
+	generator sourceXmi: OPUMLBootstrapGenerator umlSpecs.
 	generator classPrefix: 'BUT'.
 	generator packageName: 'Generated-UMLBootstrapTest'
 ]
 
-{ #category : #'tests - selecting' }
+{ #category : 'tests - selecting' }
 OPUMLBootstrapGeneratorTest >> testClassNameFor [
 	self assert: (generator classNameFor: 'Hello') equals: 'BUTHello'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 OPUMLBootstrapGeneratorTest >> testCreateAccessors [
 	| class |
 	class := CBClass new.
@@ -53,7 +35,7 @@ OPUMLBootstrapGeneratorTest >> testCreateAccessors [
 	self assert: class selectors equals: #(body body:)
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 OPUMLBootstrapGeneratorTest >> testCreateAccessorsForClassAttribute [
 	| class attribute |
 	"'class' is a prohibited attribute/method name, make sure we don't generate it"
@@ -74,7 +56,7 @@ OPUMLBootstrapGeneratorTest >> testCreateAccessorsForClassAttribute [
 	self assert: class selectors equals: #(owningClass owningClass:)
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 OPUMLBootstrapGeneratorTest >> testCreateAssociation [
 	| association element comment |
 	association := self xmiAssociation containedItems
@@ -88,15 +70,15 @@ OPUMLBootstrapGeneratorTest >> testCreateAssociation [
 	self assert: comment selectors equals: #(annotatedElement annotatedElement:)
 ]
 
-{ #category : #'tests - generating' }
+{ #category : 'tests - generating' }
 OPUMLBootstrapGeneratorTest >> testCreateClass [
 	| result |
 	result := generator createClassFrom: self xmiComplexElement in: 'CommonStructure'.
 	self assert: result name equals: 'BUTComment'.
-	self assert: result package equals: 'Generated-UMLBootstrapTest-CommonStructure'
+	self assert: result categoryName equals: 'Generated-UMLBootstrapTest-CommonStructure'
 ]
 
-{ #category : #'tests - initialization' }
+{ #category : 'tests - initialization' }
 OPUMLBootstrapGeneratorTest >> testDefaultConfiguration [
 	self assert: generator classPrefix equals: 'BUT'.
 	self assert: generator packageName equals: 'Generated-UMLBootstrapTest'.
@@ -104,18 +86,18 @@ OPUMLBootstrapGeneratorTest >> testDefaultConfiguration [
 	self assert: generator sourceXmi isNotNil
 ]
 
-{ #category : #'tests - generating' }
+{ #category : 'tests - generating' }
 OPUMLBootstrapGeneratorTest >> testEnsureCreateClass [
 	| result1 result2 |
 	result1 := generator ensureCreateClass: 'GeneratedClassXXX' in: 'Package'.
 	self assert: result1 name equals: 'BUTGeneratedClassXXX'.
-	self assert: result1 package equals: 'Generated-UMLBootstrapTest-Package'.
+	self assert: result1 categoryName equals: 'Generated-UMLBootstrapTest-Package'.
 	self assert: result1 parent equals: generator rootClassName.
 	result2 := generator ensureCreateClass: 'GeneratedClassXXX' in: 'Package'.
 	self assert: result1 == result2 description: 'should be the same identity'
 ]
 
-{ #category : #'tests - selecting' }
+{ #category : 'tests - selecting' }
 OPUMLBootstrapGeneratorTest >> testGeneralizationsInClass [
 	| parent child |
 	parent := OPXMIObjectElement new
@@ -135,14 +117,14 @@ OPUMLBootstrapGeneratorTest >> testGeneralizationsInClass [
 		equals: {'Child' -> 'Parent'}
 ]
 
-{ #category : #'tests - generating' }
+{ #category : 'tests - generating' }
 OPUMLBootstrapGeneratorTest >> testGenerateAll [
 	| result |
 	result := generator generateAll.
 	self assert: result isNotEmpty
 ]
 
-{ #category : #'tests - retrieving' }
+{ #category : 'tests - retrieving' }
 OPUMLBootstrapGeneratorTest >> testTypeOfPrimitive [
 	self
 		assert:
@@ -155,7 +137,7 @@ OPUMLBootstrapGeneratorTest >> testTypeOfPrimitive [
 		equals: 'String'
 ]
 
-{ #category : #'tests - retrieving' }
+{ #category : 'tests - retrieving' }
 OPUMLBootstrapGeneratorTest >> testTypeOfReference [
 	self
 		assert:
@@ -168,20 +150,32 @@ OPUMLBootstrapGeneratorTest >> testTypeOfReference [
 		equals: 'Element'
 ]
 
-{ #category : #'tests - generating' }
+{ #category : 'tests - generating' }
 OPUMLBootstrapGeneratorTest >> testeCreateDelegationMethods [
+
 	| parent child |
-	parent := generator ensureCreateClass: 'GeneratedParentClass' in: 'Package'.
-	child := generator ensureCreateClass: 'GeneratedChildClass' in: 'Package'.
+	parent := generator
+		          ensureCreateClass: 'GeneratedParentClass'
+		          in: 'Package'.
+	child := generator
+		         ensureCreateClass: 'GeneratedChildClass'
+		         in: 'Package'.
 	parent addMethod: (CBMethod new getter: 'property').
-	parent addMethod: (CBMethod new setter: 'property' argument: 'Property').
-	generator createDelegationMethods: #(#(GeneratedParentClass)) for: #GeneratedChildClass.
+	parent addMethod:
+		(CBMethod new setter: 'property' argument: 'Property').
+	generator
+		createDelegationMethods: #( #( GeneratedParentClass ) )
+		for: #GeneratedChildClass.
 	self assert: child methods size equals: 2.
-	self assert: child methods first protocol equals: 'accessing - GeneratedParentClass'.
-	self assert: child methods second protocol equals: 'accessing - GeneratedParentClass'
+	self
+		assert: child methods first protocolName
+		equals: 'accessing - GeneratedParentClass'.
+	self
+		assert: child methods second protocolName
+		equals: 'accessing - GeneratedParentClass'
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 OPUMLBootstrapGeneratorTest >> xmiAssociation [
 	| s |
 	s := '<xmi>
@@ -201,7 +195,7 @@ OPUMLBootstrapGeneratorTest >> xmiAssociation [
 	^ OPXMIReader readFrom: s readStream
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 OPUMLBootstrapGeneratorTest >> xmiClassAttribute [
 	^ OPXMIObjectElement new
 		xmiName: 'ownedAttribute';
@@ -219,7 +213,7 @@ OPUMLBootstrapGeneratorTest >> xmiClassAttribute [
 						value: 'http://www.omg.org/spec/UML/20131001/PrimitiveTypes.xmi#String'}}
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 OPUMLBootstrapGeneratorTest >> xmiComplexElement [
 	^ OPXMIObjectElement new
 		xmiName: 'packagedElement';

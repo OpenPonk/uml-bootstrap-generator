@@ -1,44 +1,46 @@
 Class {
-	#name : #BootUMLDirectedRelationship,
-	#superclass : #OPUMLBootstrapObject,
+	#name : 'BootUMLDirectedRelationship',
+	#superclass : 'OPUMLBootstrapObject',
 	#instVars : [
 		'source',
 		'target'
 	],
-	#category : 'OP-UML-Bootstrap-CommonStructure'
+	#category : 'OP-UML-Bootstrap-CommonStructure',
+	#package : 'OP-UML-Bootstrap',
+	#tag : 'CommonStructure'
 }
 
-{ #category : #'accessing - Element' }
+{ #category : 'accessing - Element' }
 BootUMLDirectedRelationship >> comment [
 	^ (sharedGeneralizations at: #Element) comment
 ]
 
-{ #category : #'accessing - Element' }
+{ #category : 'accessing - Element' }
 BootUMLDirectedRelationship >> comment: aComment [
 	(sharedGeneralizations at: #Element) comment: aComment
 ]
 
-{ #category : #'accessing - Element' }
+{ #category : 'accessing - Element' }
 BootUMLDirectedRelationship >> constraint [
 	^ (sharedGeneralizations at: #Element) constraint
 ]
 
-{ #category : #'accessing - Element' }
+{ #category : 'accessing - Element' }
 BootUMLDirectedRelationship >> constraint: aConstraint [
 	(sharedGeneralizations at: #Element) constraint: aConstraint
 ]
 
-{ #category : #'accessing - Element' }
+{ #category : 'accessing - Element' }
 BootUMLDirectedRelationship >> directedRelationship [
 	^ (sharedGeneralizations at: #Element) directedRelationship
 ]
 
-{ #category : #'accessing - Element' }
+{ #category : 'accessing - Element' }
 BootUMLDirectedRelationship >> directedRelationship: aDirectedRelationship [
 	(sharedGeneralizations at: #Element) directedRelationship: aDirectedRelationship
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 BootUMLDirectedRelationship >> initialize [
 	super initialize.
 	sharedGeneralizations at: #Element put: (BootUMLElement newOnShared: sharedGeneralizations).
@@ -47,7 +49,7 @@ BootUMLDirectedRelationship >> initialize [
 
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 BootUMLDirectedRelationship >> initializeGeneralizations [
 	generalizations := {
 		sharedGeneralizations at: #Relationship.
@@ -55,72 +57,72 @@ BootUMLDirectedRelationship >> initializeGeneralizations [
 
 ]
 
-{ #category : #'accessing - Element' }
+{ #category : 'accessing - Element' }
 BootUMLDirectedRelationship >> ownedComment [
 	^ (sharedGeneralizations at: #Element) ownedComment
 ]
 
-{ #category : #'accessing - Element' }
+{ #category : 'accessing - Element' }
 BootUMLDirectedRelationship >> ownedComment: aComment [
 	(sharedGeneralizations at: #Element) ownedComment: aComment
 ]
 
-{ #category : #'accessing - Element' }
+{ #category : 'accessing - Element' }
 BootUMLDirectedRelationship >> ownedElement [
 	^ (sharedGeneralizations at: #Element) ownedElement
 ]
 
-{ #category : #'accessing - Element' }
+{ #category : 'accessing - Element' }
 BootUMLDirectedRelationship >> ownedElement: anElement [
 	(sharedGeneralizations at: #Element) ownedElement: anElement
 ]
 
-{ #category : #'accessing - Element' }
+{ #category : 'accessing - Element' }
 BootUMLDirectedRelationship >> owner [
 	^ (sharedGeneralizations at: #Element) owner
 ]
 
-{ #category : #'accessing - Element' }
+{ #category : 'accessing - Element' }
 BootUMLDirectedRelationship >> owner: anElement [
 	(sharedGeneralizations at: #Element) owner: anElement
 ]
 
-{ #category : #'accessing - Relationship' }
+{ #category : 'accessing - Relationship' }
 BootUMLDirectedRelationship >> relatedElement [
 	^ (sharedGeneralizations at: #Relationship) relatedElement
 ]
 
-{ #category : #'accessing - Relationship' }
+{ #category : 'accessing - Relationship' }
 BootUMLDirectedRelationship >> relatedElement: anElement [
 	(sharedGeneralizations at: #Relationship) relatedElement: anElement
 ]
 
-{ #category : #'accessing - Element' }
+{ #category : 'accessing - Element' }
 BootUMLDirectedRelationship >> relationship [
 	^ (sharedGeneralizations at: #Element) relationship
 ]
 
-{ #category : #'accessing - Element' }
+{ #category : 'accessing - Element' }
 BootUMLDirectedRelationship >> relationship: aRelationship [
 	(sharedGeneralizations at: #Element) relationship: aRelationship
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BootUMLDirectedRelationship >> source [
 	^ source
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BootUMLDirectedRelationship >> source: anElement [
 	source := anElement
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BootUMLDirectedRelationship >> target [
 	^ target
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BootUMLDirectedRelationship >> target: anElement [
 	target := anElement
 ]

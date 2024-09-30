@@ -1,15 +1,17 @@
 Class {
-	#name : #OPUMLBootstrapGetterMethodBuilder,
-	#superclass : #Object,
+	#name : 'OPUMLBootstrapGetterMethodBuilder',
+	#superclass : 'Object',
 	#instVars : [
 		'selector',
 		'comment',
 		'defaultValue'
 	],
-	#category : 'OP-UML-BootstrapGenerator-Utilities'
+	#category : 'OP-UML-BootstrapGenerator-Utilities',
+	#package : 'OP-UML-BootstrapGenerator',
+	#tag : 'Utilities'
 }
 
-{ #category : #building }
+{ #category : 'building' }
 OPUMLBootstrapGetterMethodBuilder >> build [
 	| source |
 	source := String
@@ -22,21 +24,21 @@ OPUMLBootstrapGetterMethodBuilder >> build [
 			defaultValue
 				ifNotNil: [ stream nextPutAll: ' ifNil: [ ' , selector , ' := ' , defaultValue asString , ' ]' ] ].
 	^ CBMethod new
-		protocol: 'accessing';
+		protocolName: 'accessing';
 		source: source
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OPUMLBootstrapGetterMethodBuilder >> comment: anObject [
 	comment := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OPUMLBootstrapGetterMethodBuilder >> defaultValue: anObject [
 	defaultValue := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OPUMLBootstrapGetterMethodBuilder >> selector: anObject [
 	selector := anObject
 ]

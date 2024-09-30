@@ -1,20 +1,22 @@
 Class {
-	#name : #OPUMLMetamodelTestParentElement,
-	#superclass : #OPUMLMetamodelElementTemplate,
-	#category : 'OP-UML-BootstrapGenerator-Tests'
+	#name : 'OPUMLMetamodelTestParentElement',
+	#superclass : 'OPUMLMetamodelElementTemplate',
+	#category : 'OP-UML-BootstrapGenerator-Tests',
+	#package : 'OP-UML-BootstrapGenerator',
+	#tag : 'Tests'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OPUMLMetamodelTestParentElement >> fromParent [
 	^ 12
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 OPUMLMetamodelTestParentElement >> initializeDirectGeneralizations [
 	directGeneralizations := {}
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 OPUMLMetamodelTestParentElement >> initializeSharedGeneralizations [
 	sharedGeneralizations at: #MetamodelTestParentElement put: self
 ]

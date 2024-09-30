@@ -1,10 +1,12 @@
 Class {
-	#name : #OPUMLMetamodelGeneratorTemplates,
-	#superclass : #Object,
-	#category : 'OP-UML-BootstrapGenerator-Templates'
+	#name : 'OPUMLMetamodelGeneratorTemplates',
+	#superclass : 'Object',
+	#category : 'OP-UML-BootstrapGenerator-Templates',
+	#package : 'OP-UML-BootstrapGenerator',
+	#tag : 'Templates'
 }
 
-{ #category : #'structure accessing' }
+{ #category : 'structure accessing' }
 OPUMLMetamodelGeneratorTemplates >> methodBehaviorFor: anOperation from: aDictionaryOfSources [
 	(aDictionaryOfSources includesKey: anOperation name)
 		ifFalse: [ ^ nil ].
@@ -14,7 +16,7 @@ OPUMLMetamodelGeneratorTemplates >> methodBehaviorFor: anOperation from: aDictio
 		language: #(Pharo)
 ]
 
-{ #category : #'structure accessing' }
+{ #category : 'structure accessing' }
 OPUMLMetamodelGeneratorTemplates >> methodsFor: anOperation inClassNamed: aClassName [
 	| methodBehavior |
 	(self supportsClass: aClassName)
@@ -25,17 +27,17 @@ OPUMLMetamodelGeneratorTemplates >> methodsFor: anOperation inClassNamed: aClass
 	^ methodBehavior ifNil: [ #() ] ifNotNil: [ {methodBehavior} ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OPUMLMetamodelGeneratorTemplates >> supportedClasses [
 	^ (self class selectorsInProtocol: 'templates') collect: #capitalized
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 OPUMLMetamodelGeneratorTemplates >> supportsClass: aClassName [
 	^ (self class selectorsInProtocol: 'templates') includes: aClassName uncapitalized
 ]
 
-{ #category : #templates }
+{ #category : 'templates' }
 OPUMLMetamodelGeneratorTemplates >> useMethodPerAccessor [
 	^ (self class methodsInProtocol: #implementation)
 		collect: [ :method | 

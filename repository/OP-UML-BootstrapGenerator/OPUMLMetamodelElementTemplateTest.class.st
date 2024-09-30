@@ -1,10 +1,34 @@
 Class {
-	#name : #OPUMLMetamodelElementTemplateTest,
-	#superclass : #TestCase,
-	#category : 'OP-UML-BootstrapGenerator-Tests'
+	#name : 'OPUMLMetamodelElementTemplateTest',
+	#superclass : 'TestCase',
+	#category : 'OP-UML-BootstrapGenerator-Tests',
+	#package : 'OP-UML-BootstrapGenerator',
+	#tag : 'Tests'
 }
 
-{ #category : #tests }
+{ #category : 'running' }
+OPUMLMetamodelElementTemplateTest >> setUp [
+
+	| generator metaElementClassName |
+	super setUp.
+
+	generator := OPUMLMetamodelGenerator newDefault.
+	metaElementClassName := generator classNameFor:
+		                        generator metaElementName.
+
+	(Smalltalk globals includesKey: metaElementClassName) ifTrue: [
+		^ self ].
+
+	Object classInstaller make: [ :builder |
+		builder
+			superclass: Object;
+			name: metaElementClassName asSymbol;
+			package: generator packageName;
+			tag: generator metaTag;
+			environment: Object environment ]
+]
+
+{ #category : 'tests' }
 OPUMLMetamodelElementTemplateTest >> testAddTag [
 	| el |
 	el := OPUMLMetamodelTestChildElement new.
@@ -13,7 +37,7 @@ OPUMLMetamodelElementTemplateTest >> testAddTag [
 	self assert: (el hasTagAt: 'key')
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 OPUMLMetamodelElementTemplateTest >> testInspectorProperties [
 	self
 		assert: OPUMLMetamodelTestChildElement new inspectorProperties
@@ -24,7 +48,7 @@ OPUMLMetamodelElementTemplateTest >> testInspectorProperties [
 			#operation -> #operation}
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 OPUMLMetamodelElementTemplateTest >> testNonEmptyInspectorProperties [
 	self
 		assert: OPUMLMetamodelTestChildElement new nonEmptyinspectorProperties
@@ -33,7 +57,7 @@ OPUMLMetamodelElementTemplateTest >> testNonEmptyInspectorProperties [
 			#operation -> #operation}
 ]
 
-{ #category : #'tests  - ocl-experimental' }
+{ #category : 'tests  - ocl-experimental' }
 OPUMLMetamodelElementTemplateTest >> testOclAsType [
 	| el |
 	el := OPUMLMetamodelTestChildElement new.
@@ -42,35 +66,35 @@ OPUMLMetamodelElementTemplateTest >> testOclAsType [
 		equals: OPUMLMetamodelTestParentElement
 ]
 
-{ #category : #'tests  - ocl-experimental' }
+{ #category : 'tests  - ocl-experimental' }
 OPUMLMetamodelElementTemplateTest >> testOclIsKindOf [
 	| el |
 	el := OPUMLMetamodelTestChildElement new.
 	self assert: (el oclIsKindOf: 'MetamodelTestChildElement')
 ]
 
-{ #category : #'tests  - ocl-experimental' }
+{ #category : 'tests  - ocl-experimental' }
 OPUMLMetamodelElementTemplateTest >> testOclIsKindOfParent [
 	| el |
 	el := OPUMLMetamodelTestChildElement new.
 	self assert: (el oclIsKindOf: 'MetamodelTestParentElement')
 ]
 
-{ #category : #'tests  - ocl-experimental' }
+{ #category : 'tests  - ocl-experimental' }
 OPUMLMetamodelElementTemplateTest >> testOclIsTypeOf [
 	| el |
 	el := OPUMLMetamodelTestChildElement new.
 	self assert: (el oclIsTypeOf: 'MetamodelTestChildElement')
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 OPUMLMetamodelElementTemplateTest >> testPresentedSelectors [
 	self
 		assert: OPUMLMetamodelTestChildElement new inspectorPropertiesSelectors sorted
 		equals: #(fromParent emptyValue nilValue operation) sorted
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 OPUMLMetamodelElementTemplateTest >> testRemoveTag [
 	| el |
 	el := OPUMLMetamodelTestChildElement new.
@@ -79,7 +103,7 @@ OPUMLMetamodelElementTemplateTest >> testRemoveTag [
 	self deny: (el hasTagAt: 'key')
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 OPUMLMetamodelElementTemplateTest >> testRetrieveTag [
 	| el |
 	el := OPUMLMetamodelTestChildElement new.

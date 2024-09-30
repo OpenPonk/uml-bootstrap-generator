@@ -1,20 +1,22 @@
 Class {
-	#name : #OPUMLMetamodelTestChildElement,
-	#superclass : #OPUMLMetamodelTestParentElement,
-	#category : 'OP-UML-BootstrapGenerator-Tests'
+	#name : 'OPUMLMetamodelTestChildElement',
+	#superclass : 'OPUMLMetamodelTestParentElement',
+	#category : 'OP-UML-BootstrapGenerator-Tests',
+	#package : 'OP-UML-BootstrapGenerator',
+	#tag : 'Tests'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OPUMLMetamodelTestChildElement >> emptyValue [
 	^ #()
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 OPUMLMetamodelTestChildElement >> initializeDirectGeneralizations [
 	directGeneralizations := {sharedGeneralizations at: #MetamodelTestParentElement}
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 OPUMLMetamodelTestChildElement >> initializeSharedGeneralizations [
 	sharedGeneralizations
 		at: #MetamodelTestParentElement
@@ -22,12 +24,12 @@ OPUMLMetamodelTestChildElement >> initializeSharedGeneralizations [
 	sharedGeneralizations at: #MetamodelTestChildElement put: self
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OPUMLMetamodelTestChildElement >> nilValue [
 	^ nil
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OPUMLMetamodelTestChildElement >> operation [
 	^ #operation
 ]
