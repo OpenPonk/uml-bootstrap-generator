@@ -634,7 +634,7 @@ OPUMLMetamodelGeneratorTest >> testCreateElementMetaInstanceMethods [
 	self
 		assert: (cls methods collect: #selector) sorted
 		equals:
-			#( #announcer #announcer: #appliedStereotypes #applyStereotype:
+			#( #announcer #appliedStereotypes #applyStereotype:
 			   #hasTagAt: #identity #initialize #initializeDirectGeneralizations
 			   #initializeSharedGeneralizations
 			   #initializeWithShared: #inspectionAllProperties

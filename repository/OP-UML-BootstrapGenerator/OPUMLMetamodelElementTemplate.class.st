@@ -28,11 +28,6 @@ OPUMLMetamodelElementTemplate >> announcer [
 	^ announcer ifNil: [ announcer := Announcer new ]
 ]
 
-{ #category : 'accessing' }
-OPUMLMetamodelElementTemplate >> announcer: anAnnouncer [
-	announcer := anAnnouncer
-]
-
 { #category : 'accessing - stereotypes' }
 OPUMLMetamodelElementTemplate >> appliedStereotypes [
 	^ self tags at: #appliedStereotypes ifAbsentPut: [ OrderedCollection new ]
