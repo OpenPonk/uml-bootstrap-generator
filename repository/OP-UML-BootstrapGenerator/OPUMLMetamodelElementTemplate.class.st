@@ -44,6 +44,27 @@ OPUMLMetamodelElementTemplate >> applyStereotype: aStereotype [
 		with: aStereotype
 ]
 
+{ #category : 'printing' }
+OPUMLMetamodelElementTemplate >> generateprintAsClassifierNameOn: aStream [
+
+	aStream << (self oclClassifierNameFrom: self class).
+	(self class selectors includes: #name) ifTrue: [
+		aStream
+			<< '(';
+			<< self name printString;
+			<< ')' ]
+]
+
+{ #category : 'printing' }
+OPUMLMetamodelElementTemplate >> generateprintOn: aStream [
+	super printOn: aStream.
+	(self class selectors includes: #name)
+		ifTrue: [ aStream
+				<< '(';
+				<< self name printString;
+				<< ')' ]
+]
+
 { #category : 'accessing - tags' }
 OPUMLMetamodelElementTemplate >> hasTagAt: aKey [
 	^ tags includesKey: aKey
@@ -199,16 +220,6 @@ OPUMLMetamodelElementTemplate >> oclIsKindOf: aClassifier [
 OPUMLMetamodelElementTemplate >> oclIsTypeOf: aClassifier [
 
 	^ sharedGeneralizations keys last = (self oclClassifierNameFrom: aClassifier)
-]
-
-{ #category : 'printing' }
-OPUMLMetamodelElementTemplate >> printOn: aStream [
-	super printOn: aStream.
-	(self class selectors includes: #name)
-		ifTrue: [ aStream
-				<< '(';
-				<< self name printString;
-				<< ')' ]
 ]
 
 { #category : 'accessing - tags' }

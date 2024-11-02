@@ -632,8 +632,8 @@ OPUMLMetamodelGeneratorTest >> testCreateElementMetaInstanceMethods [
 	| cls |
 	cls := generator createElementMeta.
 	self
-		assert: (cls methods collect: #selector) sorted
-		equals:
+		assertCollection: (cls methods collect: #selector) 
+		hasSameElements:
 			#( #announcer #appliedStereotypes #applyStereotype:
 			   #hasTagAt: #identity #initialize #initializeDirectGeneralizations
 			   #initializeSharedGeneralizations
@@ -641,7 +641,7 @@ OPUMLMetamodelGeneratorTest >> testCreateElementMetaInstanceMethods [
 			   #inspectionProperties #inspectionStereotypes
 			   #inspectionTags #inspectorProperties #inspectorPropertiesSelectors
 			   #nonEmptyinspectorProperties #oclAsType: #oclClassifierNameFrom:
-			   #oclIsKindOf: #oclIsTypeOf: #printOn: #removeTagAt:
+			   #oclIsKindOf: #oclIsTypeOf: #printAsClassifierNameOn: #printOn: #removeTagAt:
 			   #tagAt: #tagAt:put: #tags #umlClassName #umlMetaClass
 			   #unapplyStereotype: #uuid #uuid: ) sorted.
 	self

@@ -62,6 +62,21 @@ BootUMLGeneralization >> generalizationSet: aGeneralizationSet [
 	generalizationSet := aGeneralizationSet
 ]
 
+{ #category : 'printing' }
+BootUMLGeneralization >> generatedprintOn: aStream [
+
+	super printOn: aStream.
+	aStream << '('.
+	self specific
+		ifNil: [ aStream << 'nil' ]
+		ifNotNil: [ :element | element printAsClassifierNameOn: aStream ].
+	aStream << ' -> '.
+	self general
+		ifNil: [ aStream << 'nil' ]
+		ifNotNil: [ :element | element printAsClassifierNameOn: aStream ].
+	aStream << ')'
+]
+
 { #category : 'initialization' }
 BootUMLGeneralization >> initialize [
 	super initialize.

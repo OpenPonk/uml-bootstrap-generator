@@ -350,6 +350,20 @@ OPUMLMetamodelGenerator >> attributeNameFor: anAttributeModel [
 	^ name
 ]
 
+{ #category : 'generating - meta' }
+OPUMLMetamodelGenerator >> cbMethodFrom: aMethod [
+
+	| generatePrefix sourceCode |
+	generatePrefix := 'generate'.
+	sourceCode := aMethod sourceCode.
+	(sourceCode beginsWith: generatePrefix) ifTrue: [
+		sourceCode := sourceCode allButFirst: generatePrefix size ].
+
+	^ CBMethod new
+		  source: sourceCode;
+		  protocolName: aMethod protocolName
+]
+
 { #category : 'changes' }
 OPUMLMetamodelGenerator >> changes [
 	| changeSet |
@@ -416,13 +430,9 @@ OPUMLMetamodelGenerator >> createElementMeta [
 	sourceClass class instVarNames do: [ :each |
 		cls addMetaInstVarNamed: each ].
 	sourceClass methods do: [ :each |
-		cls addMethod: (CBMethod new
-				 source: each sourceCode;
-				 protocolName: each protocolName) ].
+		cls addMethod: (self cbMethodFrom: each) ].
 	sourceClass class methods do: [ :each |
-		cls addMetaMethod: (CBMethod new
-				 source: each sourceCode;
-				 protocolName: each protocolName) ].
+		cls addMetaMethod: (self cbMethodFrom: each) ].
 	^ cls
 ]
 

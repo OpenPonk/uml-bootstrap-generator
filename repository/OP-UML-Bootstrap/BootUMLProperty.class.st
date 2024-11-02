@@ -167,6 +167,18 @@ BootUMLProperty >> featuringClassifier: aClassifier [
 	(sharedGeneralizations at: #Feature) featuringClassifier: aClassifier
 ]
 
+{ #category : 'printing' }
+BootUMLProperty >> generatedprintOn: aStream [
+
+	aStream << 'an ' << self class name << '('.
+	self name ifNotNil: [ :existingName |
+		existingName ifNotEmpty: [
+			aStream << existingName.
+			self type ifNotNil: [ aStream << ': ' ] ] ].
+	self type ifNotNil: [ :type | type printAsClassifierNameOn: aStream ].
+	aStream << ')'
+]
+
 { #category : 'accessing - NamedElement' }
 BootUMLProperty >> inheritingClassifier [
 	^ (sharedGeneralizations at: #NamedElement) inheritingClassifier
