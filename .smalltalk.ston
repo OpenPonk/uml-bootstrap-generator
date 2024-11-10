@@ -4,18 +4,18 @@ SmalltalkCISpec {
 			#platforms : [
 				#pharo
 			],
-			#baseline : 'UMLBootstrapGenerator',
+			#baseline : 'OpenPonkUMLBootstrapGenerator',
 			#directory : 'repository'
 		}
 	],
 	#testing : {
+		#packages : [
+			'OpenPonk*'
+		],
 		#coverage : {
 			#packages : [
-				'OP-UML-BootstrapGenerator'
+				'OpenPonk-UML-BootstrapGenerator'
 			]
-		},
-		#packages : [
-			'OP-UML-BootstrapGenerator'
-		]
+		}
 	}
 }
