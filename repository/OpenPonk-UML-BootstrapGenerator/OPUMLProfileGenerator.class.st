@@ -51,7 +51,7 @@ OPUMLProfileGenerator >> addAccessingDelegationMethodsFrom: aClassModel to: aCla
 			methods
 				do: [ :method | 
 					| delegateMethod node |
-					node := RBParser parseMethod: method source lines first.
+					node := OCParser parseMethod: method source lines first.
 					delegateMethod := node numArgs = 0
 						ifTrue: [ CBMethod new
 								getter: node selector
@@ -240,7 +240,7 @@ OPUMLProfileGenerator >> addOperationsDelegationMethodsFrom: aClassModel to: aCl
 					           (method selector withoutSuffix: ':') asSymbol ] ].
 		methods do: [ :method |
 			| delegateMethod node |
-			node := RBParser parseMethod: method source lines first.
+			node := OCParser parseMethod: method source lines first.
 			delegateMethod := CBMethod new
 				                  getter: node selector
 				                  delegateFrom: '(sharedGeneralizations at: #'
@@ -451,7 +451,7 @@ OPUMLProfileGenerator >> createProfileFactory [
 				 source: 'xmi
 	^ 
 ''' , (OPUMLXMIWriter toString: self sourceModel) , '''';
-				 protocol: 'accessing').
+				 protocolName: 'accessing').
 	^ cls
 ]
 

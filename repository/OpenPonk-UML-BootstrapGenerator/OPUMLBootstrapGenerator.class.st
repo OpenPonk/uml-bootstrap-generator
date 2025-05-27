@@ -151,7 +151,7 @@ OPUMLBootstrapGenerator >> createDelegationMethods: aCollectionOfLayers for: aCl
 			select: [ :method | method protocolName = 'accessing' ]
 			thenDo: [ :method |
 				| delegateMethod node |
-				node := RBParser parseMethod: method source lines first.
+				node := OCParser parseMethod: method source lines first.
 				delegateMethod := node numArgs = 0
 					                  ifTrue: [
 						                  CBMethod new

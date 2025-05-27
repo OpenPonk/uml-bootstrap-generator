@@ -45,11 +45,11 @@ OPUMLBootstrapObject >> initializeWithShared: aDictionary [
 	self initializeGeneralizations
 ]
 
-{ #category : 'GTInspector - extensions' }
-OPUMLBootstrapObject >> inspectionAllProperties [
+{ #category : 'as yet unclassified' }
+OPUMLBootstrapObject >> inspectionAllProperties: aBuilder [
 
 	<inspectorPresentationOrder: 6 title: 'Properties (All)'>
-	^ SpTablePresenter new
+	^ aBuilder newTree
 		  beResizable;
 		  items:
 			  ((self class methods sorted: [ :a :b | a selector < b selector ])
@@ -57,8 +57,8 @@ OPUMLBootstrapObject >> inspectionAllProperties [
 					   (each protocolName beginsWith: 'accessing') and: [
 							   each numArgs = 0 ] ]
 				   thenCollect: [ :each |
-					   StInspectorAssociationNode hostObject:
-							   each selector -> (self perform: each selector) ]);
+						   StInspectorAssociationNode hostObject:
+								   each selector -> (self perform: each selector) ]);
 		  addColumn: (SpStringTableColumn new
 				   title: 'Name';
 				   evaluated: #key;
@@ -70,11 +70,11 @@ OPUMLBootstrapObject >> inspectionAllProperties [
 		  yourself
 ]
 
-{ #category : 'GTInspector - extensions' }
-OPUMLBootstrapObject >> inspectionProperties [
+{ #category : 'as yet unclassified' }
+OPUMLBootstrapObject >> inspectionProperties: aBuilder [
 
 	<inspectorPresentationOrder: 5 title: 'Properties'>
-	^ SpTablePresenter new
+	^ aBuilder newTable
 		  beResizable;
 		  items:
 			  (((self class methods sorted: [ :a :b | a selector < b selector ])

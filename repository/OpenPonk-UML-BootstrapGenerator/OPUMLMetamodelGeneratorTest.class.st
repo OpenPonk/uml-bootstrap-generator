@@ -30,8 +30,8 @@ OPUMLMetamodelGeneratorTest class >> umlBootstrapModel [
 { #category : 'asserting' }
 OPUMLMetamodelGeneratorTest >> assertMethod: actualCode equals: expectedCode [
 	self
-		assert: (RBParser parseMethod: actualCode) formattedCode withUnixLineEndings
-		equals: (RBParser parseMethod: expectedCode) formattedCode withUnixLineEndings
+		assert: (OCParser parseMethod: actualCode) formattedCode withUnixLineEndings
+		equals: (OCParser parseMethod: expectedCode) formattedCode withUnixLineEndings
 ]
 
 { #category : 'accessing' }

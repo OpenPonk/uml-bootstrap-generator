@@ -61,7 +61,7 @@ OPUMLMetamodelGenerator >> addAccessingDelegationMethodsFrom: aClassModel to: aC
 			methods
 				do: [ :method | 
 					| delegateMethod node |
-					node := RBParser parseMethod: method source lines first.
+					node := OCParser parseMethod: method source lines first.
 					delegateMethod := node numArgs = 0
 						ifTrue: [ CBMethod new
 								getter: node selector
@@ -247,7 +247,7 @@ OPUMLMetamodelGenerator >> addOperationsDelegationMethodsFrom: aClassModel to: a
 					           (method selector withoutSuffix: ':') asSymbol ] ].
 		methods do: [ :method |
 			| delegateMethod node |
-			node := RBParser parseMethod: method source lines first.
+			node := OCParser parseMethod: method source lines first.
 			delegateMethod := CBMethod new
 				                  getter: node selector
 				                  delegateFrom: '(sharedGeneralizations at: #'

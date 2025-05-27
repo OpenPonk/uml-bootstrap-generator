@@ -101,11 +101,11 @@ OPUMLMetamodelElementTemplate >> initializeWithShared: aDictionary [
 	self initializeDirectGeneralizations
 ]
 
-{ #category : 'GTInspector - extensions' }
-OPUMLMetamodelElementTemplate >> inspectionAllProperties [
+{ #category : 'as yet unclassified' }
+OPUMLMetamodelElementTemplate >> inspectionAllProperties: aBuilder [
 
 	<inspectorPresentationOrder: 6 title: 'Properties (All)'>
-	^ SpTablePresenter new
+	^ aBuilder newTable
 		  beResizable;
 		  items: (self inspectorProperties sorted collect: [ :e |
 					   StInspectorAssociationNode hostObject: e ]);
@@ -120,11 +120,11 @@ OPUMLMetamodelElementTemplate >> inspectionAllProperties [
 		  yourself
 ]
 
-{ #category : 'GTInspector - extensions' }
-OPUMLMetamodelElementTemplate >> inspectionProperties [
+{ #category : 'as yet unclassified' }
+OPUMLMetamodelElementTemplate >> inspectionProperties: aBuilder [
 
 	<inspectorPresentationOrder: 5 title: 'Properties'>
-	^ SpTablePresenter new
+	^ aBuilder newTable
 		  beResizable;
 		  items: (self nonEmptyinspectorProperties sorted collect: [ :e |
 					   StInspectorAssociationNode hostObject: e ]);
@@ -139,21 +139,21 @@ OPUMLMetamodelElementTemplate >> inspectionProperties [
 		  yourself
 ]
 
-{ #category : 'GTInspector - extensions' }
-OPUMLMetamodelElementTemplate >> inspectionStereotypes [
+{ #category : 'as yet unclassified' }
+OPUMLMetamodelElementTemplate >> inspectionStereotypes: aBuilder [
 
 	<inspectorPresentationOrder: 7 title: 'Stereotypes'>
-	^ SpListPresenter new
+	^ aBuilder newList
 		  items: (self appliedStereotypes sorted: [ :a :b |
 					   a umlClassName < b umlClassName ]);
 		  yourself
 ]
 
-{ #category : 'GTInspector - extensions' }
-OPUMLMetamodelElementTemplate >> inspectionTags [
+{ #category : 'as yet unclassified' }
+OPUMLMetamodelElementTemplate >> inspectionTags: aBuilder [
 
 	<inspectorPresentationOrder: 7 title: 'Tags'>
-	^ SpTablePresenter new
+	^ aBuilder newTable
 		  beResizable;
 		  items: (self tags associations sorted collect: [ :e |
 					   StInspectorAssociationNode hostObject: e ]);
