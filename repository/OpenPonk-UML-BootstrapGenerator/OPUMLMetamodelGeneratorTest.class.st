@@ -632,18 +632,18 @@ OPUMLMetamodelGeneratorTest >> testCreateElementMetaInstanceMethods [
 	| cls |
 	cls := generator createElementMeta.
 	self
-		assertCollection: (cls methods collect: #selector) 
+		assertCollection: (cls methods collect: #selector)
 		hasSameElements:
 			#( #announcer #appliedStereotypes #applyStereotype:
 			   #hasTagAt: #identity #initialize #initializeDirectGeneralizations
 			   #initializeSharedGeneralizations
-			   #initializeWithShared: #inspectionAllProperties
-			   #inspectionProperties #inspectionStereotypes
-			   #inspectionTags #inspectorProperties #inspectorPropertiesSelectors
+			   #initializeWithShared: #inspectionAllProperties:
+			   #inspectionProperties: #inspectionStereotypes:
+			   #inspectionTags: #inspectorProperties #inspectorPropertiesSelectors
 			   #nonEmptyinspectorProperties #oclAsType: #oclClassifierNameFrom:
-			   #oclIsKindOf: #oclIsTypeOf: #printAsClassifierNameOn: #printOn: #removeTagAt:
-			   #tagAt: #tagAt:put: #tags #umlClassName #umlMetaClass
-			   #unapplyStereotype: #uuid #uuid: ) sorted.
+			   #oclIsKindOf: #oclIsTypeOf: #printAsClassifierNameOn:
+			   #printOn: #removeTagAt: #tagAt: #tagAt:put: #tags #umlClassName
+			   #umlMetaClass #unapplyStereotype: #uuid #uuid: ) sorted.
 	self
 		assert: (cls methodNamed: #initialize) protocolName
 		equals: 'initialization'

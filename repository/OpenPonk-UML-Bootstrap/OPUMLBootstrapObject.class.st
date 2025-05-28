@@ -45,11 +45,11 @@ OPUMLBootstrapObject >> initializeWithShared: aDictionary [
 	self initializeGeneralizations
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'inspecting' }
 OPUMLBootstrapObject >> inspectionAllProperties: aBuilder [
 
 	<inspectorPresentationOrder: 6 title: 'Properties (All)'>
-	^ aBuilder newTree
+	^ aBuilder newTable
 		  beResizable;
 		  items:
 			  ((self class methods sorted: [ :a :b | a selector < b selector ])
@@ -70,7 +70,7 @@ OPUMLBootstrapObject >> inspectionAllProperties: aBuilder [
 		  yourself
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'inspecting' }
 OPUMLBootstrapObject >> inspectionProperties: aBuilder [
 
 	<inspectorPresentationOrder: 5 title: 'Properties'>
