@@ -1,3 +1,6 @@
+"
+I am a unit test class verifying that the template injection system accurately identifies supported classes and extracts the correct methods to be injected.
+"
 Class {
 	#name : 'OPUMLMetaGenTemplateTest',
 	#superclass : 'TestCase',

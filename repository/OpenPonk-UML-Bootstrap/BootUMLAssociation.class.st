@@ -1,3 +1,6 @@
+"
+I represent a UML Association. I manage the structural relationship between classifiers, including member ends, ownership, navigability, and associated generalizations.
+"
 Class {
 	#name : 'BootUMLAssociation',
 	#superclass : 'OPUMLBootstrapObject',

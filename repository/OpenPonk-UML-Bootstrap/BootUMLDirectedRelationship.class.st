@@ -1,3 +1,6 @@
+"
+I represent a UML DirectedRelationship. I explicitly track a source element and a target element in a unidirectional or directed relationship.
+"
 Class {
 	#name : 'BootUMLDirectedRelationship',
 	#superclass : 'OPUMLBootstrapObject',

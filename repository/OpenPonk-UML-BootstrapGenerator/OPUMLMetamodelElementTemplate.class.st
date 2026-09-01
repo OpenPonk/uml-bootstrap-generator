@@ -1,5 +1,5 @@
 "
-I am a template implementation for UML Element handling things like multiple inheritance and whatnot.
+I serve as a template defining the core behaviors and properties (such as UUIDs, stereotypes, and OCL-like type querying via `oclIsKindOf:`) that will be injected into every generated UML metamodel element.
 "
 Class {
 	#name : 'OPUMLMetamodelElementTemplate',
@@ -7,7 +7,6 @@ Class {
 	#instVars : [
 		'sharedGeneralizations',
 		'directGeneralizations',
-		'announcer',
 		'uuid',
 		'tags'
 	],
@@ -21,11 +20,6 @@ OPUMLMetamodelElementTemplate class >> newOnShared: aDictionary [
 	^ self basicNew
 		initializeWithShared: aDictionary;
 		yourself
-]
-
-{ #category : 'accessing' }
-OPUMLMetamodelElementTemplate >> announcer [
-	^ announcer ifNil: [ announcer := Announcer new ]
 ]
 
 { #category : 'accessing - stereotypes' }
@@ -48,18 +42,19 @@ OPUMLMetamodelElementTemplate >> applyStereotype: aStereotype [
 OPUMLMetamodelElementTemplate >> generateprintAsClassifierNameOn: aStream [
 
 	aStream << (self oclClassifierNameFrom: self class).
-	(self class selectors includes: #name) ifTrue: [
-		aStream
-			<< '(';
-			<< self name printString;
-			<< ')' ]
+	(self respondsTo: #name) ifTrue: [
+			aStream
+				<< '(';
+				<< self name printString;
+				<< ')' ]
 ]
 
 { #category : 'printing' }
 OPUMLMetamodelElementTemplate >> generateprintOn: aStream [
+
 	super printOn: aStream.
-	(self class selectors includes: #name)
-		ifTrue: [ aStream
+	(self respondsTo: #name) ifTrue: [
+			aStream
 				<< '(';
 				<< self name printString;
 				<< ')' ]
@@ -101,7 +96,7 @@ OPUMLMetamodelElementTemplate >> initializeWithShared: aDictionary [
 	self initializeDirectGeneralizations
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'inspecting' }
 OPUMLMetamodelElementTemplate >> inspectionAllProperties: aBuilder [
 
 	<inspectorPresentationOrder: 6 title: 'Properties (All)'>
@@ -120,7 +115,26 @@ OPUMLMetamodelElementTemplate >> inspectionAllProperties: aBuilder [
 		  yourself
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'inspecting' }
+OPUMLMetamodelElementTemplate >> inspectionGeneralizations: aBuilder [
+
+	<inspectorPresentationOrder: 8 title: 'Generalizations'>
+	^ aBuilder newTable
+		  beResizable;
+		  items: (sharedGeneralizations associations sorted collect: [ :e |
+					   StInspectorAssociationNode hostObject: e ]);
+		  addColumn: (SpStringTableColumn new
+				   title: 'Name';
+				   evaluated: #key;
+				   yourself);
+		  addColumn: (SpStringTableColumn new
+				   title: 'Value';
+				   evaluated: #value;
+				   yourself);
+		  yourself
+]
+
+{ #category : 'inspecting' }
 OPUMLMetamodelElementTemplate >> inspectionProperties: aBuilder [
 
 	<inspectorPresentationOrder: 5 title: 'Properties'>
@@ -139,17 +153,40 @@ OPUMLMetamodelElementTemplate >> inspectionProperties: aBuilder [
 		  yourself
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'inspecting' }
+OPUMLMetamodelElementTemplate >> inspectionStereotypeProperties: aBuilder [
+
+	<inspectorPresentationOrder: 7 title: 'Tagged Values'>
+	^ aBuilder newTable
+		  beResizable;
+		  items:
+			  (self stereotypeProperties sorted: [ :a :b | a first < b first ]);
+		  addColumn: (SpStringTableColumn new
+				   title: 'Name';
+				   evaluated: #first;
+				   yourself);
+		  addColumn: (SpStringTableColumn new
+				   title: 'Stereotype';
+				   evaluated: #second;
+				   yourself);
+		  addColumn: (SpStringTableColumn new
+				   title: 'Value';
+				   evaluated: #third;
+				   yourself);
+		  yourself
+]
+
+{ #category : 'inspecting' }
 OPUMLMetamodelElementTemplate >> inspectionStereotypes: aBuilder [
 
 	<inspectorPresentationOrder: 7 title: 'Stereotypes'>
 	^ aBuilder newList
-		  items: (self appliedStereotypes sorted: [ :a :b |
+		  items: (self appliedStereotypes sorted: [ :a :b | 
 					   a umlClassName < b umlClassName ]);
 		  yourself
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'inspecting' }
 OPUMLMetamodelElementTemplate >> inspectionTags: aBuilder [
 
 	<inspectorPresentationOrder: 7 title: 'Tags'>
@@ -168,24 +205,27 @@ OPUMLMetamodelElementTemplate >> inspectionTags: aBuilder [
 		  yourself
 ]
 
-{ #category : 'GTInspector - extensions' }
+{ #category : 'inspecting' }
 OPUMLMetamodelElementTemplate >> inspectorProperties [
 	^ self inspectorPropertiesSelectors collect: [ :each | each -> (self perform: each) ]
 ]
 
-{ #category : 'GTInspector - extensions' }
+{ #category : 'inspecting' }
 OPUMLMetamodelElementTemplate >> inspectorPropertiesSelectors [
+
 	| classes class |
 	classes := Set new.
 	class := self class.
-	[ class superclass name = 'Object' ]
-		whileFalse: [ classes add: class.
+	[ class superclass name = 'Object' ] whileFalse: [
+			classes add: class.
 			class := class superclass ].
-	^ ((((classes flatCollect: #methods) select: [ :each | each numArgs = 0 ])
-		select: [ :each | each protocolName beginsWith: 'accessing' ]) collect: #selector) sorted
+	^ ((((classes flatCollect: #methods) select: [ :each |
+		     each numArgs = 0 ]) select: [ :each |
+		    each protocolName beginsWith: 'accessing' ]) collect: #selector)
+		  sorted
 ]
 
-{ #category : 'GTInspector - extensions' }
+{ #category : 'inspecting' }
 OPUMLMetamodelElementTemplate >> nonEmptyinspectorProperties [
 	^ self inspectorProperties
 		reject: [ :pair | pair value isNil or: [ pair value isCollection and: [ pair value isEmpty ] ] ]
@@ -225,6 +265,22 @@ OPUMLMetamodelElementTemplate >> oclIsTypeOf: aClassifier [
 { #category : 'accessing - tags' }
 OPUMLMetamodelElementTemplate >> removeTagAt: aKey [
 	tags removeKey: aKey
+]
+
+{ #category : 'inspecting' }
+OPUMLMetamodelElementTemplate >> stereotypeProperties [
+
+	| props |
+	props := OrderedCollection new.
+	^ self appliedStereotypes flatCollect: [ :stereo |
+			  | meta |
+			  meta := stereo umlMetaClass.
+			  (meta ownedAttributes reject: [ :each |
+				   each name beginsWith: 'base_' ]) collect: [ :each |
+					  {
+						  each name.
+						  meta name.
+						  (stereo perform: each name asSymbol) } ] ]
 ]
 
 { #category : 'accessing - tags' }

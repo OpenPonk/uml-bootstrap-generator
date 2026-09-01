@@ -1,3 +1,6 @@
+"
+I represent a UML EncapsulatedClassifier. I manage internal structure and boundaries by extending a classifier to own ports.
+"
 Class {
 	#name : 'BootUMLEncapsulatedClassifier',
 	#superclass : 'OPUMLBootstrapObject',

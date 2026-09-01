@@ -1,3 +1,6 @@
+"
+I represent a UML NamedElement. I serve as a base class for elements that may have a name, visibility, and a fully qualified name within a namespace.
+"
 Class {
 	#name : 'BootUMLNamedElement',
 	#superclass : 'OPUMLBootstrapObject',

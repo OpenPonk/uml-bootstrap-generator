@@ -1,3 +1,6 @@
+"
+I represent a UML Element. I am the root of the UML metamodel hierarchy, tracking ownership, comments, relationships, and basic structural constraints.
+"
 Class {
 	#name : 'BootUMLElement',
 	#superclass : 'OPUMLBootstrapObject',

@@ -1,3 +1,6 @@
+"
+I represent a UML MultiplicityElement. I define a collection of instances, specifying cardinality bounds (lower and upper) and collection constraints (isOrdered and isUnique).
+"
 Class {
 	#name : 'BootUMLMultiplicityElement',
 	#superclass : 'OPUMLBootstrapObject',

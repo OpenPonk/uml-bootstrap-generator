@@ -1,3 +1,6 @@
+"
+I represent a UML Package. I act as a namespace used to group elements, providing encapsulation, semantic boundaries, and management of package imports and merges.
+"
 Class {
 	#name : 'BootUMLPackage',
 	#superclass : 'OPUMLBootstrapObject',

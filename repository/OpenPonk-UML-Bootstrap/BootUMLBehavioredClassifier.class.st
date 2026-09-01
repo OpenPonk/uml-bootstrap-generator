@@ -1,3 +1,6 @@
+"
+I represent a UML BehavioredClassifier. I extend classifier capabilities to support owned behaviors, classifier behaviors, and interface realizations.
+"
 Class {
 	#name : 'BootUMLBehavioredClassifier',
 	#superclass : 'OPUMLBootstrapObject',

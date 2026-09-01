@@ -1,3 +1,6 @@
+"
+I am the root base class for all generated UML bootstrap objects. I provide foundational mechanisms for instance initialization, property inspection, and generalization tracking.
+"
 Class {
 	#name : 'OPUMLBootstrapObject',
 	#superclass : 'Object',

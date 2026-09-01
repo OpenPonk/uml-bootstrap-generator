@@ -1,7 +1,5 @@
 "
-I generate the UML metamodel from the bootstrap metamodel representation.
-
-See class-side for usage.
+I am the core engine that consumes the bootstrap representation of the UML metamodel and generates the final, fully-featured Pharo UML metamodel. I inject operations, handle multiple-inheritance delegations, and wire default values across the generated classes.
 "
 Class {
 	#name : 'OPUMLMetamodelGenerator',
@@ -329,7 +327,7 @@ OPUMLMetamodelGenerator >> allSuperclassesOf: aClassModel [
 	^ generalizations asArray
 ]
 
-{ #category : 'utility' }
+{ #category : 'utilities' }
 OPUMLMetamodelGenerator >> asPlural: aString [
 	(aString endsWith: 's')
 		ifTrue: [ ^ aString , 'es' ].

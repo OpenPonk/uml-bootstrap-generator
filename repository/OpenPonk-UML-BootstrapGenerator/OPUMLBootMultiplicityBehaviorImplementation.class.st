@@ -1,3 +1,6 @@
+"
+I provide the Pharo implementation logic for checking boundary constraints and computing lower/upper bounds for UML MultiplicityElements during the bootstrap generation phase.
+"
 Class {
 	#name : 'OPUMLBootMultiplicityBehaviorImplementation',
 	#superclass : 'Object',

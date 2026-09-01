@@ -1,3 +1,6 @@
+"
+I provide custom Pharo template methods (handling lower/upper bounds and multivalued checks) that are injected into generated UML MultiplicityElement instances.
+"
 Class {
 	#name : 'OPUMLMetaGenMultiplicityElementTemplate',
 	#superclass : 'OPUMLMetaGenTemplate',

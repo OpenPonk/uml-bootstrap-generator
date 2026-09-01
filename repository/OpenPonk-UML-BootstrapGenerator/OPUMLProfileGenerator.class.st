@@ -1,3 +1,6 @@
+"
+I am a specialized generator that consumes a UML Profile model (represented in XMI or bootstrap format) and generates the corresponding Pharo classes and extension methods necessary to apply and utilize the profile dynamically within OpenPonk.
+"
 Class {
 	#name : 'OPUMLProfileGenerator',
 	#superclass : 'Object',
@@ -319,7 +322,7 @@ OPUMLProfileGenerator >> allSuperclassesOf: aClassModel [
 	^ generalizations asArray
 ]
 
-{ #category : 'utility' }
+{ #category : 'utilities' }
 OPUMLProfileGenerator >> asPlural: aString [
 	(aString endsWith: 's')
 		ifTrue: [ ^ aString , 'es' ].

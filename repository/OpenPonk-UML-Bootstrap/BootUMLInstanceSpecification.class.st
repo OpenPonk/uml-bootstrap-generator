@@ -1,3 +1,6 @@
+"
+I represent a UML InstanceSpecification. I describe a specific instance of one or more classifiers, including slot values and deployment configurations.
+"
 Class {
 	#name : 'BootUMLInstanceSpecification',
 	#superclass : 'OPUMLBootstrapObject',

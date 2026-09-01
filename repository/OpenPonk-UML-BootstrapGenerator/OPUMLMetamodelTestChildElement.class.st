@@ -1,3 +1,6 @@
+"
+I am a mock child template class extending OPUMLMetamodelTestParentElement, used exclusively for unit testing the inheritance and method overriding resolution in the generator framework.
+"
 Class {
 	#name : 'OPUMLMetamodelTestChildElement',
 	#superclass : 'OPUMLMetamodelTestParentElement',

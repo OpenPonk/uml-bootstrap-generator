@@ -1,3 +1,6 @@
+"
+I represent a UML EnumerationLiteral. I represent a specific, predefined value within an enumeration data type.
+"
 Class {
 	#name : 'BootUMLEnumerationLiteral',
 	#superclass : 'OPUMLBootstrapObject',

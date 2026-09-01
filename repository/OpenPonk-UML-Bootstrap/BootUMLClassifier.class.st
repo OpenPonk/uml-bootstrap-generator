@@ -1,3 +1,6 @@
+"
+I represent a UML Classifier. I serve as the base class for classifiers, managing generalizations, features, substitutions, and template parameter bindings.
+"
 Class {
 	#name : 'BootUMLClassifier',
 	#superclass : 'OPUMLBootstrapObject',

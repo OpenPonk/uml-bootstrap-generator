@@ -1,3 +1,6 @@
+"
+I represent a UML DeploymentTarget. I represent the location (node) where deployed artifacts reside, tracking associated deployments.
+"
 Class {
 	#name : 'BootUMLDeploymentTarget',
 	#superclass : 'OPUMLBootstrapObject',

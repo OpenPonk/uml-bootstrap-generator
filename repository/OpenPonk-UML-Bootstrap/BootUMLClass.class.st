@@ -1,3 +1,6 @@
+"
+I represent a UML Class. I manage structural features (attributes, operations, nested classifiers) and behaviors, extending BehavioredClassifier and EncapsulatedClassifier.
+"
 Class {
 	#name : 'BootUMLClass',
 	#superclass : 'OPUMLBootstrapObject',

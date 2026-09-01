@@ -1,3 +1,6 @@
+"
+I represent a UML TypedElement. I am an element that has an assigned type, ensuring value specifications and parameters conform to the structural rules of the model.
+"
 Class {
 	#name : 'BootUMLTypedElement',
 	#superclass : 'OPUMLBootstrapObject',

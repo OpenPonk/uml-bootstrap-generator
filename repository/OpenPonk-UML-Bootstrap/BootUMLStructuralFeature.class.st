@@ -1,3 +1,6 @@
+"
+I represent a UML StructuralFeature. I am a typed feature of a classifier that specifies the structure or state of instances, primarily acting as a base for properties.
+"
 Class {
 	#name : 'BootUMLStructuralFeature',
 	#superclass : 'OPUMLBootstrapObject',

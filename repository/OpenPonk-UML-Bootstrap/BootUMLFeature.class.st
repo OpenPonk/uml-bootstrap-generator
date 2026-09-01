@@ -1,3 +1,6 @@
+"
+I represent a UML Feature. I define a structural or behavioral characteristic of a classifier, tracking whether it is static and which classifier features it.
+"
 Class {
 	#name : 'BootUMLFeature',
 	#superclass : 'OPUMLBootstrapObject',

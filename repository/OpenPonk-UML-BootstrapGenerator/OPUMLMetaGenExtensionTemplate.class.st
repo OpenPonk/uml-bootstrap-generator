@@ -1,3 +1,6 @@
+"
+I provide custom Pharo template methods (such as navigating to metaclasses and checking requirement constraints) that are injected into generated UML Extension instances used within UML Profiles.
+"
 Class {
 	#name : 'OPUMLMetaGenExtensionTemplate',
 	#superclass : 'OPUMLMetaGenTemplate',

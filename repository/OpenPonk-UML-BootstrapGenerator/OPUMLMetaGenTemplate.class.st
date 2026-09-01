@@ -1,5 +1,5 @@
 "
-I am a base class for classes providing Pharo implemention for some UML metamodel elements.
+I am the abstract base class for specific UML element templates. I declare which metamodel classes I support and provide custom Pharo methods that will be injected into those classes during generation.
 "
 Class {
 	#name : 'OPUMLMetaGenTemplate',
@@ -18,7 +18,7 @@ OPUMLMetaGenTemplate >> implementedMethods [
 			method selector -> (body source copyFrom: body start to: body stop) ]
 ]
 
-{ #category : 'accessing' }
+{ #category : 'structure accessing' }
 OPUMLMetaGenTemplate >> methodsFor: anOperation inClassNamed: aClassName [
 	| methodBehavior |
 	(self supportsClass: aClassName)

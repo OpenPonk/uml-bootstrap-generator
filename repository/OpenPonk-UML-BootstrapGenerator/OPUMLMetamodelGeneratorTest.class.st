@@ -1,3 +1,6 @@
+"
+I am a unit test class verifying the complete generation pipeline of OPUMLMetamodelGenerator, including the accurate construction of operations, handling of multiplicities, application of default values, and generation of multiple-inheritance delegation methods.
+"
 Class {
 	#name : 'OPUMLMetamodelGeneratorTest',
 	#superclass : 'TestCase',
@@ -63,7 +66,7 @@ OPUMLMetamodelGeneratorTest >> operation: anOperationName inClass: aClassName [
 		detect: [ :each | each name = anOperationName ]
 ]
 
-{ #category : 'initialization' }
+{ #category : 'running' }
 OPUMLMetamodelGeneratorTest >> setUp [
 	super setUp.
 	generator := OPUMLMetamodelGenerator new.
@@ -583,7 +586,7 @@ OPUMLMetamodelGeneratorTest >> testCreateElementMetaAttributes [
 	cls := generator createElementMeta.
 	self
 		assert: cls instanceVariables sorted
-		equals: #(announcer directGeneralizations sharedGeneralizations tags uuid)
+		equals: #(directGeneralizations sharedGeneralizations tags uuid)
 ]
 
 { #category : 'tests - meta' }
@@ -634,15 +637,15 @@ OPUMLMetamodelGeneratorTest >> testCreateElementMetaInstanceMethods [
 	self
 		assertCollection: (cls methods collect: #selector)
 		hasSameElements:
-			#( #announcer #appliedStereotypes #applyStereotype:
+			#( #appliedStereotypes #applyStereotype:
 			   #hasTagAt: #identity #initialize #initializeDirectGeneralizations
 			   #initializeSharedGeneralizations
-			   #initializeWithShared: #inspectionAllProperties:
-			   #inspectionProperties: #inspectionStereotypes:
+			   #initializeWithShared: #inspectionGeneralizations: #inspectionAllProperties:
+			   #inspectionProperties: #inspectionStereotypes: #inspectionStereotypeProperties:
 			   #inspectionTags: #inspectorProperties #inspectorPropertiesSelectors
 			   #nonEmptyinspectorProperties #oclAsType: #oclClassifierNameFrom:
 			   #oclIsKindOf: #oclIsTypeOf: #printAsClassifierNameOn:
-			   #printOn: #removeTagAt: #tagAt: #tagAt:put: #tags #umlClassName
+			   #printOn: #removeTagAt: #stereotypeProperties #tagAt: #tagAt:put: #tags #umlClassName
 			   #umlMetaClass #unapplyStereotype: #uuid #uuid: ) sorted.
 	self
 		assert: (cls methodNamed: #initialize) protocolName

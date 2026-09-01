@@ -1,3 +1,6 @@
+"
+I represent a UML RedefinableElement. I am an element defined within the context of a classifier that can be redefined more specifically or differently in a subclass.
+"
 Class {
 	#name : 'BootUMLRedefinableElement',
 	#superclass : 'OPUMLBootstrapObject',

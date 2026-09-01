@@ -1,3 +1,6 @@
+"
+I represent a UML LiteralBoolean. I encapsulate a constant boolean value (true or false) within the UML model.
+"
 Class {
 	#name : 'BootUMLLiteralBoolean',
 	#superclass : 'OPUMLBootstrapObject',
@@ -281,7 +284,7 @@ BootUMLLiteralBoolean >> type: aType [
 	(sharedGeneralizations at: #TypedElement) type: aType
 ]
 
-{ #category : 'accessing' }
+{ #category : 'evaluating' }
 BootUMLLiteralBoolean >> value [
 	^ value
 ]

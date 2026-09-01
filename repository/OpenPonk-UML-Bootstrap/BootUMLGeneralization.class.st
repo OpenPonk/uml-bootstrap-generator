@@ -1,3 +1,6 @@
+"
+I represent a UML Generalization. I model a taxonomic relationship between a more specific classifier and a more general classifier.
+"
 Class {
 	#name : 'BootUMLGeneralization',
 	#superclass : 'OPUMLBootstrapObject',

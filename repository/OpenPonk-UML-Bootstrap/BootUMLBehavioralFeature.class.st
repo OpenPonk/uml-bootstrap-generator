@@ -1,3 +1,6 @@
+"
+I represent a UML BehavioralFeature. I manage behavioral characteristics such as parameters, raised exceptions, concurrency, and abstract/static modifiers within a classifier.
+"
 Class {
 	#name : 'BootUMLBehavioralFeature',
 	#superclass : 'OPUMLBootstrapObject',
