@@ -1,3 +1,6 @@
+"
+I represent a UML TemplateableElement. I am an element that can optionally be defined as a template (having a template signature) and can be bound to other templates.
+"
 Class {
 	#name : 'BootUMLTemplateableElement',
 	#superclass : 'OPUMLBootstrapObject',

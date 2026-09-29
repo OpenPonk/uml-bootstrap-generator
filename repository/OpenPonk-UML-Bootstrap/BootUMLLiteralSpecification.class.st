@@ -1,3 +1,6 @@
+"
+I represent a UML LiteralSpecification. I am an abstract specialization of ValueSpecification identifying a literal value within the model.
+"
 Class {
 	#name : 'BootUMLLiteralSpecification',
 	#superclass : 'OPUMLBootstrapObject',

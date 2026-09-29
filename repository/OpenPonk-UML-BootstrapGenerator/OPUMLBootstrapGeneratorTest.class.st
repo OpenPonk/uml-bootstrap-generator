@@ -1,3 +1,6 @@
+"
+I am a unit test class verifying the foundational generation of classes, accessors, delegations, and associations from the raw UML XMI by OPUMLBootstrapGenerator.
+"
 Class {
 	#name : 'OPUMLBootstrapGeneratorTest',
 	#superclass : 'TestCase',

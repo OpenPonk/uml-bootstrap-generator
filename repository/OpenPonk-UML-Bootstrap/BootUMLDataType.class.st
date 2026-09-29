@@ -1,3 +1,6 @@
+"
+I represent a UML DataType. I am a classifier whose instances are identified only by their value, managing owned attributes and operations.
+"
 Class {
 	#name : 'BootUMLDataType',
 	#superclass : 'OPUMLBootstrapObject',

@@ -1,5 +1,5 @@
 "
-Contains UML specs and its sources
+I act as a repository and configuration holder for UML specifications (XMI definitions). I provide the URLs, raw sources, and caching mechanisms required to fetch the standard OMG UML specification files during the generation process.
 "
 Class {
 	#name : 'OPUMLBootstrapSpecs',
@@ -26,14 +26,14 @@ OPUMLBootstrapSpecs class >> primitiveTypesSpecUrl [
 	^ 'http://www.omg.org/spec/UML/20131001/PrimitiveTypes.xmi'
 ]
 
-{ #category : 'utility' }
+{ #category : 'utilities' }
 OPUMLBootstrapSpecs class >> resetUmlSpecs [
 
 	<script>
 	umlSpecs := nil
 ]
 
-{ #category : 'utility' }
+{ #category : 'utilities' }
 OPUMLBootstrapSpecs class >> retrieveUmlSpecs [
 
 	| mapping result |
@@ -1022,7 +1022,7 @@ OPUMLBootstrapSpecs class >> umlSpecUrl [
 	^ 'http://www.omg.org/spec/UML/20131001/UML.xmi'
 ]
 
-{ #category : 'utility' }
+{ #category : 'utilities' }
 OPUMLBootstrapSpecs class >> umlSpecs [
 
 	<script: 'self umlSpecs inspect'>

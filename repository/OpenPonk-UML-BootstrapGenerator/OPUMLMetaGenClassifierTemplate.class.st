@@ -1,3 +1,6 @@
+"
+I provide custom Pharo template methods (such as traversing parents, general elements, and attributes) that are injected into generated UML Classifier instances.
+"
 Class {
 	#name : 'OPUMLMetaGenClassifierTemplate',
 	#superclass : 'OPUMLMetaGenTemplate',

@@ -1,3 +1,6 @@
+"
+I represent a UML OpaqueExpression. I provide a mechanism for specifying an expression in a given language (such as OCL or natural language) via my body and language attributes.
+"
 Class {
 	#name : 'BootUMLOpaqueExpression',
 	#superclass : 'OPUMLBootstrapObject',

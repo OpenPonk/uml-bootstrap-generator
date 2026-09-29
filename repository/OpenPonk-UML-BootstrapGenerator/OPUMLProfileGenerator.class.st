@@ -1,3 +1,6 @@
+"
+I am a specialized generator that consumes a UML Profile model (represented in XMI or bootstrap format) and generates the corresponding Pharo classes and extension methods necessary to apply and utilize the profile dynamically within OpenPonk.
+"
 Class {
 	#name : 'OPUMLProfileGenerator',
 	#superclass : 'Object',
@@ -51,7 +54,7 @@ OPUMLProfileGenerator >> addAccessingDelegationMethodsFrom: aClassModel to: aCla
 			methods
 				do: [ :method | 
 					| delegateMethod node |
-					node := RBParser parseMethod: method source lines first.
+					node := OCParser parseMethod: method source lines first.
 					delegateMethod := node numArgs = 0
 						ifTrue: [ CBMethod new
 								getter: node selector
@@ -240,7 +243,7 @@ OPUMLProfileGenerator >> addOperationsDelegationMethodsFrom: aClassModel to: aCl
 					           (method selector withoutSuffix: ':') asSymbol ] ].
 		methods do: [ :method |
 			| delegateMethod node |
-			node := RBParser parseMethod: method source lines first.
+			node := OCParser parseMethod: method source lines first.
 			delegateMethod := CBMethod new
 				                  getter: node selector
 				                  delegateFrom: '(sharedGeneralizations at: #'
@@ -319,7 +322,7 @@ OPUMLProfileGenerator >> allSuperclassesOf: aClassModel [
 	^ generalizations asArray
 ]
 
-{ #category : 'utility' }
+{ #category : 'utilities' }
 OPUMLProfileGenerator >> asPlural: aString [
 	(aString endsWith: 's')
 		ifTrue: [ ^ aString , 'es' ].
@@ -451,7 +454,7 @@ OPUMLProfileGenerator >> createProfileFactory [
 				 source: 'xmi
 	^ 
 ''' , (OPUMLXMIWriter toString: self sourceModel) , '''';
-				 protocol: 'accessing').
+				 protocolName: 'accessing').
 	^ cls
 ]
 

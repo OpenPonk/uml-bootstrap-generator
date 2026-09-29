@@ -1,3 +1,6 @@
+"
+I represent a UML StructuredClassifier. I am a classifier containing an internal structure, capable of managing parts, roles, and interconnecting connectors.
+"
 Class {
 	#name : 'BootUMLStructuredClassifier',
 	#superclass : 'OPUMLBootstrapObject',

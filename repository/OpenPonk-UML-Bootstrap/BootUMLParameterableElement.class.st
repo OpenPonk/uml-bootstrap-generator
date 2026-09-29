@@ -1,3 +1,6 @@
+"
+I represent a UML ParameterableElement. I am an element that can be exposed as a formal template parameter or bound as an actual template parameter.
+"
 Class {
 	#name : 'BootUMLParameterableElement',
 	#superclass : 'OPUMLBootstrapObject',

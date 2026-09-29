@@ -1,3 +1,6 @@
+"
+I represent a UML LiteralUnlimitedNatural. I encapsulate a constant unlimited natural value, which can be an integer or an unbounded value (often represented as an asterisk).
+"
 Class {
 	#name : 'BootUMLLiteralUnlimitedNatural',
 	#superclass : 'OPUMLBootstrapObject',
@@ -281,7 +284,7 @@ BootUMLLiteralUnlimitedNatural >> type: aType [
 	(sharedGeneralizations at: #TypedElement) type: aType
 ]
 
-{ #category : 'accessing' }
+{ #category : 'evaluating' }
 BootUMLLiteralUnlimitedNatural >> value [
 	^ value
 ]

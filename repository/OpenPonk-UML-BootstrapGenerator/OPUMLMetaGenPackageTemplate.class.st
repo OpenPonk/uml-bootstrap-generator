@@ -1,3 +1,6 @@
+"
+I provide custom Pharo template methods (handling ownership, nested packages, and contained types) that are injected into generated UML Package instances.
+"
 Class {
 	#name : 'OPUMLMetaGenPackageTemplate',
 	#superclass : 'OPUMLMetaGenTemplate',

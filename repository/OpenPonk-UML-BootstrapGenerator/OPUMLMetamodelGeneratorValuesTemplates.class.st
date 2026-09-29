@@ -1,3 +1,6 @@
+"
+I provide template injection methods specifically for handling UML ValueSpecifications (such as LiteralInteger, LiteralString, LiteralBoolean). I inject the logic required to extract primitive values from these specifications.
+"
 Class {
 	#name : 'OPUMLMetamodelGeneratorValuesTemplates',
 	#superclass : 'OPUMLMetamodelGeneratorTemplates',

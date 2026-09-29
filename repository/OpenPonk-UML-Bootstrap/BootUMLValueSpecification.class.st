@@ -1,3 +1,6 @@
+"
+I represent a UML ValueSpecification. I am a typed element that evaluates to a specific value or a set of values within a UML model context.
+"
 Class {
 	#name : 'BootUMLValueSpecification',
 	#superclass : 'OPUMLBootstrapObject',

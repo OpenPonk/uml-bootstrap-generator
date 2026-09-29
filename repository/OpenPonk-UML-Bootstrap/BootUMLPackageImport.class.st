@@ -1,3 +1,6 @@
+"
+I represent a UML PackageImport. I define a directed relationship that allows an importing namespace to refer to the elements of a target package using unqualified names.
+"
 Class {
 	#name : 'BootUMLPackageImport',
 	#superclass : 'OPUMLBootstrapObject',

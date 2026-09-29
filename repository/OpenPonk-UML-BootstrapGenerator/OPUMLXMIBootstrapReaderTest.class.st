@@ -1,3 +1,6 @@
+"
+I am a unit test class verifying the accurate parsing, reference resolution, and conversion of raw UML XMI documents into bootstrap instances by OPUMLXMIBootstrapReader.
+"
 Class {
 	#name : 'OPUMLXMIBootstrapReaderTest',
 	#superclass : 'TestCase',
@@ -178,6 +181,8 @@ OPUMLXMIBootstrapReaderTest >> packageImportPackage [
 
 { #category : 'running' }
 OPUMLXMIBootstrapReaderTest >> setUp [
+
+	super setUp.
 	reader := OPUMLXMIBootstrapReader new.
 	reader classPrefix: 'BootUML'
 ]

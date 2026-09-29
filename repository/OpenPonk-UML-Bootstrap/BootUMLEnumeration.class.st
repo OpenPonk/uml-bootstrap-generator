@@ -1,3 +1,6 @@
+"
+I represent a UML Enumeration. I am a specific data type whose values are restricted to a defined set of enumeration literals.
+"
 Class {
 	#name : 'BootUMLEnumeration',
 	#superclass : 'OPUMLBootstrapObject',

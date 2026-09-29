@@ -1,3 +1,6 @@
+"
+I provide utilities to visualize the generated UML metamodel class hierarchy and structural relationships (using Roassal) to aid in debugging and validating the bootstrap output.
+"
 Class {
 	#name : 'OPUMLBootstrapVisualizations',
 	#superclass : 'Object',

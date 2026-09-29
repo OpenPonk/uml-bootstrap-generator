@@ -1,3 +1,6 @@
+"
+I serve as the base template resolver during metamodel generation. I provide strategies to look up and inject custom, hand-written Pharo implementations into the auto-generated UML metamodel classes.
+"
 Class {
 	#name : 'OPUMLMetamodelGeneratorTemplates',
 	#superclass : 'Object',

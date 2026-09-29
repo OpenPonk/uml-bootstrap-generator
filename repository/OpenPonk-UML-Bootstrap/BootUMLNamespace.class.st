@@ -1,3 +1,6 @@
+"
+I represent a UML Namespace. I am an element that can contain a set of named elements, ensuring that names are unique within my scope. I manage owned and imported members.
+"
 Class {
 	#name : 'BootUMLNamespace',
 	#superclass : 'OPUMLBootstrapObject',

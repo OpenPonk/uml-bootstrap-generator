@@ -1,3 +1,6 @@
+"
+I represent a UML ConnectableElement. I define elements (like ports or parts) that can be interconnected within the internal structure of a structured classifier.
+"
 Class {
 	#name : 'BootUMLConnectableElement',
 	#superclass : 'OPUMLBootstrapObject',
@@ -84,11 +87,10 @@ BootUMLConnectableElement >> initialize [
 
 { #category : 'initialization' }
 BootUMLConnectableElement >> initializeGeneralizations [
-	generalizations := {
-		sharedGeneralizations at: #TypedElement.
-		sharedGeneralizations at: #ParameterableElement.
-	}
 
+	generalizations := {
+		                   (sharedGeneralizations at: #TypedElement).
+		                   (sharedGeneralizations at: #ParameterableElement) }
 ]
 
 { #category : 'accessing - NamedElement' }

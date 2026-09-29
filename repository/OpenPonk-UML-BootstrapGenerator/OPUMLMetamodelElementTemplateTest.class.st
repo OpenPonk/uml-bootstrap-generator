@@ -1,3 +1,6 @@
+"
+I am a unit test class verifying the core behaviors (such as tag management, stereotype application, and OCL type checking) defined within OPUMLMetamodelElementTemplate.
+"
 Class {
 	#name : 'OPUMLMetamodelElementTemplateTest',
 	#superclass : 'TestCase',

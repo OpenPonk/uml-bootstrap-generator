@@ -10,7 +10,8 @@ SmalltalkCISpec {
 	],
 	#testing : {
 		#packages : [
-			'OpenPonk*'
+			'OpenPonk*',
+			'ChangesBuilder*'
 		],
 		#coverage : {
 			#packages : [

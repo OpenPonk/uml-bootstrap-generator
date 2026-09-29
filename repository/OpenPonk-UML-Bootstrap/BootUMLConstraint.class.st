@@ -1,3 +1,6 @@
+"
+I represent a UML Constraint. I encapsulate a condition or restriction (specification) applied to specific constrained elements within a given context.
+"
 Class {
 	#name : 'BootUMLConstraint',
 	#superclass : 'OPUMLBootstrapObject',

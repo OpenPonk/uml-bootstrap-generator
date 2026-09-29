@@ -1,7 +1,5 @@
 "
-I generate the core necessary UML infrastructure to be able to properly represent XMI inside of the UML model.
-
-So roughly it should be equivalent to to UML portions used in MOF.
+I am the primary generator responsible for creating the foundational Pharo classes and infrastructure required to properly parse and represent the UML XMI specification as Pharo objects. I create accessors, setup delegations, and establish generalization hierarchies to mirror the UML MOF (Meta Object Facility).
 "
 Class {
 	#name : 'OPUMLBootstrapGenerator',
@@ -22,7 +20,7 @@ Class {
 	#tag : 'Bootstrap-Generator'
 }
 
-{ #category : 'utility' }
+{ #category : 'utilities' }
 OPUMLBootstrapGenerator class >> umlSpecs [
 
 	^ OPUMLBootstrapSpecs umlSpecs
@@ -151,7 +149,7 @@ OPUMLBootstrapGenerator >> createDelegationMethods: aCollectionOfLayers for: aCl
 			select: [ :method | method protocolName = 'accessing' ]
 			thenDo: [ :method |
 				| delegateMethod node |
-				node := RBParser parseMethod: method source lines first.
+				node := OCParser parseMethod: method source lines first.
 				delegateMethod := node numArgs = 0
 					                  ifTrue: [
 						                  CBMethod new
@@ -381,7 +379,7 @@ OPUMLBootstrapGenerator >> typeOf: anElement [
 	self error: 'Unexpected Type'
 ]
 
-{ #category : 'utility' }
+{ #category : 'utilities' }
 OPUMLBootstrapGenerator >> withoutDuplicates: aCollection [
 	| dict |
 	dict := OrderedDictionary new.

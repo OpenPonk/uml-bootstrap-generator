@@ -1,3 +1,6 @@
+"
+I represent a UML Type. I act as a constraint on the range of values that can be represented by a typed element (such as a parameter or property).
+"
 Class {
 	#name : 'BootUMLType',
 	#superclass : 'OPUMLBootstrapObject',

@@ -1,3 +1,6 @@
+"
+I represent a UML Parameter. I specify an argument passed into or out of the invocation of a behavioral feature, including its type, direction, and multiplicity.
+"
 Class {
 	#name : 'BootUMLParameter',
 	#superclass : 'OPUMLBootstrapObject',
@@ -160,7 +163,7 @@ BootUMLParameter >> isOrdered: aBoolean [
 	(sharedGeneralizations at: #MultiplicityElement) isOrdered: aBoolean
 ]
 
-{ #category : 'accessing' }
+{ #category : 'testing' }
 BootUMLParameter >> isStream [
 	^ isStream
 ]

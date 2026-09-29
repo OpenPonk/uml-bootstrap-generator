@@ -1,3 +1,6 @@
+"
+I represent a UML LiteralInteger. I encapsulate a constant integer value within the UML model.
+"
 Class {
 	#name : 'BootUMLLiteralInteger',
 	#superclass : 'OPUMLBootstrapObject',
@@ -281,7 +284,7 @@ BootUMLLiteralInteger >> type: aType [
 	(sharedGeneralizations at: #TypedElement) type: aType
 ]
 
-{ #category : 'accessing' }
+{ #category : 'evaluating' }
 BootUMLLiteralInteger >> value [
 	^ value
 ]

@@ -1,3 +1,6 @@
+"
+I represent a UML Property. I am a structural feature of a classifier that characterizes instances, often representing attributes or association ends. I manage multiplicity, default values, and subsetting.
+"
 Class {
 	#name : 'BootUMLProperty',
 	#superclass : 'OPUMLBootstrapObject',

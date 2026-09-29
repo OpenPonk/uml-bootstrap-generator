@@ -1,3 +1,6 @@
+"
+I represent a UML DeployedArtifact. I represent an artifact or instance deployed on a deployment target node.
+"
 Class {
 	#name : 'BootUMLDeployedArtifact',
 	#superclass : 'OPUMLBootstrapObject',

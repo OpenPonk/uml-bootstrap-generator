@@ -1,3 +1,6 @@
+"
+I am a utility builder used during the UML bootstrap phase to construct and compile getter methods, managing selectors, comments, and default initializations for generated classes.
+"
 Class {
 	#name : 'OPUMLBootstrapGetterMethodBuilder',
 	#superclass : 'Object',
@@ -13,19 +16,33 @@ Class {
 
 { #category : 'building' }
 OPUMLBootstrapGetterMethodBuilder >> build [
+
 	| source |
-	source := String
-		streamContents: [ :stream | 
-			stream nextPutAll: selector , String cr.
-			comment
-				ifNotNil: [ stream
-						nextPutAll: String tab , '"' , (comment copyReplaceAll: '"' with: '""') , '"' , String cr ].
-			stream nextPutAll: String tab , '^ ' , selector.
-			defaultValue
-				ifNotNil: [ stream nextPutAll: ' ifNil: [ ' , selector , ' := ' , defaultValue asString , ' ]' ] ].
+	source := String streamContents: [ :stream |
+			          stream
+				          nextPutAll: selector;
+				          cr.
+			          comment ifNotNil: [
+					          stream
+						          tab;
+						          nextPutAll: '"';
+						          nextPutAll: (comment copyReplaceAll: '"' with: '""');
+						          nextPutAll: '"';
+						          cr ].
+			          stream
+				          tab;
+				          nextPutAll: '^ ';
+				          nextPutAll: selector.
+			          defaultValue ifNotNil: [
+					          stream
+						          nextPutAll: ' ifNil: [ ';
+						          nextPutAll: selector;
+						          nextPutAll: ' := ';
+						          nextPutAll: defaultValue asString;
+						          nextPutAll: ' ]' ] ].
 	^ CBMethod new
-		protocolName: 'accessing';
-		source: source
+		  protocolName: 'accessing';
+		  source: source
 ]
 
 { #category : 'accessing' }

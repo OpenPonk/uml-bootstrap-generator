@@ -1,7 +1,5 @@
 "
-I generate the UML metamodel from the bootstrap metamodel representation.
-
-See class-side for usage.
+I am the core engine that consumes the bootstrap representation of the UML metamodel and generates the final, fully-featured Pharo UML metamodel. I inject operations, handle multiple-inheritance delegations, and wire default values across the generated classes.
 "
 Class {
 	#name : 'OPUMLMetamodelGenerator',
@@ -61,7 +59,7 @@ OPUMLMetamodelGenerator >> addAccessingDelegationMethodsFrom: aClassModel to: aC
 			methods
 				do: [ :method | 
 					| delegateMethod node |
-					node := RBParser parseMethod: method source lines first.
+					node := OCParser parseMethod: method source lines first.
 					delegateMethod := node numArgs = 0
 						ifTrue: [ CBMethod new
 								getter: node selector
@@ -195,30 +193,27 @@ OPUMLMetamodelGenerator >> addEnumLiteral: anEnumLiteral to: aClass [
 
 { #category : 'generating - methods' }
 OPUMLMetamodelGenerator >> addGeneralizationsFrom: aClassModel to: cls [
+
 	| sharedMethod directMethod |
 	sharedMethod := CBMethodBuilder new.
 	sharedMethod selector: 'initializeSharedGeneralizations'.
-	(self allSuperclassesOf: aClassModel)
-		do: [ :each | 
-			sharedMethod
-				addLine:
-					('sharedGeneralizations at: #<1s> put: (<2s> newOnShared: sharedGeneralizations).'
-						expandMacrosWith: each name
-						with: (self classNameFor: each name)) ].
-	sharedMethod addLine: 'sharedGeneralizations at: #', aClassModel name, ' put: self.'.
+	(self allSuperclassesOf: aClassModel) do: [ :each |
+			sharedMethod addLine: ('sharedGeneralizations at: #<1s> put: (<2s> newOnShared: sharedGeneralizations).'
+					 expandMacrosWith: each name
+					 with: (self classNameFor: each name)) ].
+	sharedMethod addLine: 'sharedGeneralizations at: #' , aClassModel name , ' put: self.'.
 	directMethod := CBMethodBuilder new.
 	directMethod selector: 'initializeDirectGeneralizations'.
 	directMethod addLine: 'directGeneralizations := {'.
 	directMethod addIndent.
-	aClassModel generalization
-		ifNotNil: [ :gen | 
+	aClassModel generalization ifNotNil: [ :gen |
 			gen
 				reject: [ :each | each general name = 'Element' ]
 				thenDo: [ :each | directMethod addLine: 'sharedGeneralizations at: #' , each general name , '.' ] ].
 	directMethod removeIndent.
 	directMethod addLine: '}'.
-	cls compile: sharedMethod source trimmed classified: 'initialization'.
-	cls compile: directMethod source trimmed classified: 'initialization'
+	cls compile: sharedMethod source trimBoth classified: 'initialization'.
+	cls compile: directMethod source trimBoth classified: 'initialization'
 ]
 
 { #category : 'generating - operations' }
@@ -247,7 +242,7 @@ OPUMLMetamodelGenerator >> addOperationsDelegationMethodsFrom: aClassModel to: a
 					           (method selector withoutSuffix: ':') asSymbol ] ].
 		methods do: [ :method |
 			| delegateMethod node |
-			node := RBParser parseMethod: method source lines first.
+			node := OCParser parseMethod: method source lines first.
 			delegateMethod := CBMethod new
 				                  getter: node selector
 				                  delegateFrom: '(sharedGeneralizations at: #'
@@ -329,7 +324,7 @@ OPUMLMetamodelGenerator >> allSuperclassesOf: aClassModel [
 	^ generalizations asArray
 ]
 
-{ #category : 'utility' }
+{ #category : 'utilities' }
 OPUMLMetamodelGenerator >> asPlural: aString [
 	(aString endsWith: 's')
 		ifTrue: [ ^ aString , 'es' ].

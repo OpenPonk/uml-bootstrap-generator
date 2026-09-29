@@ -1,3 +1,6 @@
+"
+I am a unit test class verifying the complete generation pipeline of OPUMLMetamodelGenerator, including the accurate construction of operations, handling of multiplicities, application of default values, and generation of multiple-inheritance delegation methods.
+"
 Class {
 	#name : 'OPUMLMetamodelGeneratorTest',
 	#superclass : 'TestCase',
@@ -30,8 +33,8 @@ OPUMLMetamodelGeneratorTest class >> umlBootstrapModel [
 { #category : 'asserting' }
 OPUMLMetamodelGeneratorTest >> assertMethod: actualCode equals: expectedCode [
 	self
-		assert: (RBParser parseMethod: actualCode) formattedCode withUnixLineEndings
-		equals: (RBParser parseMethod: expectedCode) formattedCode withUnixLineEndings
+		assert: (OCParser parseMethod: actualCode) formattedCode withUnixLineEndings
+		equals: (OCParser parseMethod: expectedCode) formattedCode withUnixLineEndings
 ]
 
 { #category : 'accessing' }
@@ -63,7 +66,7 @@ OPUMLMetamodelGeneratorTest >> operation: anOperationName inClass: aClassName [
 		detect: [ :each | each name = anOperationName ]
 ]
 
-{ #category : 'initialization' }
+{ #category : 'running' }
 OPUMLMetamodelGeneratorTest >> setUp [
 	super setUp.
 	generator := OPUMLMetamodelGenerator new.
@@ -583,7 +586,7 @@ OPUMLMetamodelGeneratorTest >> testCreateElementMetaAttributes [
 	cls := generator createElementMeta.
 	self
 		assert: cls instanceVariables sorted
-		equals: #(announcer directGeneralizations sharedGeneralizations tags uuid)
+		equals: #(directGeneralizations sharedGeneralizations tags uuid)
 ]
 
 { #category : 'tests - meta' }
@@ -632,18 +635,18 @@ OPUMLMetamodelGeneratorTest >> testCreateElementMetaInstanceMethods [
 	| cls |
 	cls := generator createElementMeta.
 	self
-		assertCollection: (cls methods collect: #selector) 
+		assertCollection: (cls methods collect: #selector)
 		hasSameElements:
-			#( #announcer #appliedStereotypes #applyStereotype:
+			#( #appliedStereotypes #applyStereotype:
 			   #hasTagAt: #identity #initialize #initializeDirectGeneralizations
 			   #initializeSharedGeneralizations
-			   #initializeWithShared: #inspectionAllProperties
-			   #inspectionProperties #inspectionStereotypes
-			   #inspectionTags #inspectorProperties #inspectorPropertiesSelectors
+			   #initializeWithShared: #inspectionGeneralizations: #inspectionAllProperties:
+			   #inspectionProperties: #inspectionStereotypes: #inspectionStereotypeProperties:
+			   #inspectionTags: #inspectorProperties #inspectorPropertiesSelectors
 			   #nonEmptyinspectorProperties #oclAsType: #oclClassifierNameFrom:
-			   #oclIsKindOf: #oclIsTypeOf: #printAsClassifierNameOn: #printOn: #removeTagAt:
-			   #tagAt: #tagAt:put: #tags #umlClassName #umlMetaClass
-			   #unapplyStereotype: #uuid #uuid: ) sorted.
+			   #oclIsKindOf: #oclIsTypeOf: #printAsClassifierNameOn:
+			   #printOn: #removeTagAt: #stereotypeProperties #tagAt: #tagAt:put: #tags #umlClassName
+			   #umlMetaClass #unapplyStereotype: #uuid #uuid: ) sorted.
 	self
 		assert: (cls methodNamed: #initialize) protocolName
 		equals: 'initialization'
@@ -733,7 +736,7 @@ OPUMLMetamodelGeneratorTest >> testEnsureCreateClass [
 	| result1 result2 |
 	result1 := generator ensureCreateClass: 'GeneratedClassXXX' in: 'Generated-Package'.
 	self assert: result1 name equals: 'MBUTGeneratedClassXXX'.
-	self assert: result1 package equals: 'Generated-UMLMetamodelTest-Generated-Package'.
+	self assert: result1 packageName equals: 'Generated-UMLMetamodelTest-Generated-Package'.
 	self assert: result1 parent equals: 'MBUTElement'.
 	result2 := generator ensureCreateClass: 'GeneratedClassXXX' in: 'Generated-Package'.
 	self assert: result1 == result2 description: 'should be the same identity'

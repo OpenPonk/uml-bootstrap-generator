@@ -1,3 +1,6 @@
+"
+I represent a UML Relationship. I am an abstract base concept specifying a semantic connection among model elements.
+"
 Class {
 	#name : 'BootUMLRelationship',
 	#superclass : 'OPUMLBootstrapObject',

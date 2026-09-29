@@ -1,3 +1,6 @@
+"
+I represent a UML InstanceValue. I evaluate to the value of a specific instance specification within a property or constraint.
+"
 Class {
 	#name : 'BootUMLInstanceValue',
 	#superclass : 'OPUMLBootstrapObject',

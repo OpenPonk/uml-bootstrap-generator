@@ -1,3 +1,6 @@
+"
+I represent a UML Comment. I hold textual annotations (body) and track the elements to which the comment applies (annotatedElement).
+"
 Class {
 	#name : 'BootUMLComment',
 	#superclass : 'OPUMLBootstrapObject',

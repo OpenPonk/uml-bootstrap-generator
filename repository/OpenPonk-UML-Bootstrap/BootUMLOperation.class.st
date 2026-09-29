@@ -1,3 +1,6 @@
+"
+I represent a UML Operation. I am a behavioral feature of a classifier that specifies a name, type, parameters, and conditions (pre/post) for invoking a specific behavior.
+"
 Class {
 	#name : 'BootUMLOperation',
 	#superclass : 'OPUMLBootstrapObject',

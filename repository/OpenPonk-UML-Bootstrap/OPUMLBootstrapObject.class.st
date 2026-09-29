@@ -1,3 +1,6 @@
+"
+I am the root base class for all generated UML bootstrap objects. I provide foundational mechanisms for instance initialization, property inspection, and generalization tracking.
+"
 Class {
 	#name : 'OPUMLBootstrapObject',
 	#superclass : 'Object',
@@ -45,11 +48,11 @@ OPUMLBootstrapObject >> initializeWithShared: aDictionary [
 	self initializeGeneralizations
 ]
 
-{ #category : 'GTInspector - extensions' }
-OPUMLBootstrapObject >> inspectionAllProperties [
+{ #category : 'inspecting' }
+OPUMLBootstrapObject >> inspectionAllProperties: aBuilder [
 
 	<inspectorPresentationOrder: 6 title: 'Properties (All)'>
-	^ SpTablePresenter new
+	^ aBuilder newTable
 		  beResizable;
 		  items:
 			  ((self class methods sorted: [ :a :b | a selector < b selector ])
@@ -57,8 +60,8 @@ OPUMLBootstrapObject >> inspectionAllProperties [
 					   (each protocolName beginsWith: 'accessing') and: [
 							   each numArgs = 0 ] ]
 				   thenCollect: [ :each |
-					   StInspectorAssociationNode hostObject:
-							   each selector -> (self perform: each selector) ]);
+						   StInspectorAssociationNode hostObject:
+								   each selector -> (self perform: each selector) ]);
 		  addColumn: (SpStringTableColumn new
 				   title: 'Name';
 				   evaluated: #key;
@@ -70,11 +73,11 @@ OPUMLBootstrapObject >> inspectionAllProperties [
 		  yourself
 ]
 
-{ #category : 'GTInspector - extensions' }
-OPUMLBootstrapObject >> inspectionProperties [
+{ #category : 'inspecting' }
+OPUMLBootstrapObject >> inspectionProperties: aBuilder [
 
 	<inspectorPresentationOrder: 5 title: 'Properties'>
-	^ SpTablePresenter new
+	^ aBuilder newTable
 		  beResizable;
 		  items:
 			  (((self class methods sorted: [ :a :b | a selector < b selector ])

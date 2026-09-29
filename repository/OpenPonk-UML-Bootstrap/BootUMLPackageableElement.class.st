@@ -1,3 +1,6 @@
+"
+I represent a UML PackageableElement. I am a named element that can be owned directly by a package.
+"
 Class {
 	#name : 'BootUMLPackageableElement',
 	#superclass : 'OPUMLBootstrapObject',

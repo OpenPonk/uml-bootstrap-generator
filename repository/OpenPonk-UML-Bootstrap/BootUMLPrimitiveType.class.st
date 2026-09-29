@@ -1,3 +1,6 @@
+"
+I represent a UML PrimitiveType. I am a data type whose instances do not have any substructure (such as Integer, Boolean, or String).
+"
 Class {
 	#name : 'BootUMLPrimitiveType',
 	#superclass : 'OPUMLBootstrapObject',
