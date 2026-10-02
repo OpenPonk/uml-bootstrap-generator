@@ -15,7 +15,7 @@ BaselineOfOpenPonkUMLBootstrapGenerator >> baseline: spec [
 		for: #common
 		do: [ spec
 				baseline: 'OpenPonkXMI'
-				with: [ spec repository: 'github://openponk/xmi/repository' ].
+				with: [ spec repository: 'github://OpenPonk/xmi/repository' ].
 			spec
 				baseline: 'ChangesBuilder'
 				with: [ spec repository: 'github://OpenPonk/pharo-changes-builder' ].
