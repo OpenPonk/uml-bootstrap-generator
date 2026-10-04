@@ -1,22 +1,1 @@
-SmalltalkCISpec {
-	#loading : [
-		SCIMetacelloLoadSpec {
-			#platforms : [
-				#pharo
-			],
-			#baseline : 'OpenPonkUMLBootstrapGenerator',
-			#directory : 'repository'
-		}
-	],
-	#testing : {
-		#packages : [
-			'OpenPonk*',
-			'ChangesBuilder*'
-		],
-		#coverage : {
-			#packages : [
-				'OpenPonk-UML-BootstrapGenerator'
-			]
-		}
-	}
-}
+SmalltalkCISpec {	#loading : [		SCIMetacelloLoadSpec {			#platforms : [				#pharo			],			#baseline : 'OpenPonkUMLBootstrapGenerator',			#directory : 'repository'		}	],	#testing : {		#packages : [			'OpenPonk*',			'ChangesBuilder*'		],		#coverage : {			#packages : [				'OpenPonk-UML-Bootstrap*'			]		}	}}
