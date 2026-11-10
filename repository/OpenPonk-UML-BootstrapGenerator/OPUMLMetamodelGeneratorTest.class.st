@@ -81,29 +81,16 @@ OPUMLMetamodelGeneratorTest >> testAddAccessingDelegationMethods [
 	| class classModel methods |
 	class := CBClass new.
 	classModel := self findClass: 'RedefinableElement'.
-	generator
-		createClassFrom: (self findClass: 'Element')
-		in: 'CommonStructure'.
-	generator
-		createClassFrom: (self findClass: 'NamedElement')
-		in: 'CommonStructure'.
+	generator createClassFrom: (self findClass: 'Element') in: 'CommonStructure'.
+	generator createClassFrom: (self findClass: 'NamedElement') in: 'CommonStructure'.
 	generator addDelegationMethodsFrom: classModel to: class.
-	methods := class methods collect: [ :each |
-		           each selector -> each protocolName ].
-	self assert:
-		(methods includes: 'nameExpression' -> 'accessing - NamedElement').
-	self
-		assertMethod:
-			(class methods detect: [ :each | each selector = 'nameExpression' ])
-				source
-		equals: 'nameExpression
+	methods := class methods collect: [ :each | each selector -> each protocolName ].
+	self assertCollection: methods includesAll: { ('nameExpression' -> 'accessing - NamedElement') }.
+	self assertMethod: (class methods detect: [ :each | each selector = 'nameExpression' ]) source equals: 'nameExpression
 	^ (sharedGeneralizations at: #NamedElement) nameExpression'.
-	self assert:
-		(methods includes: 'nameExpression:' -> 'accessing - NamedElement').
+	self assertCollection: methods includesAll: { ('nameExpression:' -> 'accessing - NamedElement') }.
 	self
-		assertMethod:
-			(class methods detect: [ :each | each selector = 'nameExpression:' ])
-				source
+		assertMethod: (class methods detect: [ :each | each selector = 'nameExpression:' ]) source
 		equals: 'nameExpression: aStringExpression
 	(sharedGeneralizations at: #NamedElement) nameExpression: aStringExpression'
 ]
@@ -296,18 +283,15 @@ OPUMLMetamodelGeneratorTest >> testAddEnumLiteral [
 	class := CBClass new.
 	class name: 'AggregationKind'.
 	enumModel := self findElement: 'AggregationKind'.
-	literal := enumModel ownedLiteral detect: [ :each |
-		           each name = 'composite' ].
+	literal := enumModel ownedLiteral detect: [ :each | each name = 'composite' ].
 	generator addEnumLiteral: literal to: class.
 	self assert: class selectors equals: #( composite ).
 	self assert: class methods first protocolName equals: 'accessing'.
 	self assertMethod: class methods first source equals: 'composite
 		"Indicates that the Property is aggregated compositely, i.e., the composite object has responsibility for the existence and storage of the composed objects (parts)."
 		^ #composite'.
-	self assert: class metaMethods isNotEmpty.
-	self
-		assert: class metaMethods first protocolName
-		equals: 'accessing - enum'.
+	self denyEmpty: class metaMethods.
+	self assert: class metaMethods first protocolName equals: 'accessing - enum'.
 	self assertMethod: class metaMethods first source equals: 'composite
 		"Indicates that the Property is aggregated compositely, i.e., the composite object has responsibility for the existence and storage of the composed objects (parts)."
 		^ #composite'
@@ -315,14 +299,15 @@ OPUMLMetamodelGeneratorTest >> testAddEnumLiteral [
 
 { #category : 'tests - generating - literals' }
 OPUMLMetamodelGeneratorTest >> testAddEnumLiteralNotPackage [
+
 	| class enumModel literal |
 	class := CBClass new.
 	class name: 'VisibilityKind'.
 	enumModel := self findElement: 'VisibilityKind'.
 	literal := enumModel ownedLiteral detect: [ :each | each name = 'package' ].
 	generator addEnumLiteral: literal to: class.
-	self assert: class selectors equals: #(package).
-	self assert: class metaMethods isEmpty
+	self assert: class selectors equals: #( package ).
+	self assertEmpty: class metaMethods
 ]
 
 { #category : 'tests - generating - generalizations' }
@@ -491,30 +476,15 @@ OPUMLMetamodelGeneratorTest >> testAddOperationsDelegationMethods [
 	class := CBClass new.
 	classModel := self findClass: 'LiteralSpecification'.
 	generator loadTemplateMethods.
-	generator
-		createClassFrom: (self findClass: 'NamedElement')
-		in: 'Anywhere'.
-	generator
-		createClassFrom: (self findClass: 'ParameterableElement')
-		in: 'Anywhere'.
-	generator
-		createClassFrom: (self findClass: 'TypedElement')
-		in: 'Anywhere'.
-	generator
-		createClassFrom: (self findClass: 'PackageableElement')
-		in: 'Anywhere'.
-	generator
-		createClassFrom: (self findClass: 'ValueSpecification')
-		in: 'Anywhere'.
+	generator createClassFrom: (self findClass: 'NamedElement') in: 'Anywhere'.
+	generator createClassFrom: (self findClass: 'ParameterableElement') in: 'Anywhere'.
+	generator createClassFrom: (self findClass: 'TypedElement') in: 'Anywhere'.
+	generator createClassFrom: (self findClass: 'PackageableElement') in: 'Anywhere'.
+	generator createClassFrom: (self findClass: 'ValueSpecification') in: 'Anywhere'.
 	generator addDelegationMethodsFrom: classModel to: class.
-	methods := class methods collect: [ :each |
-		           each selector -> each protocolName ].
-	self assert:
-		(methods includes:
-			 'stringValue' -> 'operations - ValueSpecification').
-	self
-		assertMethod: (class methodNamed: #stringValue) source
-		equals: 'stringValue
+	methods := class methods collect: [ :each | each selector -> each protocolName ].
+	self assertCollection: methods includesAll: { ('stringValue' -> 'operations - ValueSpecification') }.
+	self assertMethod: (class methodNamed: #stringValue) source equals: 'stringValue
 	^ (sharedGeneralizations at: #ValueSpecification) stringValue'
 ]
 
@@ -693,14 +663,16 @@ OPUMLMetamodelGeneratorTest >> testDefaultValue [
 
 { #category : 'tests - retrieving' }
 OPUMLMetamodelGeneratorTest >> testDefaultValues [
+
 	| result |
 	result := generator defaultValues.
-	self assert: (result includes: 'LiteralBoolean' -> false).
-	self assert: (result includes: 'LiteralNull' -> nil)
+	self assertCollection: result includesAll: { ('LiteralBoolean' -> false) }.
+	self assertCollection: result includesAll: { ('LiteralNull' -> nil) }
 ]
 
 { #category : 'tests - generating - generalizations' }
 OPUMLMetamodelGeneratorTest >> testDontAddDelegationMethodsForRedefined [
+
 	| class classModel methods |
 	class := CBClass new.
 	classModel := self findClass: 'IntervalConstraint'.
@@ -710,12 +682,13 @@ OPUMLMetamodelGeneratorTest >> testDontAddDelegationMethodsForRedefined [
 	generator createClassFrom: (self findClass: 'PackageableElement') in: 'Somewhere'.
 	generator addDelegationMethodsFrom: classModel to: class.
 	methods := class methods collect: [ :each | each selector -> each protocolName ].
-	self deny: (methods includes: 'specification' -> 'accessing - Constraint').
-	self deny: (methods includes: 'specification:' -> 'accessing - Constraint').
+	self denyCollection: methods includesAny: { ('specification' -> 'accessing - Constraint') }.
+	self denyCollection: methods includesAny: { ('specification:' -> 'accessing - Constraint') }
 ]
 
 { #category : 'tests - generating - generalizations' }
 OPUMLMetamodelGeneratorTest >> testDontAddOperationsDelegationMethods [
+
 	| class classModel methods |
 	class := CBClass new.
 	classModel := self findClass: 'LiteralString'.
@@ -728,7 +701,7 @@ OPUMLMetamodelGeneratorTest >> testDontAddOperationsDelegationMethods [
 	generator addDelegationMethodsFrom: classModel to: class.
 	methods := class methods collect: [ :each | each selector -> each protocolName ].
 	methods := class methods collect: [ :each | each selector -> each protocolName ].
-	self deny: (methods includes: 'stringValue' -> 'operations - ValueSpecification')
+	self denyCollection: methods includesAny: { ('stringValue' -> 'operations - ValueSpecification') }
 ]
 
 { #category : 'tests - generating - classes' }
@@ -769,9 +742,10 @@ OPUMLMetamodelGeneratorTest >> testFindElement [
 
 { #category : 'tests - generating' }
 OPUMLMetamodelGeneratorTest >> testGenerateAll [
+
 	| result |
 	result := generator generateAll.
-	self assert: result isNotEmpty
+	self denyEmpty: result
 ]
 
 { #category : 'tests - testing' }
@@ -814,13 +788,14 @@ OPUMLMetamodelGeneratorTest >> testLiteralSpecification [
 
 { #category : 'tests - generating - operations' }
 OPUMLMetamodelGeneratorTest >> testLoadTemplateMethods [
+
 	| operation |
 	operation := self operation: 'isNull' inClass: 'ValueSpecification'.
 	operation method: nil.
 	generator loadTemplateMethods.
 	self assert: operation method isNotNil.
-	self assert: operation method isNotEmpty.
-	self assert: operation method first body first isNotEmpty.
+	self denyEmpty: operation method.
+	self denyEmpty: operation method first body first.
 	self assert: operation method first language first equals: 'Pharo'
 ]
 

@@ -11,9 +11,10 @@ Class {
 
 { #category : 'tests' }
 OPUMLMetaGenTemplateTest >> testImplementedMethods [
+
 	| methods |
 	methods := OPUMLMetaGenPropertyTemplate new implementedMethods.
-	self assert: ((methods collect: #key) includes: #isComposite)
+	self assertCollection: (methods collect: #key) includesAll: { #isComposite }
 ]
 
 { #category : 'tests' }

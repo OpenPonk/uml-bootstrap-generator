@@ -122,9 +122,10 @@ OPUMLBootstrapGeneratorTest >> testGeneralizationsInClass [
 
 { #category : 'tests - generating' }
 OPUMLBootstrapGeneratorTest >> testGenerateAll [
+
 	| result |
 	result := generator generateAll.
-	self assert: result isNotEmpty
+	self denyEmpty: result
 ]
 
 { #category : 'tests - retrieving' }
