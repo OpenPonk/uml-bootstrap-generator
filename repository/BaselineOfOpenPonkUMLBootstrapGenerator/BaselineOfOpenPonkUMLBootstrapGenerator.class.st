@@ -23,5 +23,8 @@ BaselineOfOpenPonkUMLBootstrapGenerator >> baseline: spec [
 			spec
 				package: 'OpenPonk-UML-BootstrapGenerator'
 				with: [ spec requires: #('OpenPonkXMI' 'ChangesBuilder' 'OpenPonk-UML-Bootstrap') ].
-			spec group: 'default' with: #('OpenPonk-UML-BootstrapGenerator') ]
+			spec
+				package: 'OpenPonk-UML-BootstrapGenerator-Tests'
+				with: [ spec requires: #('OpenPonk-UML-BootstrapGenerator') ].
+			spec group: 'default' with: #('OpenPonk-UML-BootstrapGenerator' 'OpenPonk-UML-BootstrapGenerator-Tests') ]
 ]

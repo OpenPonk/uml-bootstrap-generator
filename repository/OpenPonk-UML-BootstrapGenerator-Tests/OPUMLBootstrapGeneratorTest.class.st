@@ -10,9 +10,9 @@ Class {
 	#classInstVars : [
 		'umlSpecs'
 	],
-	#category : 'OpenPonk-UML-BootstrapGenerator-Tests',
-	#package : 'OpenPonk-UML-BootstrapGenerator',
-	#tag : 'Tests'
+	#category : 'OpenPonk-UML-BootstrapGenerator-Tests-Bootstrap-Generator',
+	#package : 'OpenPonk-UML-BootstrapGenerator-Tests',
+	#tag : 'Bootstrap-Generator'
 }
 
 { #category : 'running' }

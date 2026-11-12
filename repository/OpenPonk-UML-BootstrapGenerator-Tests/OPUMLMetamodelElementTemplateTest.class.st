@@ -4,9 +4,9 @@ I am a unit test class verifying the core behaviors (such as tag management, ste
 Class {
 	#name : 'OPUMLMetamodelElementTemplateTest',
 	#superclass : 'TestCase',
-	#category : 'OpenPonk-UML-BootstrapGenerator-Tests',
-	#package : 'OpenPonk-UML-BootstrapGenerator',
-	#tag : 'Tests'
+	#category : 'OpenPonk-UML-BootstrapGenerator-Tests-Metamodel-Generator',
+	#package : 'OpenPonk-UML-BootstrapGenerator-Tests',
+	#tag : 'Metamodel-Generator'
 }
 
 { #category : 'running' }

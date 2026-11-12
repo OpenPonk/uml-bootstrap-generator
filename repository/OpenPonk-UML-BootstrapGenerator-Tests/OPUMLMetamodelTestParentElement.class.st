@@ -4,9 +4,9 @@ I am a mock parent template class used exclusively for unit testing the multiple
 Class {
 	#name : 'OPUMLMetamodelTestParentElement',
 	#superclass : 'OPUMLMetamodelElementTemplate',
-	#category : 'OpenPonk-UML-BootstrapGenerator-Tests',
-	#package : 'OpenPonk-UML-BootstrapGenerator',
-	#tag : 'Tests'
+	#category : 'OpenPonk-UML-BootstrapGenerator-Tests-Metamodel-Generator',
+	#package : 'OpenPonk-UML-BootstrapGenerator-Tests',
+	#tag : 'Metamodel-Generator'
 }
 
 { #category : 'accessing' }

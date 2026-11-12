@@ -4,9 +4,9 @@ I am a mock child template class extending OPUMLMetamodelTestParentElement, used
 Class {
 	#name : 'OPUMLMetamodelTestChildElement',
 	#superclass : 'OPUMLMetamodelTestParentElement',
-	#category : 'OpenPonk-UML-BootstrapGenerator-Tests',
-	#package : 'OpenPonk-UML-BootstrapGenerator',
-	#tag : 'Tests'
+	#category : 'OpenPonk-UML-BootstrapGenerator-Tests-Metamodel-Generator',
+	#package : 'OpenPonk-UML-BootstrapGenerator-Tests',
+	#tag : 'Metamodel-Generator'
 }
 
 { #category : 'accessing' }

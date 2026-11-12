@@ -7,8 +7,8 @@ Class {
 	#instVars : [
 		'reader'
 	],
-	#category : 'OpenPonk-UML-BootstrapGenerator-Reader',
-	#package : 'OpenPonk-UML-BootstrapGenerator',
+	#category : 'OpenPonk-UML-BootstrapGenerator-Tests-Reader',
+	#package : 'OpenPonk-UML-BootstrapGenerator-Tests',
 	#tag : 'Reader'
 }
 

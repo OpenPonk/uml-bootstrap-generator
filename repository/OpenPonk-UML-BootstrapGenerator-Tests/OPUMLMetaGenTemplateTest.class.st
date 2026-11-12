@@ -4,9 +4,9 @@ I am a unit test class verifying that the template injection system accurately i
 Class {
 	#name : 'OPUMLMetaGenTemplateTest',
 	#superclass : 'TestCase',
-	#category : 'OpenPonk-UML-BootstrapGenerator-Tests',
-	#package : 'OpenPonk-UML-BootstrapGenerator',
-	#tag : 'Tests'
+	#category : 'OpenPonk-UML-BootstrapGenerator-Tests-Templates',
+	#package : 'OpenPonk-UML-BootstrapGenerator-Tests',
+	#tag : 'Templates'
 }
 
 { #category : 'tests' }

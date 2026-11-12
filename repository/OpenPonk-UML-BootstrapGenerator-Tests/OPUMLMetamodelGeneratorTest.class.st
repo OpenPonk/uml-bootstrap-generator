@@ -10,24 +10,16 @@ Class {
 	#classInstVars : [
 		'umlBootstrapModel'
 	],
-	#category : 'OpenPonk-UML-BootstrapGenerator-Tests',
-	#package : 'OpenPonk-UML-BootstrapGenerator',
-	#tag : 'Tests'
+	#category : 'OpenPonk-UML-BootstrapGenerator-Tests-Metamodel-Generator',
+	#package : 'OpenPonk-UML-BootstrapGenerator-Tests',
+	#tag : 'Metamodel-Generator'
 }
 
 { #category : 'accessing' }
 OPUMLMetamodelGeneratorTest class >> umlBootstrapModel [
-	"
-	umlBootstrapModel := nil
-	"
 
 	<script: 'self umlBootstrapModel inspect'>
-	^ umlBootstrapModel
-		ifNil: [ | xmi reader |
-			xmi := OPUMLBootstrapGenerator umlSpecs.
-			reader := OPUMLXMIBootstrapReader new.
-			reader classPrefix: 'BootUML'.
-			umlBootstrapModel := (reader readXmi: xmi) first ]
+	^ OPUMLMetamodelGenerator umlBootstrapModel
 ]
 
 { #category : 'asserting' }

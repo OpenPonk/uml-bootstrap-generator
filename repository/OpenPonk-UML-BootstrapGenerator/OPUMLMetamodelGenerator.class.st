@@ -12,6 +12,9 @@ Class {
 		'classes',
 		'defaultValues'
 	],
+	#classInstVars : [
+		'umlBootstrapModel'
+	],
 	#category : 'OpenPonk-UML-BootstrapGenerator-Metamodel-Generator',
 	#package : 'OpenPonk-UML-BootstrapGenerator',
 	#tag : 'Metamodel-Generator'
@@ -29,12 +32,27 @@ OPUMLMetamodelGenerator class >> newDefault [
 
 	<script: 'self newDefault inspect'>
 	| generator model |
-	model := OPUMLMetamodelGeneratorTest umlBootstrapModel.
+	model := self umlBootstrapModel.
 	generator := self new.
 	generator sourceModel: model.
 	generator classPrefix: 'OPUML'.
 	generator packageName: 'OP-UML-Metamodel'.
 	^ generator
+]
+
+{ #category : 'accessing' }
+OPUMLMetamodelGenerator class >> umlBootstrapModel [
+	"
+	umlBootstrapModel := nil
+	"
+
+	<script: 'self umlBootstrapModel inspect'>
+	^ umlBootstrapModel
+		ifNil: [ | xmi reader |
+			xmi := OPUMLBootstrapGenerator umlSpecs.
+			reader := OPUMLXMIBootstrapReader new.
+			reader classPrefix: 'BootUML'.
+			umlBootstrapModel := (reader readXmi: xmi) first ]
 ]
 
 { #category : 'generating - methods' }
