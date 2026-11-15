@@ -5,7 +5,8 @@ Class {
 	#name : 'OPUMLMetamodelGeneratorTest',
 	#superclass : 'TestCase',
 	#instVars : [
-		'generator'
+		'generator',
+		'preexistingPackages'
 	],
 	#classInstVars : [
 		'umlBootstrapModel'
@@ -60,11 +61,27 @@ OPUMLMetamodelGeneratorTest >> operation: anOperationName inClass: aClassName [
 
 { #category : 'running' }
 OPUMLMetamodelGeneratorTest >> setUp [
+
 	super setUp.
+	preexistingPackages := #( 'Generated-UMLMetamodelTest' 'TestGenerated123' ) select: [ :each |
+		                       self packageOrganizer hasPackage: each ].
 	generator := OPUMLMetamodelGenerator new.
 	generator sourceModel: self model.
 	generator classPrefix: 'MBUT'.
 	generator packageName: 'Generated-UMLMetamodelTest'
+]
+
+{ #category : 'running' }
+OPUMLMetamodelGeneratorTest >> tearDown [
+
+	| existing |
+	existing := preexistingPackages ifNil: [ #(  ) ].
+	#( 'Generated-UMLMetamodelTest' 'TestGenerated123' ) do: [ :each |
+			(existing includes: each) ifFalse: [
+					self packageOrganizer
+						packageNamed: each
+						ifPresent: [ :package | package isEmpty ifTrue: [ self packageOrganizer removePackage: package ] ] ] ].
+	super tearDown
 ]
 
 { #category : 'tests - generating - generalizations' }
@@ -258,14 +275,14 @@ OPUMLMetamodelGeneratorTest >> testAddAttributeWithEnumDefaultValue [
 
 { #category : 'tests - generating - classes' }
 OPUMLMetamodelGeneratorTest >> testAddComment [
+
 	| class |
 	class := CBClass new.
-	self assert: class comment equals: nil.
+	self assert: class comment identicalTo: nil.
 	generator addCommentFrom: (self findClass: 'Element') to: class.
 	self
 		assert: class comment
-		equals:
-			'An Element is a constituent of a model. As such, it has the capability of owning other Elements.'
+		equals: 'An Element is a constituent of a model. As such, it has the capability of owning other Elements.'
 ]
 
 { #category : 'tests' }
@@ -491,9 +508,10 @@ OPUMLMetamodelGeneratorTest >> testAllSuperclasses [
 
 { #category : 'testing - test meta' }
 OPUMLMetamodelGeneratorTest >> testAttributeInClass [
+
 	| attribute |
 	attribute := self attribute: 'ownedComment' inClass: 'Element'.
-	self assert: attribute isNotNil.
+	self assert: attribute class identicalTo: BootUMLProperty.
 	self assert: attribute name equals: 'ownedComment'
 ]
 
@@ -571,9 +589,13 @@ OPUMLMetamodelGeneratorTest >> testCreateElementMetaClassMethods [
 
 { #category : 'tests - meta' }
 OPUMLMetamodelGeneratorTest >> testCreateElementMetaComment [
+
 	| cls |
 	cls := generator createElementMeta.
-	self assert: cls comment isNotNil
+	self
+		assert: cls comment
+		equals:
+		'I am a metaclass for UML classes implementing some behavior for managing the classes and other stuff (like an announcer).'
 ]
 
 { #category : 'tests - meta' }
@@ -636,14 +658,19 @@ OPUMLMetamodelGeneratorTest >> testCreateTargetPackage [
 
 	generator packageName: 'TestGenerated123'.
 	generator createTargetPackage.
-	self assert: (self packageOrganizer hasPackage: 'TestGenerated123')
+	self
+		assert: (self packageOrganizer hasPackage: 'TestGenerated123')
+		description: 'createTargetPackage must register target package in PackageOrganizer'
 ]
 
 { #category : 'tests - retrieving' }
 OPUMLMetamodelGeneratorTest >> testDefaultDefaultValue [
+
 	| attribute |
 	attribute := self attribute: 'isReadOnly' inClass: 'Activity'.
-	self assert: (generator defaultValueFrom: attribute defaultValue) equals: false
+	self
+		deny: (generator defaultValueFrom: attribute defaultValue)
+		description: 'Default value of Activity>>isReadOnly must evaluate to false'
 ]
 
 { #category : 'tests - retrieving' }
@@ -698,13 +725,14 @@ OPUMLMetamodelGeneratorTest >> testDontAddOperationsDelegationMethods [
 
 { #category : 'tests - generating - classes' }
 OPUMLMetamodelGeneratorTest >> testEnsureCreateClass [
+
 	| result1 result2 |
 	result1 := generator ensureCreateClass: 'GeneratedClassXXX' in: 'Generated-Package'.
 	self assert: result1 name equals: 'MBUTGeneratedClassXXX'.
 	self assert: result1 packageName equals: 'Generated-UMLMetamodelTest-Generated-Package'.
 	self assert: result1 parent equals: 'MBUTElement'.
 	result2 := generator ensureCreateClass: 'GeneratedClassXXX' in: 'Generated-Package'.
-	self assert: result1 == result2 description: 'should be the same identity'
+	self assert: result1 identicalTo: result2
 ]
 
 { #category : 'tests - retrieving' }
@@ -718,17 +746,19 @@ OPUMLMetamodelGeneratorTest >> testEnumDefaultValue [
 
 { #category : 'testing - test meta' }
 OPUMLMetamodelGeneratorTest >> testFindClass [
+
 	| aClass |
 	aClass := self findClass: 'Comment'.
-	self assert: aClass isNotNil.
+	self assert: aClass class identicalTo: BootUMLClass.
 	self assert: aClass name equals: 'Comment'
 ]
 
 { #category : 'testing - test meta' }
 OPUMLMetamodelGeneratorTest >> testFindElement [
+
 	| anElement |
 	anElement := self findElement: 'AggregationKind'.
-	self assert: anElement isNotNil.
+	self assert: anElement class identicalTo: BootUMLEnumeration.
 	self assert: anElement name equals: 'AggregationKind'
 ]
 
@@ -742,9 +772,10 @@ OPUMLMetamodelGeneratorTest >> testGenerateAll [
 
 { #category : 'tests - testing' }
 OPUMLMetamodelGeneratorTest >> testIsEnumValue [
+
 	self
-		assert:
-			(generator isEnumValue: (self attribute: 'direction' inClass: 'Parameter') defaultValue)
+		assert: (generator isEnumValue: (self attribute: 'direction' inClass: 'Parameter') defaultValue)
+		description: 'Parameter direction default value must be recognized as an enum value'
 ]
 
 { #category : 'tests - testing' }
@@ -768,14 +799,13 @@ OPUMLMetamodelGeneratorTest >> testIsMultivalued [
 
 { #category : 'tests - testing' }
 OPUMLMetamodelGeneratorTest >> testLiteralSpecification [
+
 	self
-		assert:
-			(generator
-				isLiteralSpecification: (self attribute: 'value' inClass: 'LiteralInteger') defaultValue).
+		assert: (generator isLiteralSpecification: (self attribute: 'value' inClass: 'LiteralInteger') defaultValue)
+		description: 'LiteralInteger value defaultValue must be recognized as a LiteralSpecification'.
 	self
-		deny:
-			(generator
-				isLiteralSpecification: (self attribute: 'direction' inClass: 'Parameter') defaultValue)
+		deny: (generator isLiteralSpecification: (self attribute: 'direction' inClass: 'Parameter') defaultValue)
+		description: 'Parameter direction defaultValue must not be recognized as a LiteralSpecification'
 ]
 
 { #category : 'tests - generating - operations' }
@@ -785,7 +815,7 @@ OPUMLMetamodelGeneratorTest >> testLoadTemplateMethods [
 	operation := self operation: 'isNull' inClass: 'ValueSpecification'.
 	operation method: nil.
 	generator loadTemplateMethods.
-	self assert: operation method isNotNil.
+	self assert: operation method class identicalTo: Array.
 	self denyEmpty: operation method.
 	self denyEmpty: operation method first body first.
 	self assert: operation method first language first equals: 'Pharo'
@@ -793,16 +823,27 @@ OPUMLMetamodelGeneratorTest >> testLoadTemplateMethods [
 
 { #category : 'tests - generating - operations' }
 OPUMLMetamodelGeneratorTest >> testLoadTemplateMethodsVarious [
+
+	| isNullMethod lowerMethod |
 	generator loadTemplateMethods.
-	self assert: (self operation: 'isNull' inClass: 'ValueSpecification') method isNotNil.
-	self assert: (self operation: 'lower' inClass: 'MultiplicityElement') method isNotNil.
+	isNullMethod := (self operation: 'isNull' inClass: 'ValueSpecification') method.
+	lowerMethod := (self operation: 'lower' inClass: 'MultiplicityElement') method.
+	self assert: isNullMethod class identicalTo: Array.
+	self denyEmpty: isNullMethod.
+	self assert: isNullMethod first language equals: #( #Pharo ).
+	self assert: isNullMethod first body equals: #( '^ false' ).
+	self assert: lowerMethod class identicalTo: Array.
+	self denyEmpty: lowerMethod.
+	self assert: lowerMethod first language equals: #( #Pharo ).
+	self assert: lowerMethod first body equals: #( '^ self lowerBound' )
 ]
 
 { #category : 'testing - test meta' }
 OPUMLMetamodelGeneratorTest >> testOperationInClass [
+
 	| operation |
 	operation := self operation: 'lowerBound' inClass: 'MultiplicityElement'.
-	self assert: operation isNotNil.
+	self assert: operation class identicalTo: BootUMLOperation.
 	self assert: operation name equals: 'lowerBound'
 ]
 

@@ -5,7 +5,8 @@ Class {
 	#name : 'OPUMLBootstrapGeneratorTest',
 	#superclass : 'TestCase',
 	#instVars : [
-		'generator'
+		'generator',
+		'preexistingPackages'
 	],
 	#classInstVars : [
 		'umlSpecs'
@@ -17,11 +18,26 @@ Class {
 
 { #category : 'running' }
 OPUMLBootstrapGeneratorTest >> setUp [
+
 	super setUp.
+	preexistingPackages := #( 'Generated-UMLBootstrapTest' ) select: [ :each | self packageOrganizer hasPackage: each ].
 	generator := OPUMLBootstrapGenerator new.
 	generator sourceXmi: OPUMLBootstrapGenerator umlSpecs.
 	generator classPrefix: 'BUT'.
 	generator packageName: 'Generated-UMLBootstrapTest'
+]
+
+{ #category : 'running' }
+OPUMLBootstrapGeneratorTest >> tearDown [
+
+	| existing |
+	existing := preexistingPackages ifNil: [ #(  ) ].
+	#( 'Generated-UMLBootstrapTest' ) do: [ :each |
+			(existing includes: each) ifFalse: [
+					self packageOrganizer
+						packageNamed: each
+						ifPresent: [ :package | package isEmpty ifTrue: [ self packageOrganizer removePackage: package ] ] ] ].
+	super tearDown
 ]
 
 { #category : 'tests - selecting' }
@@ -83,41 +99,40 @@ OPUMLBootstrapGeneratorTest >> testCreateClass [
 
 { #category : 'tests - initialization' }
 OPUMLBootstrapGeneratorTest >> testDefaultConfiguration [
+
 	self assert: generator classPrefix equals: 'BUT'.
 	self assert: generator packageName equals: 'Generated-UMLBootstrapTest'.
 	self assert: generator rootClassName equals: 'OPUMLBootstrapObject'.
-	self assert: generator sourceXmi isNotNil
+	self assert: generator sourceXmi identicalTo: OPUMLBootstrapGenerator umlSpecs.
+	self assert: generator sourceXmi class identicalTo: OPXMIObjectElement
 ]
 
 { #category : 'tests - generating' }
 OPUMLBootstrapGeneratorTest >> testEnsureCreateClass [
+
 	| result1 result2 |
 	result1 := generator ensureCreateClass: 'GeneratedClassXXX' in: 'Package'.
 	self assert: result1 name equals: 'BUTGeneratedClassXXX'.
 	self assert: result1 categoryName equals: 'Generated-UMLBootstrapTest-Package'.
 	self assert: result1 parent equals: generator rootClassName.
 	result2 := generator ensureCreateClass: 'GeneratedClassXXX' in: 'Package'.
-	self assert: result1 == result2 description: 'should be the same identity'
+	self assert: result1 identicalTo: result2
 ]
 
 { #category : 'tests - selecting' }
 OPUMLBootstrapGeneratorTest >> testGeneralizationsInClass [
+
 	| parent child |
-	parent := OPXMIObjectElement new
-		containedItems: {OPXMIValueElement xmiName: 'name' value: 'Parent'}.
-	child := OPXMIObjectElement new
-		containedItems:
-			{OPXMIValueElement xmiName: 'name' value: 'Child'.
-			OPXMIObjectElement new
-				xmiName: 'generalization';
-				containedItems:
-					{OPXMIReferenceAttribute new
-						xmiName: 'general';
-						referencedElements: {parent}}}.
-	self assert: (generator collectGeneralizationsInClass: parent) equals: #().
-	self
-		assert: (generator collectGeneralizationsInClass: child)
-		equals: {'Child' -> 'Parent'}
+	parent := OPXMIObjectElement new containedItems: { (OPXMIValueElement xmiName: 'name' value: 'Parent') }.
+	child := OPXMIObjectElement new containedItems: {
+			         (OPXMIValueElement xmiName: 'name' value: 'Child').
+			         (OPXMIObjectElement new
+				          xmiName: 'generalization';
+				          containedItems: { (OPXMIReferenceAttribute new
+						           xmiName: 'general';
+						           referencedElements: { parent }) }) }.
+	self assertEmpty: (generator collectGeneralizationsInClass: parent).
+	self assert: (generator collectGeneralizationsInClass: child) equals: { ('Child' -> 'Parent') }
 ]
 
 { #category : 'tests - generating' }
@@ -158,25 +173,15 @@ OPUMLBootstrapGeneratorTest >> testTypeOfReference [
 OPUMLBootstrapGeneratorTest >> testeCreateDelegationMethods [
 
 	| parent child |
-	parent := generator
-		          ensureCreateClass: 'GeneratedParentClass'
-		          in: 'Package'.
-	child := generator
-		         ensureCreateClass: 'GeneratedChildClass'
-		         in: 'Package'.
+	parent := generator ensureCreateClass: 'GeneratedParentClass' in: 'Package'.
+	child := generator ensureCreateClass: 'GeneratedChildClass' in: 'Package'.
 	parent addMethod: (CBMethod new getter: 'property').
-	parent addMethod:
-		(CBMethod new setter: 'property' argument: 'Property').
-	generator
-		createDelegationMethods: #( #( GeneratedParentClass ) )
-		for: #GeneratedChildClass.
-	self assert: child methods size equals: 2.
+	parent addMethod: (CBMethod new setter: 'property' argument: 'Property').
+	generator createDelegationMethods: #( #( GeneratedParentClass ) ) for: #GeneratedChildClass.
+	self assert: (child methods collect: #selector as: Array) sorted equals: #( #property #property: ).
 	self
-		assert: child methods first protocolName
-		equals: 'accessing - GeneratedParentClass'.
-	self
-		assert: child methods second protocolName
-		equals: 'accessing - GeneratedParentClass'
+		assert: (child methods collect: #protocolName as: Array)
+		equals: #( 'accessing - GeneratedParentClass' 'accessing - GeneratedParentClass' )
 ]
 
 { #category : 'instance creation' }

@@ -198,25 +198,28 @@ OPUMLXMIBootstrapReaderTest >> testAmbiguousPackageImport [
 	activitiesPkg := masterPkg packageImport first importedPackage.
 	classificationPkg := masterPkg packageImport second importedPackage.
 	self assert: classificationPkg name equals: 'Classification'.
-	self assert: classificationPkg packageImport equals: nil.
+	self assert: classificationPkg packageImport identicalTo: nil.
 	self assert: activitiesPkg name equals: 'Activities'.
-	self assert: activitiesPkg packageImport first importedPackage equals: classificationPkg
+	self assert: activitiesPkg packageImport first importedPackage identicalTo: classificationPkg
 ]
 
 { #category : 'tests' }
 OPUMLXMIBootstrapReaderTest >> testAssociation [
+
 	| result |
 	result := reader readItem: self association.
 	self assert: result className equals: #BootUMLAssociation.
-	self assert: result memberEnd size equals: 2.
-	self assert: result memberEnd second equals: result ownedEnd first
+	self assert: (result memberEnd collect: #name as: Array) equals: #( 'annotatedElement' 'comment' ).
+	self assert: (result ownedEnd collect: #name as: Array) equals: #( 'comment' ).
+	self assert: result memberEnd second identicalTo: result ownedEnd first
 ]
 
 { #category : 'tests' }
 OPUMLXMIBootstrapReaderTest >> testBooleanValue [
+
 	| result |
 	result := reader valueFor: 'true'.
-	self assert: result equals: true
+	self assert: result description: 'Bootstrap reader valueFor: ''true'' must evaluate to true'
 ]
 
 { #category : 'tests' }
@@ -241,24 +244,25 @@ OPUMLXMIBootstrapReaderTest >> testGeneralizationElement [
 
 { #category : 'tests' }
 OPUMLXMIBootstrapReaderTest >> testGroupedChildren [
+
 	| result |
 	result := reader groupedChildrenIn: self multipleNestedAttributes.
-	self assert: result keys sorted equals: #(name ownedAttribute).
-	self assert: (result at: #name) size equals: 1.
-	self assert: (result at: #ownedAttribute) size equals: 2
+	self assert: result keys sorted equals: #( name ownedAttribute ).
+	self assert: ((result at: #name) collect: #value as: Array) equals: #( 'Comment' ).
+	self assert: ((result at: #ownedAttribute) collect: #nameValue as: Array) equals: #( 'annotatedElement' 'body' )
 ]
 
 { #category : 'tests' }
 OPUMLXMIBootstrapReaderTest >> testInstance [
+
 	| element result1 result2 |
-	element := OPXMIObjectElement new
-		containedItems:
-			{OPXMIValueElement xmiName: 'xmi:id' value: 'CLS'.
-			OPXMIValueElement xmiName: 'xmi:type' value: 'uml:Package'}.
+	element := OPXMIObjectElement new containedItems: {
+			           (OPXMIValueElement xmiName: 'xmi:id' value: 'CLS').
+			           (OPXMIValueElement xmiName: 'xmi:type' value: 'uml:Package') }.
 	result1 := reader instanceFor: element.
 	self assert: result1 className equals: #BootUMLPackage.
 	result2 := reader instanceFor: element.
-	self assert: result1 == result2 description: 'We expect the same object.'
+	self assert: result1 identicalTo: result2
 ]
 
 { #category : 'tests' }
@@ -270,42 +274,61 @@ OPUMLXMIBootstrapReaderTest >> testIntegerValue [
 
 { #category : 'tests' }
 OPUMLXMIBootstrapReaderTest >> testIsCollectionAttribute [
-	self deny: (reader isCollectionAttribute: #name inClass: BootUMLProperty).
-	self deny: (reader isCollectionAttribute: #body inClass: BootUMLComment).
-	self deny: (reader isCollectionAttribute: #general inClass: BootUMLGeneralization).
-	self deny: (reader isCollectionAttribute: #type inClass: BootUMLProperty).
-	self deny: (reader isCollectionAttribute: #importedPackage inClass: BootUMLPackageImport).
-	self deny: (reader isCollectionAttribute: #defaultValue inClass: BootUMLProperty).
-	self deny: (reader isCollectionAttribute: #instance inClass: BootUMLInstanceValue).
-	self deny: (reader isCollectionAttribute: #bodyCondition inClass: BootUMLOperation).
-	self deny: (reader isCollectionAttribute: #specification inClass: BootUMLConstraint)
+
+	self
+		deny: (reader isCollectionAttribute: #name inClass: BootUMLProperty)
+		description: 'BootUMLProperty>>name must not be treated as a collection attribute'.
+	self
+		deny: (reader isCollectionAttribute: #body inClass: BootUMLComment)
+		description: 'BootUMLComment>>body must not be treated as a collection attribute'.
+	self
+		deny: (reader isCollectionAttribute: #general inClass: BootUMLGeneralization)
+		description: 'BootUMLGeneralization>>general must not be treated as a collection attribute'.
+	self
+		deny: (reader isCollectionAttribute: #type inClass: BootUMLProperty)
+		description: 'BootUMLProperty>>type must not be treated as a collection attribute'.
+	self
+		deny: (reader isCollectionAttribute: #importedPackage inClass: BootUMLPackageImport)
+		description: 'BootUMLPackageImport>>importedPackage must not be treated as a collection attribute'.
+	self
+		deny: (reader isCollectionAttribute: #defaultValue inClass: BootUMLProperty)
+		description: 'BootUMLProperty>>defaultValue must not be treated as a collection attribute'.
+	self
+		deny: (reader isCollectionAttribute: #instance inClass: BootUMLInstanceValue)
+		description: 'BootUMLInstanceValue>>instance must not be treated as a collection attribute'.
+	self
+		deny: (reader isCollectionAttribute: #bodyCondition inClass: BootUMLOperation)
+		description: 'BootUMLOperation>>bodyCondition must not be treated as a collection attribute'.
+	self
+		deny: (reader isCollectionAttribute: #specification inClass: BootUMLConstraint)
+		description: 'BootUMLConstraint>>specification must not be treated as a collection attribute'
 ]
 
 { #category : 'tests' }
 OPUMLXMIBootstrapReaderTest >> testMultipleNestedAttributes [
+
 	| result |
 	result := reader readItem: self multipleNestedAttributes.
 	self assert: result className equals: #BootUMLClass.
-	self assert: result ownedAttribute size equals: 2.
-	self assert: result ownedAttribute first name equals: 'annotatedElement'.
-	self assert: result ownedAttribute second name equals: 'body'
+	self assert: (result ownedAttribute collect: #name as: Array) equals: #( 'annotatedElement' 'body' )
 ]
 
 { #category : 'tests' }
 OPUMLXMIBootstrapReaderTest >> testNestedComplexElement [
+
 	| result |
 	result := reader readItem: self nestedComplexElement.
 	self assert: result className equals: #BootUMLProperty.
 	self assert: result upperValue value equals: '*'.
-	"	self assert: result lowerValue value equals: 0."
-	self assert: result lowerValue value equals: nil
+	self assert: result lowerValue value identicalTo: nil
 ]
 
 { #category : 'tests' }
 OPUMLXMIBootstrapReaderTest >> testReadBoolean [
+
 	| result |
 	result := reader readItem: (OPXMIValueAttribute xmiName: 'isDerived' value: 'true').
-	self assert: result equals: true
+	self assert: result description: 'Reading Boolean attribute ''true'' must evaluate to true'
 ]
 
 { #category : 'tests' }
@@ -323,20 +346,19 @@ OPUMLXMIBootstrapReaderTest >> testReadSimpleObject [
 
 { #category : 'tests' }
 OPUMLXMIBootstrapReaderTest >> testReadTrivialXmi [
+
 	| result |
 	result := reader readXmi: self trivialXmi.
-	self assert: result size equals: 1.
-	self assert: result first className equals: #BootUMLPackage
+	self assert: (result collect: #className as: Array) equals: #( #BootUMLPackage )
 ]
 
 { #category : 'tests' }
 OPUMLXMIBootstrapReaderTest >> testReadTrivialishXmi [
+
 	| result |
 	result := reader readXmi: self trivialishXmi.
-	self assert: result size equals: 1.
-	self assert: result first className equals: #BootUMLPackage.
-	self assert: result first packagedElement size equals: 1.
-	self assert: result first packagedElement first name equals: 'Activities'
+	self assert: (result collect: #className as: Array) equals: #( #BootUMLPackage ).
+	self assert: (result first packagedElement collect: #name as: Array) equals: #( 'Activities' )
 ]
 
 { #category : 'tests' }

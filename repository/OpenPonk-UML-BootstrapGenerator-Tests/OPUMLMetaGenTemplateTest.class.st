@@ -24,5 +24,8 @@ OPUMLMetaGenTemplateTest >> testSupportedClasses [
 
 { #category : 'tests' }
 OPUMLMetaGenTemplateTest >> testSupports [
-	self assert: (OPUMLMetaGenPropertyTemplate new supportsClass: 'Property')
+
+	self
+		assert: (OPUMLMetaGenPropertyTemplate new supportsClass: 'Property')
+		description: 'OPUMLMetaGenPropertyTemplate must support Property class'
 ]

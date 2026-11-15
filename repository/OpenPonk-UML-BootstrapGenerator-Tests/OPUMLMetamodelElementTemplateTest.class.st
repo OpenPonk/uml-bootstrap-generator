@@ -33,11 +33,12 @@ OPUMLMetamodelElementTemplateTest >> setUp [
 
 { #category : 'tests' }
 OPUMLMetamodelElementTemplateTest >> testAddTag [
+
 	| el |
 	el := OPUMLMetamodelTestChildElement new.
-	self deny: (el hasTagAt: 'key').
+	self deny: (el hasTagAt: 'key') description: 'Fresh element must not have tag at #key'.
 	el tagAt: 'key' put: 12.
-	self assert: (el hasTagAt: 'key')
+	self assert: (el hasTagAt: 'key') description: 'Element must have tag at #key after tagAt:put:'
 ]
 
 { #category : 'tests' }
@@ -62,32 +63,40 @@ OPUMLMetamodelElementTemplateTest >> testNonEmptyInspectorProperties [
 
 { #category : 'tests  - ocl-experimental' }
 OPUMLMetamodelElementTemplateTest >> testOclAsType [
+
 	| el |
 	el := OPUMLMetamodelTestChildElement new.
-	self
-		assert: (el oclAsType: 'MetamodelTestParentElement') class
-		equals: OPUMLMetamodelTestParentElement
+	self assert: (el oclAsType: 'MetamodelTestParentElement') class identicalTo: OPUMLMetamodelTestParentElement
 ]
 
 { #category : 'tests  - ocl-experimental' }
 OPUMLMetamodelElementTemplateTest >> testOclIsKindOf [
+
 	| el |
 	el := OPUMLMetamodelTestChildElement new.
-	self assert: (el oclIsKindOf: 'MetamodelTestChildElement')
+	self
+		assert: (el oclIsKindOf: 'MetamodelTestChildElement')
+		description: 'Element must satisfy oclIsKindOf: for its own classifier'
 ]
 
 { #category : 'tests  - ocl-experimental' }
 OPUMLMetamodelElementTemplateTest >> testOclIsKindOfParent [
+
 	| el |
 	el := OPUMLMetamodelTestChildElement new.
-	self assert: (el oclIsKindOf: 'MetamodelTestParentElement')
+	self
+		assert: (el oclIsKindOf: 'MetamodelTestParentElement')
+		description: 'Element must satisfy oclIsKindOf: for its parent classifier'
 ]
 
 { #category : 'tests  - ocl-experimental' }
 OPUMLMetamodelElementTemplateTest >> testOclIsTypeOf [
+
 	| el |
 	el := OPUMLMetamodelTestChildElement new.
-	self assert: (el oclIsTypeOf: 'MetamodelTestChildElement')
+	self
+		assert: (el oclIsTypeOf: 'MetamodelTestChildElement')
+		description: 'Element must satisfy oclIsTypeOf: for its exact classifier'
 ]
 
 { #category : 'tests' }
@@ -99,11 +108,12 @@ OPUMLMetamodelElementTemplateTest >> testPresentedSelectors [
 
 { #category : 'tests' }
 OPUMLMetamodelElementTemplateTest >> testRemoveTag [
+
 	| el |
 	el := OPUMLMetamodelTestChildElement new.
 	el tagAt: 'key' put: 12.
 	el removeTagAt: 'key'.
-	self deny: (el hasTagAt: 'key')
+	self deny: (el hasTagAt: 'key') description: 'Element must not have tag at #key after removeTagAt:'
 ]
 
 { #category : 'tests' }
