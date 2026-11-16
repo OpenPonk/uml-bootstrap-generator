@@ -7,10 +7,8 @@ Class {
 	#instVars : [
 		'classPrefix',
 		'packageName',
-		'rootClassName',
 		'sourceModel',
-		'classes',
-		'defaultValues'
+		'classes'
 	],
 	#category : 'OpenPonk-UML-BootstrapGenerator-Profile-Generator',
 	#package : 'OpenPonk-UML-BootstrapGenerator',
@@ -71,87 +69,22 @@ OPUMLProfileGenerator >> addAccessingDelegationMethodsFrom: aClassModel to: aCla
 { #category : 'generating - attributes' }
 OPUMLProfileGenerator >> addAttribute: anAttributeModel to: aClass [
 
-	| name comment getterBuilder oppositeEnd |
+	| name comment |
 	name := self attributeNameFor: anAttributeModel.
-	oppositeEnd := anAttributeModel opposite.
 	comment := self commentIn: anAttributeModel.
 	aClass addInstVarNamed: name.
-	(getterBuilder := OPUMLBootstrapGetterMethodBuilder new)
-		selector: name;
-		comment: comment.
-	anAttributeModel isMultivalued & oppositeEnd isNotNil ifTrue: [
-		oppositeEnd isMultivalued
-			ifTrue: [
-				getterBuilder defaultValue:
-					'OPUMLManyToManyLinks on: self identity opposite: #'
-					, (self attributeNameFor: oppositeEnd) ]
-			ifFalse: [
-				getterBuilder defaultValue:
-					'OPUMLToManyLinks on: self identity opposite: #'
-					, (self attributeNameFor: oppositeEnd) , ':' ] ].
-	(self isLiteralSpecification: anAttributeModel defaultValue) ifTrue: [
-		getterBuilder defaultValue:
-			(self defaultValueFrom: anAttributeModel defaultValue) ].
-	(self isEnumValue: anAttributeModel defaultValue) ifTrue: [
-		getterBuilder defaultValue:
-			(self defaultValueFrom: anAttributeModel defaultValue) ].
-	aClass addMethod: getterBuilder build.
-	oppositeEnd
-		ifNil: [
-			aClass addMethod: (CBMethod new
-					 setter: name
-					 argument: anAttributeModel type name
-					 comment: comment) ]
-		ifNotNil: [ :assoc |
-			| setter |
-			setter := CBMethod new.
-			setter protocolName: 'accessing'.
-			anAttributeModel isMultivalued
-				ifTrue: [
-					setter source: ('<1s>: <2s>
-	"<3s>"
-	self <1s>
-		removeAll;
-		addAll: <2s>'
-							 expandMacrosWith: name
-							 with: (setter asArgumentName: anAttributeModel type name)
-							 with: (setter asComment: comment)) ]
-				ifFalse: [
-					oppositeEnd isMultivalued
-						ifTrue: [
-							setter source: ('{attribute}: {argument}
-	"{comment}"
-	{attribute} := OPUMLToOneLink
-		on: self identity
-		update: #{otherSelector}
-		from: {attribute}
-		to: {argument}' format: {
-										 (#attribute -> name).
-										 (#argument
-										  -> (setter asArgumentName: anAttributeModel type name)).
-										 (#comment -> (setter asComment: comment)).
-										 (#otherSelector -> (self attributeNameFor: oppositeEnd)) }
-										 asDictionary) ]
-						ifFalse: [
-							setter source: ('{attribute}: {argument}
-	"{comment}"
-	|anOld{attributeCap}|
-	anOld{attributeCap} := {attribute}.
-	{attribute} := {argument}.
-	OPUMLToOneLink
-		on: self identity
-		thisSelector: #{attribute}
-		otherSelector: #{otherAttribute}
-		from: anOld{attributeCap}
-		to: {attribute}' format: {
-										 (#attribute -> name).
-										 (#attributeCap -> name capitalized).
-										 (#argument
-										  -> (setter asArgumentName: anAttributeModel type name)).
-										 (#comment -> (setter asComment: comment)).
-										 (#otherAttribute -> (self attributeNameFor: oppositeEnd)) }
-										 asDictionary) ] ].
-			aClass addMethod: setter ]
+	aClass addMethod: (self getterMethodFor: anAttributeModel named: name comment: comment).
+	aClass addMethod: (self setterMethodFor: anAttributeModel named: name comment: comment)
+]
+
+{ #category : 'generating - operations' }
+OPUMLProfileGenerator >> addBodyConditionFrom: anOperationModel to: aMethodBuilder [
+
+	| spec |
+	anOperationModel bodyCondition ifNil: [ ^ self ].
+	spec := anOperationModel bodyCondition specification.
+	spec ifNil: [ ^ self ].
+	spec bodies withIndexDo: [ :each :i | aMethodBuilder addComment: '{' , (self languageAt: i in: spec) , '} ' , each ]
 ]
 
 { #category : 'generating - classes' }
@@ -168,60 +101,55 @@ OPUMLProfileGenerator >> addDelegationMethodsFrom: aClassModel to: aClass [
 
 { #category : 'generating - enums' }
 OPUMLProfileGenerator >> addEnumLiteral: anEnumLiteral to: aClass [
+
 	| builder prohibitedClassSideSelectors |
 	builder := CBMethodBuilder new.
 	builder selector: anEnumLiteral name.
-	anEnumLiteral ownedComment
-		ifNotNil:
-			[ :comments | builder addLine: '"' , (comments first body copyReplaceAll: '"' with: '""') , '"' ].
+	anEnumLiteral ownedComments ifNotNil: [ :comments |
+		comments ifNotEmpty: [ builder addLine: '"' , (comments first body copyReplaceAll: '"' with: '""') , '"' ] ].
 	builder addLine: '^ #' , anEnumLiteral name.
-	aClass
-		addMethod:
-			(CBMethod new
-				protocol: 'accessing';
-				source: builder source).
-	prohibitedClassSideSelectors := #(package).
-	(prohibitedClassSideSelectors includes: anEnumLiteral name)
-		ifFalse: [ aClass
-				addMetaMethod:
-					(CBMethod new
-						protocol: 'accessing - enum';
-						source: builder source) ]
+	aClass addMethod: (CBMethod new
+			 protocolName: 'accessing';
+			 source: builder source).
+	prohibitedClassSideSelectors := #( #package ).
+	(prohibitedClassSideSelectors includes: anEnumLiteral name) ifFalse: [
+			aClass addMetaMethod: (CBMethod new
+					 protocolName: 'accessing - enum';
+					 source: builder source) ]
 ]
 
 { #category : 'generating - methods' }
 OPUMLProfileGenerator >> addGeneralizationsFrom: aClassModel to: cls [
+
 	| sharedMethod directMethod |
 	sharedMethod := CBMethodBuilder new.
 	sharedMethod selector: 'initializeSharedGeneralizations'.
-	(self allSuperclassesOf: aClassModel)
-		do: [ :each | 
-			sharedMethod
-				addLine:
-					('sharedGeneralizations at: #<1s> put: (<2s> newOnShared: sharedGeneralizations).'
-						expandMacrosWith: each name
-						with: (self classNameFor: each name)) ].
-	sharedMethod addLine: 'sharedGeneralizations at: #', aClassModel name, ' put: self.'.
+	(self allSuperclassesOf: aClassModel) do: [ :each |
+			sharedMethod addLine: ('sharedGeneralizations at: #<1s> put: (<2s> newOnShared: sharedGeneralizations).'
+					 expandMacrosWith: each name
+					 with: (self classNameFor: each name)) ].
+	sharedMethod addLine: 'sharedGeneralizations at: #' , aClassModel name , ' put: self.'.
 	directMethod := CBMethodBuilder new.
 	directMethod selector: 'initializeDirectGeneralizations'.
 	directMethod addLine: 'directGeneralizations := {'.
 	directMethod addIndent.
-	aClassModel generalizations
-		ifNotNil: [ :gen | 
+	aClassModel generalizations ifNotNil: [ :gen |
 			gen
 				reject: [ :each | each general name = 'Element' ]
 				thenDo: [ :each | directMethod addLine: 'sharedGeneralizations at: #' , each general name , '.' ] ].
 	directMethod removeIndent.
 	directMethod addLine: '}'.
-	cls compile: sharedMethod source trimmed classified: 'initialization'.
-	cls compile: directMethod source trimmed classified: 'initialization'
+	cls compile: sharedMethod source trimBoth classified: 'initialization'.
+	cls compile: directMethod source trimBoth classified: 'initialization'
 ]
 
 { #category : 'generating - operations' }
 OPUMLProfileGenerator >> addOperation: anOperationModel to: aClass [
+
 	self addStubOperation: anOperationModel to: aClass.
-	(anOperationModel method isNotNil and: [ anOperationModel method isNotEmpty ])
-		ifTrue: [ self addRealOperation: anOperationModel to: aClass ]
+	(anOperationModel methods isNotNil and: [
+		 anOperationModel methods isNotEmpty and: [ anOperationModel methods first bodies isNotEmpty ] ]) ifTrue: [
+		self addRealOperation: anOperationModel to: aClass ]
 ]
 
 { #category : 'generating - methods' }
@@ -230,81 +158,52 @@ OPUMLProfileGenerator >> addOperationsDelegationMethodsFrom: aClassModel to: aCl
 	| redefinedNames |
 	redefinedNames := Set new.
 	aClassModel ownedOperations ifNotNil: [ :ops |
-		ops
-			select: [ :op | op method isNotNil ]
-			thenDo: [ :op | redefinedNames add: op name ] ].
+			ops
+				select: [ :op | op methods isNotNil and: [ op methods isNotEmpty and: [ op methods first bodies isNotEmpty ] ] ]
+				thenDo: [ :op | redefinedNames add: (self operationNameFor: op) ] ].
 	(self allSuperclassesOf: aClassModel) do: [ :superClassModel |
-		| superClass methods |
-		superClass := classes at: superClassModel name.
-		methods := (superClass methods select: [ :method |
-			            method protocolName = 'operations' ]) reject: [ :method |
-			           (redefinedNames includes: method selector) or: [
-				           redefinedNames includes:
-					           (method selector withoutSuffix: ':') asSymbol ] ].
-		methods do: [ :method |
-			| delegateMethod node |
-			node := OCParser parseMethod: method source lines first.
-			delegateMethod := CBMethod new
-				                  getter: node selector
-				                  delegateFrom: '(sharedGeneralizations at: #'
-					                  ,
-						                  (superClass name withoutPrefix:
-								                   self classPrefix) , ')';
-				                  protocol:
-					                  'operations - '
-					                  ,
-						                  (superClass name withoutPrefix:
-								                   self classPrefix).
-			aClass addMethod: delegateMethod ] ]
+			| superClass methods |
+			superClass := classes at: superClassModel name.
+			methods := (superClass methods select: [ :method | method protocolName = 'operations' ]) reject: [ :method |
+				           (redefinedNames includes: method selector) or: [
+					           redefinedNames includes: (method selector withoutSuffix: ':') asSymbol ] ].
+			methods do: [ :method |
+					| delegateMethod node |
+					node := OCParser parseMethod: method source lines first.
+					delegateMethod := CBMethod new
+						                  getter: node selector
+						                  delegateFrom: '(sharedGeneralizations at: #' , (superClass name withoutPrefix: self classPrefix) , ')';
+						                  protocolName: 'operations - ' , (superClass name withoutPrefix: self classPrefix).
+					aClass addMethod: delegateMethod ] ]
+]
+
+{ #category : 'generating - operations' }
+OPUMLProfileGenerator >> addPreconditionsFrom: anOperationModel to: aMethodBuilder [
+
+	anOperationModel preconditions ifNil: [ ^ self ].
+	anOperationModel preconditions do: [ :pre |
+			| spec |
+			spec := pre specification.
+			(spec isNotNil and: [ spec bodies isNotEmpty ]) ifTrue: [
+				aMethodBuilder addComment: pre name , ': {' , (self languageAt: 1 in: spec) , '} ' , spec bodies first ] ]
 ]
 
 { #category : 'generating - operations' }
 OPUMLProfileGenerator >> addRealOperation: anOperationModel to: aClass [
-	| name comment methodBuilder |
-	name := self operationNameFor: anOperationModel.
-	comment := self commentIn: anOperationModel.
-	methodBuilder := CBMethodBuilder new selector: name.
-	methodBuilder addComment: comment.
-	methodBuilder addLine: ''.
-	anOperationModel precondition
-		ifNotNil: [ anOperationModel precondition
-				do: [ :pre | 
-					methodBuilder
-						addComment: pre name , ': {' , pre specification language first , '} ' , pre specification body first ] ].
-	anOperationModel bodyCondition
-		ifNotNil: [ :bodyCond | 
-			| spec |
-			spec := bodyCond specification.
-			spec body
-				withIndexDo: [ :each :i | methodBuilder addComment: '{' , (spec language at: i) , '} ' , each ] ].
-	methodBuilder addLine: ''.
-	methodBuilder
-		addLine: (self prefixClassNamesInText: anOperationModel method first body first).
-	aClass compile: methodBuilder source classified: 'operations'
+
+	| methodBuilder |
+	methodBuilder := self operationMethodBuilderFor: anOperationModel named: (self operationNameFor: anOperationModel).
+	methodBuilder addLine: (self prefixClassNamesInText: anOperationModel methods first bodies first).
+	aClass compile: methodBuilder source withInternalLineEndings classified: 'operations'
 ]
 
 { #category : 'generating - operations' }
 OPUMLProfileGenerator >> addStubOperation: anOperationModel to: aClass [
-	| name comment methodBuilder |
-	name := self stubOperationNameFor: anOperationModel.
-	comment := self commentIn: anOperationModel.
-	methodBuilder := CBMethodBuilder new selector: name.
-	methodBuilder addComment: comment.
-	methodBuilder addLine: ''.
-	anOperationModel precondition
-		ifNotNil: [ anOperationModel precondition
-				do: [ :pre | 
-					methodBuilder
-						addComment: pre name , ': {' , pre specification language first , '} ' , pre specification body first ] ].
-	anOperationModel bodyCondition
-		ifNotNil: [ :bodyCond | 
-			| spec |
-			spec := bodyCond specification.
-			spec body
-				withIndexDo: [ :each :i | methodBuilder addComment: '{' , (spec language at: i) , '} ' , each ] ].
-	methodBuilder addLine: ''.
+
+	| methodBuilder |
+	methodBuilder := self operationMethodBuilderFor: anOperationModel named: (self stubOperationNameFor: anOperationModel).
 	methodBuilder addLine: 'self notYetImplemented'.
-	aClass compile: methodBuilder source withSqueakLineEndings classified: 'operations - stubs'
+	aClass compile: methodBuilder source withInternalLineEndings classified: 'operations - stubs'
 ]
 
 { #category : 'retrieving' }
@@ -401,12 +300,9 @@ OPUMLProfileGenerator >> createClassFrom: aClassModel in: aCategoryName [
 OPUMLProfileGenerator >> createElementMeta [
 
 	| cls |
-	cls := self
-		       ensureCreateClass: 'Element'
-		       in: self sourceModel implementationPackage.
-	cls comment: 'I am an abstract class for ' , classPrefix
-		,
-		' implementing some behavior for managing the classes and other stuff.'.
+	cls := self ensureCreateClass: 'Element' in: self targetTagName.
+	cls comment:
+		'I am an abstract class for ' , classPrefix , ' implementing some behavior for managing the classes and other stuff.'.
 	cls
 		addMethod: (CBMethod new
 				 source: 'umlClassName
@@ -421,95 +317,69 @@ OPUMLProfileGenerator >> createElementMeta [
 
 { #category : 'generating - enums' }
 OPUMLProfileGenerator >> createEnumFrom: anEnumModel in: aCategoryName [
+
 	| cls |
 	cls := self ensureCreateClass: anEnumModel name in: aCategoryName.
 	cls parent: (self classNameFor: 'Enumeration').
 	self addCommentFrom: anEnumModel to: cls.
-	anEnumModel ownedLiteral ifNotNil: [ :lits | lits do: [ :each | self addEnumLiteral: each to: cls ] ].
+	anEnumModel ownedLiterals ifNotNil: [ :literals | literals do: [ :each | self addEnumLiteral: each to: cls ] ].
 	^ cls
 ]
 
-{ #category : 'generating-classes' }
+{ #category : 'generating - classes' }
 OPUMLProfileGenerator >> createProfileFactory [
 
 	| cls |
-	Smalltalk
-		at: (self classNameFor: 'ProfileFactory')
-		ifPresent: [ :existingCls | existingCls reset ].
 	cls := self ensureCreateClass: 'ProfileFactory' in: 'Model'.
-	cls comment:
-		'I am a class representing the ' , classPrefix , ' profile itself.'.
+	cls comment: 'I am a class representing the ' , classPrefix , ' profile itself.'.
 	cls addInstVarNamed: 'profile'.
 	cls
 		addMethod: (CBMethod new
 				 source: 'createProfile
 	profile ifNotNil: [ ^ profile ].
 	profile := OPUMLXMIReader readFrom: self xmi readStream.
-	profile implementationPackage: ''' , self packageName , ''';
-		implementationPrefix: ''' , classPrefix , '''.	
+	profile implementationPackage: ' , self packageName printString , ';
+		implementationPrefix: ' , classPrefix printString , '.
 	profile ownedStereotype do: [ :each | each profile: profile ].
 	^ profile';
 				 protocolName: 'accessing');
 		addMethod: (CBMethod new
 				 source: 'xmi
-	^ 
-''' , (OPUMLXMIWriter toString: self sourceModel) , '''';
+	^ ' , self xmiString printString;
 				 protocolName: 'accessing').
 	^ cls
 ]
 
 { #category : 'retrieving' }
 OPUMLProfileGenerator >> defaultValueFrom: aDefaultValue [
-	(self isEnumValue: aDefaultValue)
-		ifTrue: [ ^ (self classNameFor: aDefaultValue type name) , ' new ' , aDefaultValue instance name ].
-	aDefaultValue value ifNotNil: [ ^ aDefaultValue value ].
-	^ self defaultValues
-		detect: [ :pair | aDefaultValue className endsWith: pair key ]
-		ifFound: [ :pair | pair value ]
-		ifNone: [ nil ]
-]
 
-{ #category : 'retrieving' }
-OPUMLProfileGenerator >> defaultValues [
-	| literals |
-	"	defaultValues ifNotNil: [ ^ defaultValues ]."
-	literals := (sourceModel packagedElement detect: [ :each | each name = 'Values' ])
-		packagedElement select: [ :each | each name beginsWith: 'Literal' ].
-	defaultValues := literals
-		collect: [ :each | 
-			| key value |
-			key := each name.
-			value := each ownedAttribute
-				ifNil: [ nil ]
-				ifNotNil: [ (each ownedAttribute detect: [ :attr | attr name = 'value' ]) defaultValue value ].
-			key -> value ].
-	^ defaultValues
+	| rawValue |
+	(self isEnumValue: aDefaultValue) ifTrue: [
+		^ (self classNameFor: aDefaultValue type name) , ' new ' , aDefaultValue instance name ].
+	rawValue := aDefaultValue value.
+	rawValue ifNil: [ ^ nil ].
+	^ rawValue isString
+		  ifTrue: [ rawValue printString ]
+		  ifFalse: [ rawValue ]
 ]
 
 { #category : 'generating - classes' }
 OPUMLProfileGenerator >> ensureCreateClass: aName in: aTagName [
-	^ classes
-		at: aName
-		ifAbsentPut: [ CBClass
-				name: (self classNameFor: aName)
-				parent: (self parentFor: aName)
-				package:
-					(aTagName = 'Unclassified'
-						ifTrue: [ self packageName ]
-						ifFalse: [ self packageName , '-' , aTagName ]) ]
-]
 
-{ #category : 'generating' }
-OPUMLProfileGenerator >> generate [
-	<script: 'self generate'>
-	
+	^ classes at: aName ifAbsentPut: [
+			  CBClass
+				  name: (self classNameFor: aName)
+				  parent: (self parentFor: aName)
+				  package: self packageName
+				  tag: (aTagName = 'Unclassified'
+						   ifTrue: [ '' ]
+						   ifFalse: [ aTagName ]) ]
 ]
 
 { #category : 'generating' }
 OPUMLProfileGenerator >> generateAll [
+
 	classes := OrderedDictionary new.
-"	self loadTemplateMethods."
-"	self createTargetPackage."
 	self createElementMeta.
 	self generateAllEnums.
 	self generateAllClasses.
@@ -521,10 +391,8 @@ OPUMLProfileGenerator >> generateAll [
 
 { #category : 'generating' }
 OPUMLProfileGenerator >> generateAllClasses [
-	self sourceModel packagedElements
-		select: [ :each | each oclIsKindOf: #Stereotype ]
-		thenDo:
-			[ :each | self createClassFrom: each in: self sourceModel implementationPackage ]
+
+	self allClassesInModel do: [ :each | self createClassFrom: each in: self targetTagName ]
 ]
 
 { #category : 'generating' }
@@ -535,30 +403,26 @@ OPUMLProfileGenerator >> generateAllDelegationMethods [
 
 { #category : 'generating' }
 OPUMLProfileGenerator >> generateAllEnums [
+
 	self sourceModel packagedElements
-		select: [ :each | each isKindOf: BootUMLEnumeration ]
-		thenDo: [ :each | self createEnumFrom: each in: self sourceModel implementationPackage ]
+		select: [ :each | each oclIsKindOf: #Enumeration ]
+		thenDo: [ :each | self createEnumFrom: each in: self targetTagName ]
 ]
 
 { #category : 'generating' }
 OPUMLProfileGenerator >> generateExtensionMethods [
 
 	| extensions metaClass cls extensionGetter extensionSetter |
-	extensions := self sourceModel packagedElements select: [ :each |
-		              each oclIsKindOf: #Extension ].
+	extensions := self sourceModel packagedElements select: [ :each | each oclIsKindOf: #Extension ].
 	extensions do: [ :ext |
-		metaClass := self class environment at:
-			             ('OPUML' , ext ownedEnd opposite type name) asSymbol.
-		cls := CBClass fromClass: metaClass.
-		classes at: cls name put: cls.
-		extensionGetter := CBMethod new
-			                   source: ('<1s>
-		^ self tagAt: #<1s> ifAbsent: [ nil ]' expandMacrosWith:
-						                    ext ownedEnd name);
-			                   protocolName:
-				                   '*' , self sourceModel implementationPackage.
-		extensionSetter := CBMethod new
-			                   source: ('<1s>: a<2s>
+			metaClass := self class environment at: ('OPUML' , ext ownedEnd opposite type name) asSymbol.
+			cls := classes at: metaClass name ifAbsentPut: [ CBClass fromClass: metaClass ].
+			extensionGetter := CBMethod new
+				                   source: ('<1s>
+		^ self tagAt: #<1s> ifAbsent: [ nil ]' expandMacrosWith: ext ownedEnd name);
+				                   protocolName: '*' , self sourceModel implementationPackage.
+			extensionSetter := CBMethod new
+				                   source: ('<1s>: a<2s>
 	| old<2s> |
 	old<2s> := self <1s>.
 	self tagAt: #<1s> put: a<2s>.
@@ -567,14 +431,28 @@ OPUMLProfileGenerator >> generateExtensionMethods [
 		thisSelector: #<1s>
 		otherSelector: #<3s>
 		updateFrom: old<2s>
-		to: a<2s>'
-					                    expandMacrosWith: ext ownedEnd name
-					                    with: ext ownedEnd type name
-					                    with: ext ownedEnd opposite name);
-			                   protocolName:
-				                   '*' , self sourceModel implementationPackage.
-		cls addMethod: extensionGetter.
-		cls addMethod: extensionSetter ]
+		to: a<2s>' expandMacrosWith: ext ownedEnd name with: ext ownedEnd type name with: ext ownedEnd opposite name);
+				                   protocolName: '*' , self sourceModel implementationPackage.
+			cls addMethod: extensionGetter.
+			cls addMethod: extensionSetter ]
+]
+
+{ #category : 'generating - attributes' }
+OPUMLProfileGenerator >> getterMethodFor: anAttributeModel named: aName comment: aComment [
+
+	| oppositeEnd getterBuilder |
+	oppositeEnd := anAttributeModel opposite.
+	(getterBuilder := OPUMLBootstrapGetterMethodBuilder new)
+		selector: aName;
+		comment: aComment.
+	anAttributeModel isMultivalued & oppositeEnd isNil ifTrue: [ getterBuilder defaultValue: 'OrderedCollection new' ].
+	anAttributeModel isMultivalued & oppositeEnd isNotNil ifTrue: [
+			getterBuilder defaultValue: (oppositeEnd isMultivalued
+					 ifTrue: [ 'OPUMLManyToManyLinks on: self identity opposite: #' , (self attributeNameFor: oppositeEnd) ]
+					 ifFalse: [ 'OPUMLToManyLinks on: self identity opposite: #' , (self attributeNameFor: oppositeEnd) , ':' ]) ].
+	((self isLiteralSpecification: anAttributeModel defaultValue) or: [ self isEnumValue: anAttributeModel defaultValue ]) ifTrue: [
+		getterBuilder defaultValue: (self defaultValueFrom: anAttributeModel defaultValue) ].
+	^ getterBuilder build
 ]
 
 { #category : 'initialization' }
@@ -585,32 +463,69 @@ OPUMLProfileGenerator >> initialize [
 
 { #category : 'testing' }
 OPUMLProfileGenerator >> isEnumValue: anElement [
-	^ (anElement className endsWith: 'InstanceValue') and: [ anElement type className endsWith: 'Enumeration' ]
+
+	^ anElement isNotNil and: [
+		  (anElement oclIsKindOf: #InstanceValue) and: [ anElement type isNotNil and: [ anElement type oclIsKindOf: #Enumeration ] ] ]
 ]
 
 { #category : 'testing' }
 OPUMLProfileGenerator >> isLiteralSpecification: anElement [
-	^ anElement isNotNil and: [ (anElement instVarNamed: #sharedGeneralizations) includesKey: #LiteralSpecification ]
+
+	^ anElement isNotNil and: [ anElement oclIsKindOf: #LiteralSpecification ]
 ]
 
-{ #category : 'generating' }
-OPUMLProfileGenerator >> loadTemplateMethods [
-	| templateClasses allClasses |
-	templateClasses := OPUMLMetamodelGeneratorTemplates allSubclasses
-		copyWithout: OPUMLMetaGenTemplate.
-	allClasses := sourceModel packagedElements
-		select: [ :each | each oclIsKindOf: #Stereotype ].
-	templateClasses
-		do: [ :cls | 
-			| supported template |
-			template := cls new.
-			supported := template supportedClasses.
-			supported
-				do: [ :name | 
-					| classModel |
-					classModel := allClasses detect: [ :each | each name = name ].
-					classModel ownedOperation
-						do: [ :op | op method: (template methodsFor: op inClassNamed: name) ] ] ]
+{ #category : 'generating - operations' }
+OPUMLProfileGenerator >> languageAt: anIndex in: aSpecification [
+
+	^ anIndex <= aSpecification languages size
+		  ifTrue: [ aSpecification languages at: anIndex ]
+		  ifFalse: [ '' ]
+]
+
+{ #category : 'generating - attributes' }
+OPUMLProfileGenerator >> linkSetterSourceFor: aName argument: anArgument comment: aComment opposite: anOppositeEnd [
+
+	anOppositeEnd isMultivalued ifTrue: [
+			^ '{attribute}: {argument}
+	"{comment}"
+	{attribute} := OPUMLToOneLink
+		on: self identity
+		update: #{otherSelector}
+		from: {attribute}
+		to: {argument}' format: {
+					  (#attribute -> aName).
+					  (#argument -> anArgument).
+					  (#comment -> aComment).
+					  (#otherSelector -> (self attributeNameFor: anOppositeEnd)) } asDictionary ].
+	^ '{attribute}: {argument}
+	"{comment}"
+	|anOld{attributeCap}|
+	anOld{attributeCap} := {attribute}.
+	{attribute} := {argument}.
+	OPUMLToOneLink
+		on: self identity
+		thisSelector: #{attribute}
+		otherSelector: #{otherAttribute}
+		from: anOld{attributeCap}
+		to: {attribute}' format: {
+			  (#attribute -> aName).
+			  (#attributeCap -> aName capitalized).
+			  (#argument -> anArgument).
+			  (#comment -> aComment).
+			  (#otherAttribute -> (self attributeNameFor: anOppositeEnd)) } asDictionary
+]
+
+{ #category : 'generating - operations' }
+OPUMLProfileGenerator >> operationMethodBuilderFor: anOperationModel named: aSelector [
+
+	| methodBuilder |
+	methodBuilder := CBMethodBuilder new selector: aSelector.
+	methodBuilder addComment: (self commentIn: anOperationModel).
+	methodBuilder addLine: ''.
+	self addPreconditionsFrom: anOperationModel to: methodBuilder.
+	self addBodyConditionFrom: anOperationModel to: methodBuilder.
+	methodBuilder addLine: ''.
+	^ methodBuilder
 ]
 
 { #category : 'retrieving' }
@@ -649,6 +564,31 @@ OPUMLProfileGenerator >> prefixClassNamesInText: aString [
 		matchesTranslatedUsing: [ :each | self classPrefix , (each copyFrom: 3 to: each size - 2) ]
 ]
 
+{ #category : 'generating - attributes' }
+OPUMLProfileGenerator >> setterMethodFor: anAttributeModel named: aName comment: aComment [
+
+	| oppositeEnd typeName setter |
+	oppositeEnd := anAttributeModel opposite.
+	typeName := anAttributeModel type ifNil: [ 'Object' ] ifNotNil: [ :type | type name ].
+	oppositeEnd ifNil: [ ^ CBMethod new setter: aName argument: typeName comment: aComment ].
+	setter := CBMethod new.
+	setter protocolName: 'accessing'.
+	setter source: (anAttributeModel isMultivalued
+			 ifTrue: [
+					 '<1s>: <2s>
+	"<3s>"
+	self <1s>
+		removeAll;
+		addAll: <2s>' expandMacrosWith: aName with: (setter asArgumentName: typeName) with: (setter asComment: aComment) ]
+			 ifFalse: [
+					 self
+						 linkSetterSourceFor: aName
+						 argument: (setter asArgumentName: typeName)
+						 comment: (setter asComment: aComment)
+						 opposite: oppositeEnd ]).
+	^ setter
+]
+
 { #category : 'accessing' }
 OPUMLProfileGenerator >> sourceModel [
 	^ sourceModel
@@ -666,14 +606,30 @@ OPUMLProfileGenerator >> stubOperationNameFor: anOperationName [
 
 { #category : 'retrieving' }
 OPUMLProfileGenerator >> superclassLayersOf: aClassModel [
-	| subclasses layers layer parents |
+
+	| subclasses layers layer |
 	layers := OrderedCollection new.
 	subclasses := OrderedCollection with: aClassModel.
-	[ subclasses isNotEmpty ]
-		whileTrue: [ 
-			layer := (subclasses select: [ :each | each generalizations isNotNil ])
-				flatCollect: [ :each | each generalizations collect: #general ].
+	[ subclasses isNotEmpty ] whileTrue: [
+			layer := (subclasses select: [ :each | each generalizations isNotNil ]) flatCollect: [ :each |
+				         each generalizations collect: #general ].
 			layers add: layer asArray.
 			subclasses := layer ].
 	^ layers reversed asArray
+]
+
+{ #category : 'retrieving' }
+OPUMLProfileGenerator >> targetTagName [
+
+	| targetTag |
+	targetTag := self sourceModel implementationPackage.
+	^ targetTag = self packageName
+		  ifTrue: [ 'Model' ]
+		  ifFalse: [ targetTag ]
+]
+
+{ #category : 'generating' }
+OPUMLProfileGenerator >> xmiString [
+
+	^ OPUMLXMIWriter toString: self sourceModel
 ]
