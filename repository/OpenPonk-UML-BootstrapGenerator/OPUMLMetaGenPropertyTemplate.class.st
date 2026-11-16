@@ -26,6 +26,6 @@ OPUMLMetaGenPropertyTemplate >> isNavigable [
 { #category : 'implementation' }
 OPUMLMetaGenPropertyTemplate >> opposite [
 
-	^ (association isNotNil and: [ association memberEnds size = 2 ])
-		  ifTrue: [ association memberEnds detect: [ :each | each ~= self ] ]
+	(association isNotNil and: [ association memberEnds size = 2 ]) ifFalse: [ ^ nil ].
+	^ association memberEnds detect: [ :each | each ~= self ]
 ]

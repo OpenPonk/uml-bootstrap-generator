@@ -5,7 +5,6 @@ Class {
 	#name : 'OPUMLMetaGenMultiplicityElementTemplate',
 	#superclass : 'OPUMLMetaGenTemplate',
 	#instVars : [
-		'value',
 		'lowerValue',
 		'upperValue'
 	],

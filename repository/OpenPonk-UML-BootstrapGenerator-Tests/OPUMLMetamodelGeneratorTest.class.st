@@ -620,20 +620,13 @@ OPUMLMetamodelGeneratorTest >> testCreateElementMetaInstanceMethods [
 	cls := generator createElementMeta.
 	self
 		assertCollection: (cls methods collect: #selector)
-		hasSameElements:
-			#( #appliedStereotypes #applyStereotype:
-			   #hasTagAt: #identity #initialize #initializeDirectGeneralizations
-			   #initializeSharedGeneralizations
-			   #initializeWithShared: #inspectionGeneralizations: #inspectionAllProperties:
-			   #inspectionProperties: #inspectionStereotypes: #inspectionStereotypeProperties:
-			   #inspectionTags: #inspectorProperties #inspectorPropertiesSelectors
-			   #nonEmptyinspectorProperties #oclAsType: #oclClassifierNameFrom:
-			   #oclIsKindOf: #oclIsTypeOf: #printAsClassifierNameOn:
-			   #printOn: #removeTagAt: #stereotypeProperties #tagAt: #tagAt:put: #tags #umlClassName
-			   #umlMetaClass #unapplyStereotype: #uuid #uuid: ) sorted.
-	self
-		assert: (cls methodNamed: #initialize) protocolName
-		equals: 'initialization'
+		hasSameElements: #( #appliedStereotypes #applyStereotype: #hasTagAt: #identity #initialize #initializeDirectGeneralizations
+			   #initializeSharedGeneralizations #initializeWithShared: #inspectionGeneralizations: #inspectionAllProperties:
+			   #inspectionProperties: #inspectionStereotypes: #inspectionStereotypeProperties: #inspectionTags: #inspectorProperties
+			   #inspectorPropertiesSelectors #nonEmptyinspectorProperties #oclAsType: #oclClassifierNameFrom: #oclIsKindOf: #oclIsTypeOf:
+			   #printAsClassifierNameOn: #printOn: #removeTagAt: #setExtensionFor:to: #stereotypeProperties #tagAt: #tagAt:ifAbsent:
+			   #tagAt:put: #tags #umlClassName #umlMetaClass #unapplyStereotype: #uuid #uuid: ).
+	self assert: (cls methodNamed: #initialize) protocolName equals: 'initialization'
 ]
 
 { #category : 'tests - generating - enums' }

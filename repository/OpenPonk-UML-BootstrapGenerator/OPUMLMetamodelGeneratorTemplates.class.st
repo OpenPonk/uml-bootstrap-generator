@@ -39,12 +39,3 @@ OPUMLMetamodelGeneratorTemplates >> supportedClasses [
 OPUMLMetamodelGeneratorTemplates >> supportsClass: aClassName [
 	^ (self class selectorsInProtocol: 'templates') includes: aClassName uncapitalized
 ]
-
-{ #category : 'templates' }
-OPUMLMetamodelGeneratorTemplates >> useMethodPerAccessor [
-	^ (self class methodsInProtocol: #implementation)
-		collect: [ :method | 
-			| body |
-			body := method ast body.
-			method selector -> (body source copyFrom: body start to: body stop) ]
-]

@@ -30,12 +30,9 @@ OPUMLMetamodelElementTemplate >> appliedStereotypes [
 { #category : 'accessing - stereotypes' }
 OPUMLMetamodelElementTemplate >> applyStereotype: aStereotype [
 
-	(self appliedStereotypes anySatisfy: [ :any | 
-		 any oclIsTypeOf: aStereotype umlClassName ]) ifTrue: [ ^ self ].
+	(self appliedStereotypes anySatisfy: [ :any | any oclIsTypeOf: aStereotype umlClassName ]) ifTrue: [ ^ self ].
 	self appliedStereotypes add: aStereotype.
-	self
-		perform: ('extension_' , aStereotype umlClassName , ':') asSymbol
-		with: aStereotype
+	self setExtensionFor: aStereotype to: aStereotype
 ]
 
 { #category : 'printing' }
@@ -267,6 +264,16 @@ OPUMLMetamodelElementTemplate >> removeTagAt: aKey [
 	tags removeKey: aKey
 ]
 
+{ #category : 'accessing - stereotypes' }
+OPUMLMetamodelElementTemplate >> setExtensionFor: aStereotype to: aValue [
+
+	| meta attribute |
+	meta := aStereotype umlMetaClass.
+	attribute := (meta allAttributes select: [ :each | each name beginsWith: 'base_' ]) detect: [ :each |
+		             self oclIsKindOf: each type name ].
+	self perform: (attribute opposite name , ':') asSymbol with: aValue
+]
+
 { #category : 'inspecting' }
 OPUMLMetamodelElementTemplate >> stereotypeProperties [
 	^ self appliedStereotypes flatCollect: [ :stereo |
@@ -283,6 +290,12 @@ OPUMLMetamodelElementTemplate >> stereotypeProperties [
 { #category : 'accessing - tags' }
 OPUMLMetamodelElementTemplate >> tagAt: aKey [
 	^ tags at: aKey
+]
+
+{ #category : 'accessing - tags' }
+OPUMLMetamodelElementTemplate >> tagAt: aKey ifAbsent: anAbsentBlock [
+
+	^ tags at: aKey ifAbsent: anAbsentBlock
 ]
 
 { #category : 'accessing - tags' }
@@ -307,8 +320,9 @@ OPUMLMetamodelElementTemplate >> umlMetaClass [
 
 { #category : 'accessing - stereotypes' }
 OPUMLMetamodelElementTemplate >> unapplyStereotype: aStereotype [
-	self appliedStereotypes remove: aStereotype ifAbsent: [  ].
-	self perform: ('extension_' , aStereotype umlClassName , ':') asSymbol with: nil
+
+	self appliedStereotypes remove: aStereotype ifAbsent: [ ].
+	self setExtensionFor: aStereotype to: nil
 ]
 
 { #category : 'accessing' }

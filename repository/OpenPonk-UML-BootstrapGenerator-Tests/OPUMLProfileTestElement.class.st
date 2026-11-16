@@ -30,12 +30,25 @@ Class {
 		'defaultValue',
 		'value',
 		'instance',
-		'isMultivalued'
+		'isMultivalued',
+		'allAttributes'
 	],
 	#category : 'OpenPonk-UML-BootstrapGenerator-Tests-Profile-Generator',
 	#package : 'OpenPonk-UML-BootstrapGenerator-Tests',
 	#tag : 'Profile-Generator'
 }
+
+{ #category : 'accessing' }
+OPUMLProfileTestElement >> allAttributes [
+
+	^ allAttributes
+]
+
+{ #category : 'accessing' }
+OPUMLProfileTestElement >> allAttributes: aCollection [
+
+	allAttributes := aCollection
+]
 
 { #category : 'accessing' }
 OPUMLProfileTestElement >> bodies [
