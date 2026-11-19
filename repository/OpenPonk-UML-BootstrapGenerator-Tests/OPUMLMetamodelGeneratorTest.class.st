@@ -8,9 +8,6 @@ Class {
 		'generator',
 		'preexistingPackages'
 	],
-	#classInstVars : [
-		'umlBootstrapModel'
-	],
 	#category : 'OpenPonk-UML-BootstrapGenerator-Tests-Metamodel-Generator',
 	#package : 'OpenPonk-UML-BootstrapGenerator-Tests',
 	#tag : 'Metamodel-Generator'
@@ -534,6 +531,17 @@ OPUMLMetamodelGeneratorTest >> testClassNameFor [
 ]
 
 { #category : 'tests - retrieving' }
+OPUMLMetamodelGeneratorTest >> testClassesAccessors [
+
+	| customClasses |
+	customClasses := Dictionary with: 'Example' -> (CBClass new
+			                  name: 'MBUTExample';
+			                  yourself).
+	generator classes: customClasses.
+	self assert: generator classes identicalTo: customClasses
+]
+
+{ #category : 'tests - retrieving' }
 OPUMLMetamodelGeneratorTest >> testCommentIn [
 	self
 		assert: (generator commentIn: (self operation: 'lowerBound' inClass: 'MultiplicityElement'))
@@ -671,6 +679,12 @@ OPUMLMetamodelGeneratorTest >> testDefaultValue [
 	| attribute |
 	attribute := self attribute: 'value' inClass: 'LiteralInteger'.
 	self assert: (generator defaultValueFrom: attribute defaultValue) equals: 0
+]
+
+{ #category : 'tests - retrieving' }
+OPUMLMetamodelGeneratorTest >> testDefaultValueFromUnknownLiteral [
+
+	self assert: (generator defaultValueFrom: Association new) equals: nil
 ]
 
 { #category : 'tests - retrieving' }
@@ -842,12 +856,14 @@ OPUMLMetamodelGeneratorTest >> testOperationInClass [
 
 { #category : 'tests - generating - operations' }
 OPUMLMetamodelGeneratorTest >> testOperationName [
-	self
-		assert: (generator operationNameFor: (self operation: 'lower' inClass: 'MultiplicityElement'))
-		equals: 'lower'.
-	self
-		assert: (generator operationNameFor: (self operation: 'context' inClass: 'Behavior'))
-		equals: 'context'
+
+	| classOperation |
+	self assert: (generator operationNameFor: (self operation: 'lower' inClass: 'MultiplicityElement')) equals: 'lower'.
+	self assert: (generator operationNameFor: (self operation: 'context' inClass: 'Behavior')) equals: 'context'.
+	classOperation := BootUMLOperation new
+		                  name: 'class';
+		                  yourself.
+	self assert: (generator operationNameFor: classOperation) equals: 'owningClass'
 ]
 
 { #category : 'tests - retrieving' }
@@ -889,4 +905,17 @@ OPUMLMetamodelGeneratorTest >> testSuperclassLayers [
 		assert: ((generator superclassLayersOf: class) collect: [ :each | each collect: #name ])
 		equals:
 			#(#() #(Element) #(Element NamedElement) #(Element NamedElement RedefinableElement) #(MultiplicityElement TypedElement Feature))
+]
+
+{ #category : 'tests - retrieving' }
+OPUMLMetamodelGeneratorTest >> testUmlBootstrapModelCachingAndReset [
+
+	| cachedModel reloadedModel |
+	[
+		OPUMLMetamodelGenerator resetUmlBootstrapModel.
+		reloadedModel := OPUMLMetamodelGenerator umlBootstrapModel.
+		cachedModel := OPUMLMetamodelGenerator umlBootstrapModel.
+		self assert: reloadedModel className equals: #BootUMLPackage.
+		self assert: reloadedModel name equals: 'UML'.
+		self assert: cachedModel identicalTo: reloadedModel ] ensure: [ OPUMLMetamodelGenerator umlBootstrapModel ]
 ]

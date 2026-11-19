@@ -306,6 +306,27 @@ OPUMLProfileGeneratorTest >> testAddGeneralizations [
 ]
 
 { #category : 'tests - generating - operations' }
+OPUMLProfileGeneratorTest >> testAddOperationWithNilPreconditionsAndNilBodySpecification [
+
+	| cls bodyCond nilPreconditionsClass op |
+	cls := CBClass new.
+	bodyCond := self profileElementWithName: 'emptySpec' kind: #Constraint.
+	nilPreconditionsClass := OPUMLProfileTestElement newAnonymousSubclass.
+	nilPreconditionsClass compile: 'preconditions ^ nil'.
+	op := nilPreconditionsClass new
+		      name: 'answer';
+		      kind: #Operation;
+		      bodyCondition: bodyCond;
+		      yourself.
+	generator addOperation: op to: cls.
+	self assertCollection: cls selectors hasSameElements: #( #answerStub ).
+	self assertMethod: (cls methodNamed: #answerStub) source equals: 'answerStub
+	""
+	self notYetImplemented'.
+	self assertAllMethodsParseIn: cls
+]
+
+{ #category : 'tests - generating - operations' }
 OPUMLProfileGeneratorTest >> testAddOperationWithRealMethod [
 
 	| cls op behavior |

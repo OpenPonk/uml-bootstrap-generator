@@ -15,21 +15,6 @@ Class {
 	#tag : 'Profile-Generator'
 }
 
-{ #category : 'translating' }
-OPUMLProfileGenerator class >> generate [
-	<script>
-	| generator model |
-	Smalltalk globals
-		at: #OntoUMLProfileFactory
-		ifPresent: [ :factory | 
-			model := factory profile.
-			generator := self new.
-			generator sourceModel: model.
-			generator classPrefix: model implementationPrefix.
-			generator packageName: model implementationPackage.
-			(CBChangesBrowser changes: generator generateAll) open ]
-]
-
 { #category : 'generating - methods' }
 OPUMLProfileGenerator >> addAccessingDelegationMethodsFrom: aClassModel to: aClass [
 	| redefinedNames |

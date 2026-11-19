@@ -7,7 +7,6 @@ Class {
 	#instVars : [
 		'classPrefix',
 		'packageName',
-		'rootClassName',
 		'sourceModel',
 		'classes',
 		'defaultValues'
@@ -40,19 +39,23 @@ OPUMLMetamodelGenerator class >> newDefault [
 	^ generator
 ]
 
+{ #category : 'utilities' }
+OPUMLMetamodelGenerator class >> resetUmlBootstrapModel [
+
+	<script>
+	umlBootstrapModel := nil
+]
+
 { #category : 'accessing' }
 OPUMLMetamodelGenerator class >> umlBootstrapModel [
-	"
-	umlBootstrapModel := nil
-	"
 
 	<script: 'self umlBootstrapModel inspect'>
-	^ umlBootstrapModel
-		ifNil: [ | xmi reader |
-			xmi := OPUMLBootstrapGenerator umlSpecs.
-			reader := OPUMLXMIBootstrapReader new.
-			reader classPrefix: 'BootUML'.
-			umlBootstrapModel := (reader readXmi: xmi) first ]
+	^ umlBootstrapModel ifNil: [
+			  | xmi reader |
+			  xmi := OPUMLBootstrapGenerator umlSpecs.
+			  reader := OPUMLXMIBootstrapReader new.
+			  reader classPrefix: 'BootUML'.
+			  umlBootstrapModel := (reader readXmi: xmi) first ]
 ]
 
 { #category : 'generating - methods' }

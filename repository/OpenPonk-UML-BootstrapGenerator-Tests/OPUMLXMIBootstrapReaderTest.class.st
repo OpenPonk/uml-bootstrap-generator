@@ -217,9 +217,8 @@ OPUMLXMIBootstrapReaderTest >> testAssociation [
 { #category : 'tests' }
 OPUMLXMIBootstrapReaderTest >> testBooleanValue [
 
-	| result |
-	result := reader valueFor: 'true'.
-	self assert: result description: 'Bootstrap reader valueFor: ''true'' must evaluate to true'
+	self assert: (reader valueFor: 'true') description: 'Bootstrap reader valueFor: ''true'' must evaluate to true'.
+	self deny: (reader valueFor: 'false') description: 'Bootstrap reader valueFor: ''false'' must evaluate to false'
 ]
 
 { #category : 'tests' }
@@ -326,9 +325,12 @@ OPUMLXMIBootstrapReaderTest >> testNestedComplexElement [
 { #category : 'tests' }
 OPUMLXMIBootstrapReaderTest >> testReadBoolean [
 
-	| result |
-	result := reader readItem: (OPXMIValueAttribute xmiName: 'isDerived' value: 'true').
-	self assert: result description: 'Reading Boolean attribute ''true'' must evaluate to true'
+	self
+		assert: (reader readItem: (OPXMIValueAttribute xmiName: 'isDerived' value: 'true'))
+		description: 'Reading Boolean attribute ''true'' must evaluate to true'.
+	self
+		deny: (reader readItem: (OPXMIValueAttribute xmiName: 'isDerived' value: 'false'))
+		description: 'Reading Boolean attribute ''false'' must evaluate to false'
 ]
 
 { #category : 'tests' }

@@ -12,9 +12,6 @@ Class {
 		'classes',
 		'cachedRequiredClasses'
 	],
-	#classInstVars : [
-		'umlSpecs'
-	],
 	#category : 'OpenPonk-UML-BootstrapGenerator-Bootstrap-Generator',
 	#package : 'OpenPonk-UML-BootstrapGenerator',
 	#tag : 'Bootstrap-Generator'

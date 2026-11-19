@@ -8,9 +8,6 @@ Class {
 		'generator',
 		'preexistingPackages'
 	],
-	#classInstVars : [
-		'umlSpecs'
-	],
 	#category : 'OpenPonk-UML-BootstrapGenerator-Tests-Bootstrap-Generator',
 	#package : 'OpenPonk-UML-BootstrapGenerator-Tests',
 	#tag : 'Bootstrap-Generator'
@@ -97,6 +94,21 @@ OPUMLBootstrapGeneratorTest >> testCreateClass [
 	self assert: result categoryName equals: 'Generated-UMLBootstrapTest-CommonStructure'
 ]
 
+{ #category : 'tests - generating' }
+OPUMLBootstrapGeneratorTest >> testCreateDelegationMethods [
+
+	| parent child |
+	parent := generator ensureCreateClass: 'GeneratedParentClass' in: 'Package'.
+	child := generator ensureCreateClass: 'GeneratedChildClass' in: 'Package'.
+	parent addMethod: (CBMethod new getter: 'property').
+	parent addMethod: (CBMethod new setter: 'property' argument: 'Property').
+	generator createDelegationMethods: #( #( #GeneratedParentClass #MissingSuperClass ) ) for: #GeneratedChildClass.
+	self assert: (child methods collect: #selector as: Array) sorted equals: #( #property #property: ).
+	self
+		assert: (child methods collect: #protocolName as: Array)
+		equals: #( 'accessing - GeneratedParentClass' 'accessing - GeneratedParentClass' )
+]
+
 { #category : 'tests - initialization' }
 OPUMLBootstrapGeneratorTest >> testDefaultConfiguration [
 
@@ -143,6 +155,16 @@ OPUMLBootstrapGeneratorTest >> testGenerateAll [
 	self denyEmpty: result
 ]
 
+{ #category : 'tests - generating' }
+OPUMLBootstrapGeneratorTest >> testRootClassNameAccessor [
+
+	| generatedClass |
+	generator rootClassName: 'CustomBootstrapRoot'.
+	self assert: generator rootClassName equals: 'CustomBootstrapRoot'.
+	generatedClass := generator ensureCreateClass: 'CustomRootedClass' in: 'Package'.
+	self assert: generatedClass parent equals: 'CustomBootstrapRoot'
+]
+
 { #category : 'tests - retrieving' }
 OPUMLBootstrapGeneratorTest >> testTypeOfPrimitive [
 	self
@@ -167,21 +189,6 @@ OPUMLBootstrapGeneratorTest >> testTypeOfReference [
 							{OPXMIObjectElement new
 								containedItems: {OPXMIValueElement xmiName: 'name' value: 'Element'}}))
 		equals: 'Element'
-]
-
-{ #category : 'tests - generating' }
-OPUMLBootstrapGeneratorTest >> testeCreateDelegationMethods [
-
-	| parent child |
-	parent := generator ensureCreateClass: 'GeneratedParentClass' in: 'Package'.
-	child := generator ensureCreateClass: 'GeneratedChildClass' in: 'Package'.
-	parent addMethod: (CBMethod new getter: 'property').
-	parent addMethod: (CBMethod new setter: 'property' argument: 'Property').
-	generator createDelegationMethods: #( #( GeneratedParentClass ) ) for: #GeneratedChildClass.
-	self assert: (child methods collect: #selector as: Array) sorted equals: #( #property #property: ).
-	self
-		assert: (child methods collect: #protocolName as: Array)
-		equals: #( 'accessing - GeneratedParentClass' 'accessing - GeneratedParentClass' )
 ]
 
 { #category : 'instance creation' }
