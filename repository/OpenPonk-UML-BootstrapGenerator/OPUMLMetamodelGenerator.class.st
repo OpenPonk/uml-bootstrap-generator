@@ -166,7 +166,7 @@ OPUMLMetamodelGenerator >> addAttribute: anAttributeModel to: aClass [
 		on: self identity
 		thisSelector: #{attribute}
 		otherSelector: #{otherAttribute}
-		from: anOld{attributeCap}
+		updateFrom: anOld{attributeCap}
 		to: {attribute}'
 										format:
 											{#attribute -> name.

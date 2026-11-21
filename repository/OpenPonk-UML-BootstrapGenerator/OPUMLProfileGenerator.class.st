@@ -491,7 +491,7 @@ OPUMLProfileGenerator >> linkSetterSourceFor: aName argument: anArgument comment
 		on: self identity
 		thisSelector: #{attribute}
 		otherSelector: #{otherAttribute}
-		from: anOld{attributeCap}
+		updateFrom: anOld{attributeCap}
 		to: {attribute}' format: {
 			  (#attribute -> aName).
 			  (#attributeCap -> aName capitalized).

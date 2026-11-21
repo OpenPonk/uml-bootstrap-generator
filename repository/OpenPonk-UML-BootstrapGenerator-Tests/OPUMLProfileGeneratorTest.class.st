@@ -151,7 +151,7 @@ OPUMLProfileGeneratorTest >> testAddAttributeAssociations [
 	| anOldMate |
 	anOldMate := mate.
 	mate := aNode.
-	OPUMLToOneLink on: self identity thisSelector: #mate otherSelector: #owner from: anOldMate to: mate'.
+	OPUMLToOneLink on: self identity thisSelector: #mate otherSelector: #owner updateFrom: anOldMate to: mate'.
 	self assertAllMethodsParseIn: cls
 ]
 
