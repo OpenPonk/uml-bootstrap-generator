@@ -48,11 +48,22 @@ generator packageName: 'OP-UML-Metamodel'.
 ```
 
 ## Installation
- 
+
+To load only the UML profile generator (`default` group):
+
 ```smalltalk
 Metacello new
-	baseline: 'UMLBootstrapGenerator';
-	repository: 'github://OpenPonk/uml-bootstrap-generator/repository';
+	baseline: 'OpenPonkUMLBootstrapGenerator';
+	repository: 'github://OpenPonk/uml-bootstrap-generator';
 	load.
+```
+
+To also load the UML bootstrap metamodel and metamodel generator (`dev` group):
+
+```smalltalk
+Metacello new
+	baseline: 'OpenPonkUMLBootstrapGenerator';
+	repository: 'github://OpenPonk/uml-bootstrap-generator';
+	load: 'dev'.
 ```
 
