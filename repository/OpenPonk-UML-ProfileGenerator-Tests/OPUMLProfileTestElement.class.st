@@ -33,8 +33,8 @@ Class {
 		'isMultivalued',
 		'allAttributes'
 	],
-	#category : 'OpenPonk-UML-BootstrapGenerator-Tests-Profile-Generator',
-	#package : 'OpenPonk-UML-BootstrapGenerator-Tests',
+	#category : 'OpenPonk-UML-ProfileGenerator-Tests-Profile-Generator',
+	#package : 'OpenPonk-UML-ProfileGenerator-Tests',
 	#tag : 'Profile-Generator'
 }
 

@@ -9,8 +9,8 @@ Class {
 		'comment',
 		'defaultValue'
 	],
-	#category : 'OpenPonk-UML-BootstrapGenerator-Utilities',
-	#package : 'OpenPonk-UML-BootstrapGenerator',
+	#category : 'OpenPonk-UML-ProfileGenerator-Utilities',
+	#package : 'OpenPonk-UML-ProfileGenerator',
 	#tag : 'Utilities'
 }
 

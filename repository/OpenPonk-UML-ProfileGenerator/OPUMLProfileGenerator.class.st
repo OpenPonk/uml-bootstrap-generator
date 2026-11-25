@@ -10,8 +10,8 @@ Class {
 		'sourceModel',
 		'classes'
 	],
-	#category : 'OpenPonk-UML-BootstrapGenerator-Profile-Generator',
-	#package : 'OpenPonk-UML-BootstrapGenerator',
+	#category : 'OpenPonk-UML-ProfileGenerator-Profile-Generator',
+	#package : 'OpenPonk-UML-ProfileGenerator',
 	#tag : 'Profile-Generator'
 }
 

@@ -7,8 +7,8 @@ Class {
 	#instVars : [
 		'generator'
 	],
-	#category : 'OpenPonk-UML-BootstrapGenerator-Tests-Profile-Generator',
-	#package : 'OpenPonk-UML-BootstrapGenerator-Tests',
+	#category : 'OpenPonk-UML-ProfileGenerator-Tests-Profile-Generator',
+	#package : 'OpenPonk-UML-ProfileGenerator-Tests',
 	#tag : 'Profile-Generator'
 }
 
@@ -18,11 +18,11 @@ OPUMLProfileGeneratorTest >> assertAllMethodsParseIn: aCBClass [
 	aCBClass methods do: [ :each |
 			self
 				assert: (OCParser parseMethod: each source) isMethod
-				description: 'Generated instance method ' , each selector , ' must parse cleanly' ].
+				description: ('Generated instance method {1} must parse cleanly' format: { each selector }) ].
 	aCBClass metaMethods do: [ :each |
 			self
 				assert: (OCParser parseMethod: each source) isMethod
-				description: 'Generated class method ' , each selector , ' must parse cleanly' ]
+				description: ('Generated class method {1} must parse cleanly' format: { each selector }) ]
 ]
 
 { #category : 'asserting' }
@@ -571,11 +571,11 @@ OPUMLProfileGeneratorTest >> testGenerateAll [
 		                   generalizations: { (OPUMLProfileTestElement new general: baseStereotype) };
 		                   ownedAttributes: { childAttr };
 		                   yourself.
-	metaclassElement := self profileElementWithName: 'MetamodelTestParentElement' kind: #Class.
-	opp1 := (self profileElementWithName: 'base_MetamodelTestParentElement' kind: #Property)
+	metaclassElement := self profileElementWithName: 'ProfileTestGenerator' kind: #Class.
+	opp1 := (self profileElementWithName: 'base_ProfileTestGenerator' kind: #Property)
 		        type: metaclassElement;
 		        yourself.
-	opp2 := (self profileElementWithName: 'base_MetamodelTestParentElement' kind: #Property)
+	opp2 := (self profileElementWithName: 'base_ProfileTestGenerator' kind: #Property)
 		        type: metaclassElement;
 		        yourself.
 	end1 := (self profileElementWithName: 'extension_BaseStereo' kind: #Property)
@@ -611,7 +611,7 @@ OPUMLProfileGeneratorTest >> testGenerateAll [
 	self denyEmpty: changes.
 	self
 		assertCollection: testGenerator classes keys
-		hasSameElements: #( 'Element' 'VisibilityKind' 'BaseStereo' 'ChildStereo' 'ProfileFactory' #OPUMLMetamodelTestParentElement ).
+		hasSameElements: #( 'Element' 'VisibilityKind' 'BaseStereo' 'ChildStereo' 'ProfileFactory' #OPUMLProfileTestGenerator ).
 	self assert: (testGenerator classes at: 'BaseStereo') tag equals: 'Model'.
 	testGenerator classes valuesDo: [ :each | self assertAllMethodsParseIn: each ]
 ]
@@ -660,10 +660,10 @@ OPUMLProfileGeneratorTest >> testGenerateExtensionMethods [
 		                     name: 'SampleStereotype';
 		                     yourself.
 	metaclassElement := OPUMLProfileTestElement new
-		                    name: 'MetamodelTestParentElement';
+		                    name: 'ProfileTestGenerator';
 		                    yourself.
 	oppositeEnd := OPUMLProfileTestElement new
-		               name: 'base_MetamodelTestParentElement';
+		               name: 'base_ProfileTestGenerator';
 		               type: metaclassElement;
 		               yourself.
 	extensionEnd := OPUMLProfileTestElement new
@@ -689,9 +689,9 @@ OPUMLProfileGeneratorTest >> testGenerateExtensionMethods [
 	generator sourceModel: profile.
 	generator generateExtensionMethods.
 
-	self assertCollection: generator classes keys hasSameElements: #( #OPUMLMetamodelTestParentElement ).
-	generatedClass := generator classes at: #OPUMLMetamodelTestParentElement.
-	self assert: generatedClass packageTag equals: OPUMLMetamodelTestParentElement packageTagName asString.
+	self assertCollection: generator classes keys hasSameElements: #( #OPUMLProfileTestGenerator ).
+	generatedClass := generator classes at: #OPUMLProfileTestGenerator.
+	self assert: generatedClass packageTag equals: OPUMLProfileTestGenerator packageTagName asString.
 	self
 		assertCollection: (generatedClass methods collect: #selector)
 		hasSameElements: #( #extension_SampleStereotype #extension_SampleStereotype: ).
@@ -709,7 +709,7 @@ OPUMLProfileGeneratorTest >> testGenerateExtensionMethods [
 	OPUMLToOneLink
 		on: self
 		thisSelector: #extension_SampleStereotype
-		otherSelector: #base_MetamodelTestParentElement
+		otherSelector: #base_ProfileTestGenerator
 		updateFrom: oldSampleStereotype
 		to: aSampleStereotype'.
 
@@ -726,11 +726,11 @@ OPUMLProfileGeneratorTest >> testGenerateExtensionMethodsMultipleOnSameMetaclass
 	| stereotypeOne stereotypeTwo metaclassElement oppositeOne oppositeTwo endOne endTwo extOne extTwo profile generatedClass |
 	stereotypeOne := self profileElementWithName: 'FirstStereotype' kind: #Stereotype.
 	stereotypeTwo := self profileElementWithName: 'SecondStereotype' kind: #Stereotype.
-	metaclassElement := self profileElementWithName: 'MetamodelTestParentElement' kind: #Class.
-	oppositeOne := (self profileElementWithName: 'base_MetamodelTestParentElement' kind: #Property)
+	metaclassElement := self profileElementWithName: 'ProfileTestGenerator' kind: #Class.
+	oppositeOne := (self profileElementWithName: 'base_ProfileTestGenerator' kind: #Property)
 		               type: metaclassElement;
 		               yourself.
-	oppositeTwo := (self profileElementWithName: 'base_MetamodelTestParentElement' kind: #Property)
+	oppositeTwo := (self profileElementWithName: 'base_ProfileTestGenerator' kind: #Property)
 		               type: metaclassElement;
 		               yourself.
 	endOne := (self profileElementWithName: 'extension_FirstStereotype' kind: #Property)
@@ -755,7 +755,7 @@ OPUMLProfileGeneratorTest >> testGenerateExtensionMethodsMultipleOnSameMetaclass
 		           yourself.
 	generator sourceModel: profile.
 	generator generateExtensionMethods.
-	generatedClass := generator classes at: #OPUMLMetamodelTestParentElement.
+	generatedClass := generator classes at: #OPUMLProfileTestGenerator.
 	self
 		assertCollection: (generatedClass methods collect: #selector)
 		hasSameElements:
@@ -817,4 +817,17 @@ OPUMLProfileGeneratorTest >> testSuperclassLayersAndAllSuperclasses [
 	self assertCollection: (layers fourth collect: #name) hasSameElements: #( 'ParentA' 'ParentB' ).
 	allSupers := generator allSuperclassesOf: child.
 	self assert: (allSupers collect: #name) equals: #( 'Root' 'ParentA' 'ParentB' )
+]
+
+{ #category : 'tests - generating' }
+OPUMLProfileGeneratorTest >> testXmiString [
+
+	| profile xmi |
+	profile := OPUMLProfile new
+		           name: 'SampleProfile';
+		           yourself.
+	generator sourceModel: profile.
+	xmi := generator xmiString.
+	self assert: xmi isString description: 'xmiString must return a String'.
+	self assert: (xmi includesSubstring: 'SampleProfile') description: 'Serialized XMI must include the profile name'
 ]
