@@ -443,12 +443,30 @@ OPUMLMetamodelGenerator >> createElementMeta [
 		'I am a metaclass for UML classes implementing some behavior for managing the classes and other stuff (like an announcer).'.
 	sourceClass := OPUMLMetamodelElementTemplate.
 	sourceClass instVarNames do: [ :each | cls addInstVarNamed: each ].
-	sourceClass class instVarNames do: [ :each |
-		cls addMetaInstVarNamed: each ].
-	sourceClass methods do: [ :each |
-		cls addMethod: (self cbMethodFrom: each) ].
-	sourceClass class methods do: [ :each |
-		cls addMetaMethod: (self cbMethodFrom: each) ].
+	sourceClass class instVarNames do: [ :each | cls addMetaInstVarNamed: each ].
+	sourceClass methods do: [ :each | cls addMethod: (self cbMethodFrom: each) ].
+	sourceClass class methods do: [ :each | cls addMetaMethod: (self cbMethodFrom: each) ].
+	cls addMethod: (CBMethod new
+			 source: ('metaElementClass
+	^ <1s>' expandMacrosWith: (self classNameFor: self metaElementName));
+			 protocolName: 'accessing').
+	cls addMethod: (CBMethod new
+			 source: ('umlClassPrefix
+	^ ''<1s>''' expandMacrosWith: self classPrefix);
+			 protocolName: 'accessing').
+	cls addMethod: (CBMethod new
+			 source: 'isBidirectionalToOneSlotNamed: aSlotName
+	| setter |
+	setter := self class lookupSelector: (aSlotName , '':'') asSymbol.
+	^ setter isNotNil and: [ setter refersToLiteral: OPUMLToOneLink binding ]';
+			 protocolName: 'copying').
+	cls addMethod: (CBMethod new
+			 source: 'postCopySlotValue: aValue forSlotNamed: aSlotName
+	(aValue isKindOf: OPUMLToManyLinks) ifTrue: [ ^ nil ].
+	aValue class == OrderedCollection ifTrue: [ ^ aValue copy ].
+	(self isBidirectionalToOneSlotNamed: aSlotName) ifTrue: [ ^ nil ].
+	^ aValue';
+			 protocolName: 'copying').
 	^ cls
 ]
 

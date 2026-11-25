@@ -222,6 +222,12 @@ OPUMLMetamodelElementTemplate >> inspectorPropertiesSelectors [
 		  sorted
 ]
 
+{ #category : 'accessing' }
+OPUMLMetamodelElementTemplate >> metaElementClass [
+
+	^ OPUMLMetamodelElementTemplate
+]
+
 { #category : 'inspecting' }
 OPUMLMetamodelElementTemplate >> nonEmptyinspectorProperties [
 	^ self inspectorProperties
@@ -236,11 +242,8 @@ OPUMLMetamodelElementTemplate >> oclAsType: aClassifier [
 { #category : 'ocl-experimental' }
 OPUMLMetamodelElementTemplate >> oclClassifierNameFrom: anObject [
 
-	| metaElementClass |
-	metaElementClass := Smalltalk globals at: #OPUMLMetaElement.
-	(anObject isKindOf: metaElementClass class) ifTrue: [
-		^ anObject name withoutPrefix: 'OPUML' ].
-	(anObject isKindOf: metaElementClass) ifTrue: [ ^ anObject name ].
+	(anObject isKindOf: self metaElementClass class) ifTrue: [ ^ anObject name withoutPrefix: self umlClassPrefix ].
+	(anObject isKindOf: self metaElementClass) ifTrue: [ ^ anObject name ].
 	anObject isString ifTrue: [ ^ anObject ].
 	self error: 'Unknown classifier ' , anObject asString
 ]
@@ -257,6 +260,57 @@ OPUMLMetamodelElementTemplate >> oclIsKindOf: aClassifier [
 OPUMLMetamodelElementTemplate >> oclIsTypeOf: aClassifier [
 
 	^ sharedGeneralizations keys last = (self oclClassifierNameFrom: aClassifier)
+]
+
+{ #category : 'copying' }
+OPUMLMetamodelElementTemplate >> postCopy [
+
+	| originalShared copiedShared |
+	super postCopy.
+	uuid := nil.
+	tags ifNotNil: [
+			| originalTags |
+			originalTags := tags.
+			tags := OrderedDictionary new.
+			originalTags keysAndValuesDo: [ :key :value |
+				(key = #appliedStereotypes or: [ key asString beginsWith: 'extension_' ]) ifFalse: [ tags at: key put: value ] ] ].
+	sharedGeneralizations ifNil: [
+			self postCopyResetSliceSlots.
+			^ self ].
+	originalShared := sharedGeneralizations.
+	copiedShared := OrderedDictionary new: originalShared size.
+	originalShared keysAndValuesDo: [ :key :slice |
+			copiedShared at: key put: (slice class == self class
+					 ifTrue: [ self ]
+					 ifFalse: [ slice shallowCopy ]) ].
+	copiedShared valuesDo: [ :eachSlice | eachSlice postCopySliceWithShared: copiedShared ]
+]
+
+{ #category : 'copying' }
+OPUMLMetamodelElementTemplate >> postCopyResetSliceSlots [
+
+	| metaSlotNames |
+	metaSlotNames := self metaElementClass instVarNames.
+	self class allInstVarNames do: [ :slotName |
+			(metaSlotNames includes: slotName) ifFalse: [
+					| currentValue |
+					currentValue := self instVarNamed: slotName.
+					currentValue ifNotNil: [ self instVarNamed: slotName put: (self postCopySlotValue: currentValue forSlotNamed: slotName) ] ] ]
+]
+
+{ #category : 'copying' }
+OPUMLMetamodelElementTemplate >> postCopySliceWithShared: aDictionary [
+
+	sharedGeneralizations := aDictionary.
+	self initializeDirectGeneralizations.
+	self postCopyResetSliceSlots
+]
+
+{ #category : 'copying' }
+OPUMLMetamodelElementTemplate >> postCopySlotValue: aValue forSlotNamed: aSlotName [
+
+	aValue class == OrderedCollection ifTrue: [ ^ aValue copy ].
+	^ aValue
 ]
 
 { #category : 'accessing - tags' }
@@ -310,7 +364,14 @@ OPUMLMetamodelElementTemplate >> tags [
 
 { #category : 'accessing' }
 OPUMLMetamodelElementTemplate >> umlClassName [
-	^ self className withoutPrefix: 'OPUML'
+
+	^ self className withoutPrefix: self umlClassPrefix
+]
+
+{ #category : 'accessing' }
+OPUMLMetamodelElementTemplate >> umlClassPrefix [
+
+	^ 'OPUML'
 ]
 
 { #category : 'accessing' }

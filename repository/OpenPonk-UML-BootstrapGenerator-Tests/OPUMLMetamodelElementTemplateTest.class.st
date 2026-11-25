@@ -4,11 +4,6 @@ I am a unit test class verifying the core behaviors (such as tag management, ste
 Class {
 	#name : 'OPUMLMetamodelElementTemplateTest',
 	#superclass : 'TestCase',
-	#instVars : [
-		'metaElementClass',
-		'createdMetaElementClass',
-		'preexistingMetaPackage'
-	],
 	#category : 'OpenPonk-UML-BootstrapGenerator-Tests-Metamodel-Generator',
 	#package : 'OpenPonk-UML-BootstrapGenerator-Tests',
 	#tag : 'Metamodel-Generator'
@@ -39,43 +34,6 @@ OPUMLMetamodelElementTemplateTest >> newStereotypeNamed: aStereotypeName extensi
 		  umlClassName: aStereotypeName;
 		  umlMetaClass: metaClass;
 		  yourself
-]
-
-{ #category : 'running' }
-OPUMLMetamodelElementTemplateTest >> setUp [
-
-	| generator metaElementClassName |
-	super setUp.
-	generator := OPUMLMetamodelGenerator newDefault.
-	metaElementClassName := (generator classNameFor: generator metaElementName) asSymbol.
-	metaElementClass := self class environment at: metaElementClassName ifAbsent: [ nil ].
-	metaElementClass ifNotNil: [ ^ self ].
-	preexistingMetaPackage := self packageOrganizer hasPackage: generator packageName.
-	createdMetaElementClass := Object classInstaller make: [ :builder |
-			                           builder
-				                           superclass: Object;
-				                           name: metaElementClassName;
-				                           package: generator packageName;
-				                           tag: generator metaTag;
-				                           environment: self class environment ].
-	metaElementClass := createdMetaElementClass
-]
-
-{ #category : 'running' }
-OPUMLMetamodelElementTemplateTest >> tearDown [
-
-	createdMetaElementClass ifNotNil: [ :createdClass |
-			| packageName |
-			packageName := createdClass package name.
-			createdClass removeFromSystem.
-			(preexistingMetaPackage ifNil: [ false ]) ifFalse: [
-					self packageOrganizer
-						packageNamed: packageName
-						ifPresent: [ :package | package isEmpty ifTrue: [ self packageOrganizer removePackage: package ] ] ] ].
-	createdMetaElementClass := nil.
-	metaElementClass := nil.
-	preexistingMetaPackage := nil.
-	super tearDown
 ]
 
 { #category : 'tests' }
@@ -137,15 +95,12 @@ OPUMLMetamodelElementTemplateTest >> testApplyAndUnapplyInheritedStereotype [
 { #category : 'tests' }
 OPUMLMetamodelElementTemplateTest >> testGeneratePrintAsClassifierNameOn [
 
-	| unnamedSubclass namedElement unnamedOutput namedOutput |
-	unnamedSubclass := OPUMLMetamodelTestParentElement newAnonymousSubclass.
-	unnamedSubclass compile: 'oclClassifierNameFrom: anObject
-	anObject == self class ifTrue: [ ^ ''MetamodelTestParentElement'' ].
-	^ super oclClassifierNameFrom: anObject'.
+	| unnamedElement namedElement unnamedOutput namedOutput |
+	unnamedElement := OPUMLMetamodelTestParentElement new.
 	namedElement := OPUMLMetamodelTestStereotypedElement new
 		                name: 'Customer';
 		                yourself.
-	unnamedOutput := String streamContents: [ :stream | unnamedSubclass new generateprintAsClassifierNameOn: stream ].
+	unnamedOutput := String streamContents: [ :stream | unnamedElement generateprintAsClassifierNameOn: stream ].
 	namedOutput := String streamContents: [ :stream | namedElement generateprintAsClassifierNameOn: stream ].
 	self assert: unnamedOutput equals: 'MetamodelTestParentElement'.
 	self assert: namedOutput equals: 'MetamodelTestStereotypedElement(''Customer'')'
@@ -278,12 +233,28 @@ OPUMLMetamodelElementTemplateTest >> testOclClassifierNameFrom [
 
 	| element anonymousSubclass |
 	element := OPUMLMetamodelTestChildElement new.
-	anonymousSubclass := metaElementClass newAnonymousSubclass.
+	anonymousSubclass := OPUMLMetamodelElementTemplate newAnonymousSubclass.
 	anonymousSubclass class compile: 'name ^ ''OPUMLSampleClass'''.
 	anonymousSubclass compile: 'name ^ ''SampleInstance'''.
 	self assert: (element oclClassifierNameFrom: 'Class') equals: 'Class'.
 	self assert: (element oclClassifierNameFrom: anonymousSubclass) equals: 'SampleClass'.
 	self assert: (element oclClassifierNameFrom: anonymousSubclass basicNew) equals: 'SampleInstance'.
+	self should: [ element oclClassifierNameFrom: 123 ] raise: Error
+]
+
+{ #category : 'tests' }
+OPUMLMetamodelElementTemplateTest >> testOclClassifierNameFromTemplateHierarchy [
+
+	| element namedElement |
+	element := OPUMLMetamodelTestChildElement new.
+	namedElement := OPUMLMetamodelTestStereotypedElement new
+		                name: 'Customer';
+		                yourself.
+	self assert: element metaElementClass identicalTo: OPUMLMetamodelElementTemplate.
+	self assert: element umlClassPrefix equals: 'OPUML'.
+	self assert: (element oclClassifierNameFrom: OPUMLMetamodelTestChildElement) equals: 'MetamodelTestChildElement'.
+	self assert: (element oclClassifierNameFrom: namedElement) equals: 'Customer'.
+	self assert: (element oclClassifierNameFrom: 'Class') equals: 'Class'.
 	self should: [ element oclClassifierNameFrom: 123 ] raise: Error
 ]
 
@@ -323,6 +294,52 @@ OPUMLMetamodelElementTemplateTest >> testOclIsTypeOf [
 		deny: (element oclIsTypeOf: 'MetamodelTestParentElement')
 		description: 'Element must not satisfy oclIsTypeOf: for its parent classifier'.
 	self deny: (element oclIsTypeOf: #Element) description: 'Element must not satisfy oclIsTypeOf: #Element'
+]
+
+{ #category : 'tests' }
+OPUMLMetamodelElementTemplateTest >> testPostCopyClonesGeneralizationsTagsAndCollections [
+
+	| original copy originalParentSlice copyParentSlice uninitialized uninitializedCopy |
+	original := OPUMLMetamodelTestStereotypedElement new.
+	original name: 'Original'.
+	original extension_BaseStereo: (OrderedCollection with: #item1).
+	original tagAt: #custom put: 'value1'.
+	original tagAt: #appliedStereotypes put: (OrderedCollection with: #fakeStereo).
+	original tagAt: #extension_Demo put: #fakeExtension.
+	original uuid.
+
+	copy := original copy.
+	self deny: copy identicalTo: original.
+	self deny: copy uuid equals: original uuid.
+	self assert: copy identity identicalTo: copy.
+	self deny: (copy instVarNamed: #sharedGeneralizations) identicalTo: (original instVarNamed: #sharedGeneralizations).
+
+	originalParentSlice := original oclAsType: #MetamodelTestParentElement.
+	copyParentSlice := copy oclAsType: #MetamodelTestParentElement.
+	self deny: copyParentSlice identicalTo: originalParentSlice.
+	self assert: copyParentSlice identity identicalTo: copy.
+	self assert: (copy instVarNamed: #directGeneralizations) first identicalTo: copyParentSlice.
+
+	copy name: 'Renamed'.
+	self assert: original name equals: 'Original'.
+	self assert: copy name equals: 'Renamed'.
+
+	copy extension_BaseStereo add: #item2.
+	self assert: original extension_BaseStereo asArray equals: #( #item1 ).
+	self assert: copy extension_BaseStereo asArray equals: #( #item1 #item2 ).
+
+	self assert: (copy tagAt: #custom) equals: 'value1'.
+	self deny: (copy hasTagAt: #appliedStereotypes) description: 'Copied element must not retain appliedStereotypes tag'.
+	self deny: (copy hasTagAt: #extension_Demo) description: 'Copied element must not retain extension_* tags'.
+	copy tagAt: #custom put: 'changed'.
+	self assert: (original tagAt: #custom) equals: 'value1'.
+
+	uninitialized := OPUMLMetamodelTestStereotypedElement basicNew.
+	uninitialized extension_BaseStereo: (OrderedCollection with: #onlyItem).
+	uninitializedCopy := uninitialized copy.
+	uninitializedCopy extension_BaseStereo add: #extraItem.
+	self assert: uninitialized extension_BaseStereo asArray equals: #( #onlyItem ).
+	self assert: uninitializedCopy extension_BaseStereo asArray equals: #( #onlyItem #extraItem )
 ]
 
 { #category : 'tests' }

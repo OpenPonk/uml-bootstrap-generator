@@ -281,6 +281,8 @@ OPUMLMetaGenTemplateTest >> testPropertyTemplate [
 	thirdProperty := propertyClass new.
 
 	self assert: property opposite identicalTo: nil.
+	self deny: property isNavigable description: 'Property with nil owningClass and nil association must not be navigable'.
+
 	association := OPUMLMetaGenTestDouble new
 		               memberEnds: { property };
 		               navigableOwnedEnds: #(  );

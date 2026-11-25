@@ -631,10 +631,40 @@ OPUMLMetamodelGeneratorTest >> testCreateElementMetaInstanceMethods [
 		hasSameElements: #( #appliedStereotypes #applyStereotype: #hasTagAt: #identity #initialize #initializeDirectGeneralizations
 			   #initializeSharedGeneralizations #initializeWithShared: #inspectionGeneralizations: #inspectionAllProperties:
 			   #inspectionProperties: #inspectionStereotypes: #inspectionStereotypeProperties: #inspectionTags: #inspectorProperties
-			   #inspectorPropertiesSelectors #nonEmptyinspectorProperties #oclAsType: #oclClassifierNameFrom: #oclIsKindOf: #oclIsTypeOf:
-			   #printAsClassifierNameOn: #printOn: #removeTagAt: #setExtensionFor:to: #stereotypeProperties #tagAt: #tagAt:ifAbsent:
-			   #tagAt:put: #tags #umlClassName #umlMetaClass #unapplyStereotype: #uuid #uuid: ).
+			   #inspectorPropertiesSelectors #isBidirectionalToOneSlotNamed: #metaElementClass #nonEmptyinspectorProperties
+			   #oclAsType: #oclClassifierNameFrom: #oclIsKindOf: #oclIsTypeOf: #postCopy #postCopyResetSliceSlots #postCopySliceWithShared:
+			   #postCopySlotValue:forSlotNamed: #printAsClassifierNameOn: #printOn: #removeTagAt: #setExtensionFor:to: #stereotypeProperties
+			   #tagAt: #tagAt:ifAbsent: #tagAt:put: #tags #umlClassName #umlClassPrefix #umlMetaClass #unapplyStereotype:
+			   #uuid #uuid: ).
 	self assert: (cls methodNamed: #initialize) protocolName equals: 'initialization'
+]
+
+{ #category : 'tests - meta' }
+OPUMLMetamodelGeneratorTest >> testCreateElementMetaUsesConfiguredClassPrefix [
+
+	| cls metaClassMethod prefixMethod oclMethod postCopySlotMethod toOneMethod |
+	cls := generator createElementMeta.
+	metaClassMethod := cls methodNamed: #metaElementClass.
+	prefixMethod := cls methodNamed: #umlClassPrefix.
+	oclMethod := cls methodNamed: #oclClassifierNameFrom:.
+	postCopySlotMethod := cls methodNamed: #postCopySlotValue:forSlotNamed:.
+	toOneMethod := cls methodNamed: #isBidirectionalToOneSlotNamed:.
+	self assertMethod: metaClassMethod source equals: 'metaElementClass
+	^ MBUTMetaElement'.
+	self assertMethod: prefixMethod source equals: 'umlClassPrefix
+	^ ''MBUT'''.
+	self
+		deny: (oclMethod source includesSubstring: 'Smalltalk globals')
+		description: 'Generated oclClassifierNameFrom: must not use Smalltalk globals dynamic lookup'.
+	self
+		deny: (oclMethod source includesSubstring: '''OPUML''')
+		description: 'Generated oclClassifierNameFrom: must not hardcode OPUML prefix'.
+	self
+		assert: (postCopySlotMethod source includesSubstring: 'OPUMLToManyLinks')
+		description: 'Generated postCopySlotValue:forSlotNamed: must detach OPUMLToManyLinks slots'.
+	self
+		assert: (toOneMethod source includesSubstring: 'OPUMLToOneLink')
+		description: 'Generated isBidirectionalToOneSlotNamed: must detect OPUMLToOneLink setters'
 ]
 
 { #category : 'tests - generating - enums' }
@@ -843,6 +873,16 @@ OPUMLMetamodelGeneratorTest >> testLoadTemplateMethodsVarious [
 	self denyEmpty: lowerMethod.
 	self assert: lowerMethod first language equals: #( #Pharo ).
 	self assert: lowerMethod first body equals: #( '^ self lowerBound' )
+]
+
+{ #category : 'tests' }
+OPUMLMetamodelGeneratorTest >> testNewDefault [
+
+	| defaultGenerator |
+	defaultGenerator := OPUMLMetamodelGenerator newDefault.
+	self assert: defaultGenerator classPrefix equals: 'OPUML'.
+	self assert: defaultGenerator packageName equals: 'OP-UML-Metamodel'.
+	self assert: defaultGenerator sourceModel identicalTo: OPUMLMetamodelGenerator umlBootstrapModel
 ]
 
 { #category : 'testing - test meta' }

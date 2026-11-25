@@ -20,7 +20,8 @@ OPUMLMetaGenPropertyTemplate >> isComposite [
 
 { #category : 'implementation' }
 OPUMLMetaGenPropertyTemplate >> isNavigable [
-	^ owningClass isNotNil or: [ association navigableOwnedEnds includes: self ]
+
+	^ owningClass isNotNil or: [ association isNotNil and: [ association navigableOwnedEnds includes: self ] ]
 ]
 
 { #category : 'implementation' }

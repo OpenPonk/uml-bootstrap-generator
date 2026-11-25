@@ -49,10 +49,3 @@ OPUMLMetamodelTestStereotypedElement >> name: aString [
 
 	name := aString
 ]
-
-{ #category : 'ocl-experimental' }
-OPUMLMetamodelTestStereotypedElement >> oclClassifierNameFrom: anObject [
-
-	anObject == self class ifTrue: [ ^ 'MetamodelTestStereotypedElement' ].
-	^ super oclClassifierNameFrom: anObject
-]
