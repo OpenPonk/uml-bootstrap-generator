@@ -443,7 +443,6 @@ OPUMLMetamodelGenerator >> createElementMeta [
 		'I am a metaclass for UML classes implementing some behavior for managing the classes and other stuff (like an announcer).'.
 	sourceClass := OPUMLMetamodelElementTemplate.
 	sourceClass instVarNames do: [ :each | cls addInstVarNamed: each ].
-	sourceClass class instVarNames do: [ :each | cls addMetaInstVarNamed: each ].
 	sourceClass methods do: [ :each | cls addMethod: (self cbMethodFrom: each) ].
 	sourceClass class methods do: [ :each | cls addMetaMethod: (self cbMethodFrom: each) ].
 	cls addMethod: (CBMethod new
